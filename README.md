@@ -1,1 +1,3 @@
-# config-rules
+# Configs
+
+My personal used proxy configs.

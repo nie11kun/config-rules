@@ -1,0 +1,97 @@
+# This is the local http proxy server port.
+# Note there is another SOCKS5 proxy server starts at port+1 automatically.
+port: 9090
+adapter:
+  - id: JP1
+    type: ss
+    host: x.x.x.x
+    port: xxxx
+    # Currently support: AES-128-CFB, AES-192-CFB, AES-256-CFB, chacha20, salsa20, rc4-md5
+    method: rc4-md5
+    password: xxxx
+  - id: JP2
+    type: ss
+    host: x.x.x.x
+    port: xxxx
+    method: rc4-md5
+    password: xxxx
+  - id: JP3
+    type: ss
+    host: x.x.x.x
+    port: xxxx
+    method: rc4-md5
+    password: xxxx
+  - id: JP4
+    type: ss
+    host: x.x.x.x
+    port: xxxx
+    method: rc4-md5
+    password: xxxx
+  - id: JP5
+    type: ss
+    host: x.x.x.x
+    port: xxxx
+    method: rc4-md5
+    password: xxxx
+  - id: speed
+    type: SPEED
+    adapters:
+      - id: JP1
+        delay: 300
+      - id: JP2
+        delay: 300
+      - id: JP3
+        delay: 300
+      - id: JP4
+        delay: 300
+      - id: JP5
+        delay: 300
+      - id: direct
+        delay: 0
+  - id: proxy
+    type: SPEED
+    adapters:
+      - id: JP1
+        delay: 0
+      - id: JP2
+        delay: 100
+      - id: JP3
+        delay: 100
+      - id: JP4
+        delay: 100
+      - id: JP5
+        delay: 100
+  - id: reject
+    type: reject
+    delay: 300
+rule:
+  - type: list
+    file: ~/.SpechtLite/rejectlist
+    adapter: reject
+  - type: iplist
+    file: ~/.SpechtLite/rejectiplist
+    adapter: reject
+  - type: list
+    file: ~/.SpechtLite/directlist
+    adapter: direct
+  - type: iplist
+    file: ~/.SpechtLite/directiplist
+    adapter: direct
+  - type: list
+    file: ~/.SpechtLite/proxylist
+    adapter: proxy
+  - type: iplist
+    file: ~/.SpechtLite/proxyiplist
+    adapter: proxy
+  - type: country
+    country: CN
+    match: true
+    adapter: direct
+  - type: country
+    country: --
+    match: true
+    adapter: speed
+  - type: DNSFail
+    adapter: speed
+  - type: all
+    adapter: proxy
