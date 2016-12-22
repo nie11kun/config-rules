@@ -9,30 +9,40 @@ adapter:
     # Currently support: AES-128-CFB, AES-192-CFB, AES-256-CFB, chacha20, salsa20, rc4-md5
     method: rc4-md5
     password: xxxx
+    obfs: tls1.2_ticket_auth
+    obfs_param: bing.com
   - id: JP2
     type: ss
     host: x.x.x.x
     port: xxxx
     method: rc4-md5
     password: xxxx
+    obfs: tls1.2_ticket_auth
+    obfs_param: bing.com
   - id: JP3
     type: ss
     host: x.x.x.x
     port: xxxx
     method: rc4-md5
     password: xxxx
+    obfs: tls1.2_ticket_auth
+    obfs_param: bing.com
   - id: JP4
     type: ss
     host: x.x.x.x
     port: xxxx
     method: rc4-md5
     password: xxxx
+    obfs: tls1.2_ticket_auth
+    obfs_param: bing.com
   - id: JP5
     type: ss
     host: x.x.x.x
     port: xxxx
     method: rc4-md5
     password: xxxx
+    obfs: tls1.2_ticket_auth
+    obfs_param: bing.com
   - id: speed
     type: SPEED
     adapters:
