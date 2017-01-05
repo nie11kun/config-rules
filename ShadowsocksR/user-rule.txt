@@ -4,7 +4,6 @@
 google
 nowtv100
 rthklive
-
 ||surge.one
 ||newyorker.com
 ||app-measurement.com
@@ -54,9 +53,7 @@ rthklive
 ||t66y.com
 ||virtualphoneline.com
 ||pandora.com
-
 ||lookup-api.apple.com
-
 ||aaplimg.com
 ||apple.co
 ||apple.com
@@ -65,7 +62,6 @@ rthklive
 ||itunes.com
 ||itunes.apple.com
 ||me.com
-
 ||accounts.google.com
 ||appspot.com
 ||cdninstagram.com
@@ -83,9 +79,7 @@ rthklive
 ||twitter.com
 ||youtube-nocookie.com
 ||youtube.com
-
 ||geetest.com
-
 ||netflix.com
 ||netflix.net
 ||nflxext.com
@@ -94,7 +88,6 @@ rthklive
 ||nflxvideo.net
 ||tvb.com
 ||mytvsuper.com
-
 ||playstation.com
 ||playstation.com.hk
 ||playstation.net
@@ -103,7 +96,6 @@ rthklive
 ||sony.net
 ||sony.com.hk
 ||sonyentertainmentnetwork.com
-
 ||2o7.net
 ||4sqi.net
 ||9to5mac.com
