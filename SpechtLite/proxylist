@@ -90,6 +90,15 @@ nflxvideo\.net
 tvb\.com
 mytvsuper\.com
 
+playstation\.com
+playstation\.com\.hk
+playstation\.net
+playstationnetwork\.com
+sony\.com
+sony\.net
+sony\.com\.hk
+sonyentertainmentnetwork\.com
+
 2o7\.net
 4sqi\.net
 9to5mac\.com
@@ -137,9 +146,11 @@ blogsmithmedia\.com
 blogspot\.com
 blogspot\.hk
 bloomberg\.com
+boomtrain\.com
 box\.com
 box\.net
 cachefly\.net
+cdn\.segment\.com
 chromium\.org
 cl\.ly
 cloudflare\.com
@@ -237,6 +248,7 @@ kat\.cr
 klip\.me
 libsyn\.com
 licdn\.com
+lightboxcdn\.com
 linkedin\.com
 linode\.com
 lithium\.com
@@ -262,6 +274,7 @@ modmyi\.com
 msedge\.net
 myfontastic\.com
 name\.com
+netdna-cdn\.com
 nextmedia\.com
 nintendo\.com
 nsstatic\.net
@@ -288,10 +301,7 @@ pinboard\.in
 pinterest\.com
 pixelmator\.com
 playpcesor\.com
-playstation\.com
-playstation\.com\.hk
-playstation\.net
-playstationnetwork\.com
+prfct\.co
 pushwoosh\.com
 rime\.im
 servebom\.com
@@ -305,10 +315,6 @@ slack\.com
 smartdnsproxy\.com
 smartmailcloud\.com
 sndcdn\.com
-sony\.com
-sony\.net
-sony\.com\.hk
-sonyentertainmentnetwork\.com
 soundcloud\.com
 sourceforge\.net
 speedtest\.net
@@ -325,6 +331,7 @@ surge\.run
 symauth\.com
 symcb\.com
 symcd\.com
+t\.me
 tapbots\.com
 tapbots\.net
 tdesktop\.com
@@ -359,6 +366,8 @@ usertrust\.com
 v\.gd
 v2ex\.co
 v2ex\.com
+vbstatic\.co
+venturebeat\.com
 vimeo\.com
 vimeocdn\.com
 vine\.co
