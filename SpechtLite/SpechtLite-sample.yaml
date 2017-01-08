@@ -107,6 +107,6 @@ rule:
     match: true
     adapter: speed
   - type: DNSFail
-    adapter: speed
+    adapter: proxy
   - type: all
     adapter: proxy
