@@ -13,8 +13,17 @@
 #       38.25.63.10     x.acme.com              # x client host
 
 # localhost name resolution is handled within DNS itself.
+# Windows default lines
 #	127.0.0.1       localhost
 #	::1             localhost
+# Mac OS default lines
+#   127.0.0.1       localhost
+#   255.255.255.255 broadcasthost
+#   ::1             localhost 
+#   fe80::10        localhost
+
+# Windows file location: C:\WINDOWS\system32\drivers\etc
+# Mac file location: /etc/hosts
 
 # baidu locating
 1.0.0.1     api.map.baidu.com
