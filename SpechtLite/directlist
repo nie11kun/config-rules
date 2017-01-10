@@ -1,6 +1,3 @@
-alphassl\.com
-edu\.cn
-
 api\.smoot\.apple\.com
 captive\.apple\.com
 configuration\.apple\.com
@@ -12,14 +9,8 @@ akadns\.net
 cdn-apple\.com
 ess\.apple\.com
 push\.apple\.com
-
-fmfmobile
 content\.icloud
-www\.thinkdifferent\.us
-www\.itools\.info
-www\.ibook\.info
 www\.apple\.com
-www\.aiport\.us
 upp\.itunes\.apple\.com
 swscan\.apple\.com
 swquery\.apple\.com
@@ -50,9 +41,16 @@ appldnld\.apple\.com
 lcdn-locator\.apple\.com
 lcdn-registration\.apple\.com
 ls\.apple\.com
-mzstatic\.com
 phobos\.apple\.com
 
+fmfmobile
+www\.thinkdifferent\.us
+www\.itools\.info
+www\.ibook\.info
+www\.aiport\.us
+mzstatic\.com
+alphassl\.com
+edu\.cn
 -cn
 126\.net
 163\.com
