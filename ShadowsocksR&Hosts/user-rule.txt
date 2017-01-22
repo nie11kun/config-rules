@@ -213,6 +213,7 @@ rthklive
 ||github.io
 ||githubapp.com
 ||githubusercontent.com
+||github.global.ssl.fastly.Net
 ||globalsign.com
 ||gmodules.com
 ||godaddy.com
