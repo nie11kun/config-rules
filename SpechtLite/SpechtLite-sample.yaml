@@ -83,18 +83,18 @@ rule:
   - type: list
     file: ~/.SpechtLite/proxylist
     adapter: proxy
+  - type: iplist
+    file: ~/.SpechtLite/proxyiplist
+    adapter: proxy
   - type: list
     file: ~/.SpechtLite/directlist
+    adapter: direct
+  - type: iplist
+    file: ~/.SpechtLite/directiplist
     adapter: direct
   - type: list
     file: ~/.SpechtLite/rejectlist
     adapter: reject
-  - type: iplist
-    file: ~/.SpechtLite/proxyiplist
-    adapter: proxy
-  - type: iplist
-    file: ~/.SpechtLite/directiplist
-    adapter: direct
   - type: iplist
     file: ~/.SpechtLite/rejectiplist
     adapter: reject
