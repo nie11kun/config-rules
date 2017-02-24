@@ -951,6 +951,7 @@
 ||ted.com
 ||telecomspace.com
 ||telegram.org
+||t.me
 ||theampfactory.com
 ||theappleblog.com
 ||thebcomplex.com
