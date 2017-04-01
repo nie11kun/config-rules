@@ -1,6 +1,11 @@
 ! Put user rules line by line in this file.
 ! See https://adblockplus.org/en/filter-cheatsheet
 
+||apple.com
+||icloud.com
+||itunes.com
+||mzstatic.com
+||icloud-content.com
 ||0rz.tw
 ||0to255.com
 ||12bet.com
