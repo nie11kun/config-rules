@@ -568,6 +568,8 @@
 ||lithium.com
 ||littlebigdetails.com
 ||liudejun.com
+||live.com
+||live.net
 ||livedoor.com
 ||livedoor.jp
 ||liveleak.com
@@ -612,6 +614,7 @@
 ||megabyet.net
 ||megurineluka.com
 ||memrijttm.org
+||microsoft.com
 ||michaelanti.com
 ||michaelmarketl.com
 ||middle-way.net
@@ -712,6 +715,7 @@
 ||olumpo.com
 ||omgili.com
 ||omy.sg
+||onenote.com
 ||onedrive.live.com
 ||onion.city
 ||onlylady.cn
