@@ -490,6 +490,7 @@
 ||imageshack.us
 ||imagezilla.net
 ||imdb.com
+||imgur.com
 ||img.ly
 ||imgchili.net
 ||imlive.com
