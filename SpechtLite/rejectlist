@@ -42,6 +42,7 @@ ad-brix\.com
 aac-dmp\.cn
 adsame\.com
 appcoachs\.net
+adsmarket\.com
 afp\.alicdn\.com
 amdc\.m\.taobao\.com
 adhouyi\.com
@@ -344,7 +345,6 @@ hzkcbs\.com
 hxadt\.com
 haiyunx\.com
 hxsame\.hexun\.com
-hudong\.pl\.youku\.com
 hm\.baidu\.com\.cn
 hwcdn\.net
 hmma\.baidu\.com
@@ -457,7 +457,6 @@ map\.dxpmedia\.com
 market\.xiaomi\.com
 mct01\.com
 mega\.mlt01\.com
-mmstat\.com
 my5525\.net
 media\.tianjimedia\.com
 media\.yesky\.com
@@ -763,7 +762,7 @@ iface2\.iqiyi\.com\/views_pop\/3\.0\/pop_home\?
 msg\.71\.am
 msga\.cupid\.iqiyi\.com
 pic\d{1}\.qiyipic\.com\/common
-(api|ps|sv|offnavi|newvector|ulog\.imap|newloc)(\.map|)\.(baidu|n\.shifen)\.com
+(ps|sv|offnavi|newvector|ulog\.imap|newloc)(\.map)?\.(baidu|n\.shifen)\.com
 huichuan\.sm\.cn\/jsad\?
 wmedia-track\.uc\.cn
 m\.elecfans\.com\/static\/js\/ad\.js
