@@ -14,7 +14,7 @@
 0.0.0.0 255.255.255.255 remoteproxy
 
 # Default
-.apple.com remoteproxy
+.apple.com direct
 .icloud.com remoteproxy
 .itunes.com remoteproxy
 .mzstatic.com remoteproxy
