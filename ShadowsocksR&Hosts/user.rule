@@ -10,8 +10,8 @@
 # reject: 拒绝连接
 
 # final proxy
-:: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff localproxy
-0.0.0.0 255.255.255.255 localproxy
+:: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff direct
+0.0.0.0 255.255.255.255 direct
 
 # Default
 .apple.com direct
@@ -168,9 +168,6 @@
 .youtube.com remoteproxy
 .youtubecn.com remoteproxy
 .ytimg.com remoteproxy
-# DIRECT
-.yun.baidu.com direct
-.pan.baidu.com direct
 # REJECT
 .baidu.com reject
 .360.com reject
@@ -195,6 +192,9 @@
 .newvector.map.baidu.com reject
 .ulog.imap.baidu.com reject
 .newloc.map.n.shifen.com reject
+# DIRECT
+.yun.baidu.com direct
+.pan.baidu.com direct
 # IP-CIDR
 43.249.72.0 43.249.72.255 remoteproxy
 64.30.224.0 64.30.224.255 remoteproxy
