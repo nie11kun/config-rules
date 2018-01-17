@@ -10,8 +10,8 @@
 # reject: 拒绝连接
 
 # final proxy
-:: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff direct
-0.0.0.0 255.255.255.255 direct
+:: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff remoteproxy
+0.0.0.0 255.255.255.255 remoteproxy
 
 # Default
 .apple.com direct
@@ -169,7 +169,6 @@
 .youtubecn.com remoteproxy
 .ytimg.com remoteproxy
 # REJECT
-.baidu.com reject
 .360.com reject
 .360.cn reject
 .5lyq.com reject
