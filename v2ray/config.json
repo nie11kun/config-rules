@@ -50,14 +50,32 @@
         {
           "domain": [
             "360.com",
-            "360.cn"
+            "360.cn",
+            "api.map.baidu.com",
+            "ps.map.baidu.com",
+            "sv.map.baidu.com",
+            "offnavi.map.baidu.com",
+            "newvector.map.baidu.com",
+            "ulog.imap.baidu.com",
+            "newloc.map.n.shifen.com",
+            "api.map.baidu.com",
+            "ps.map.baidu.com",
+            "sv.map.baidu.com",
+            "offnavi.map.baidu.com",
+            "newvector.map.baidu.com",
+            "ulog.imap.baidu.com",
+            "newloc.map.n.shifen.com"
           ],
           "type": "field",
-          "outboundTag": "reject"       
+          "outboundTag": "reject"
         },
         {
           "domain": [
-            "taobao.com"
+            "apple.com",
+            "icloud.com",
+            "itunes.com",
+            "mzstatic.com",
+            "icloud-content.com"
           ],
           "type": "field",
           "outboundTag": "direct"
