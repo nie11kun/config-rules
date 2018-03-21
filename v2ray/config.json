@@ -12,6 +12,21 @@
       "ip": "127.0.0.1"
     }
   },
+  "inboundDetour": [
+    {
+      "port": "1082",
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "allocate": {
+        "strategy": "always",
+        "refresh": 5,
+        "concurrency": 3
+      },
+      "settings": {},
+      "streamSettings": {},
+      "domainOverride": ["http", "tls"]
+    }
+  ],
   "outbound": {
     "protocol": "vmess",
     "settings": {
