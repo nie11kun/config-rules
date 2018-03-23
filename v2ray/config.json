@@ -46,8 +46,14 @@
       ]
     },
     "streamSettings": {
-      "network": "tcp",
-      "security": "tls"
+      "network": "ws",
+      "security": "tls",
+      "tlsSettings": {
+        "serverName": "xxxxxx.ml"
+      },
+      "wsSettings": {
+        "path": "/xxx"
+      }
     },
     "mux": {
       "enabled": true,
