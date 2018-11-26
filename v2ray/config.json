@@ -2,80 +2,16 @@
   "log": {
     "loglevel": "warning"
   },
-  "inbound": {
-    "port": 1080,
-    "listen": "127.0.0.1",
-    "protocol": "socks",
-    "settings": {
-      "auth": "noauth",
-      "udp": false,
-      "ip": "127.0.0.1"
-    }
+  "dns": {
+    "hosts": {
+      "360.com": "127.0.0.1"
+    },
+    "servers": [
+        "223.5.5.5",
+        "223.6.6.6",
+        "localhost"
+    ]
   },
-  "inboundDetour": [
-    {
-      "port": "1082",
-      "listen": "127.0.0.1",
-      "protocol": "http",
-      "allocate": {
-        "strategy": "always",
-        "refresh": 5,
-        "concurrency": 3
-      },
-      "settings": {},
-      "streamSettings": {},
-      "domainOverride": ["http", "tls"]
-    }
-  ],
-  "outbound": {
-    "protocol": "vmess",
-    "settings": {
-      "vnext": [
-        {
-          "address": "xxx.xxx.xxx.xxx",
-          "port": 12345,
-          "users": [
-            {
-              "id": "48d6b-6c0-4ba-a85-c12a",
-              "alterId": 64,
-              "security": "auto",
-              "level": 0
-            }
-          ]
-        }
-      ]
-    },
-    "streamSettings": {
-      "network": "ws",
-      "security": "tls",
-      "tlsSettings": {
-        "serverName": "xxxxxx.ml"
-      },
-      "wsSettings": {
-        "path": "/xxx"
-      }
-    },
-    "mux": {
-      "enabled": true,
-      "concurrency": 8
-    }
-  },
-  "outboundDetour": [
-    {
-      "protocol": "freedom",
-      "settings": {},
-      "tag": "direct"
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {
-        "response": {
-          "type": "none"
-        }
-      },
-      "tag": "reject"
-    }
-  ],
   "routing": {
     "strategy": "rules",
     "settings": {
@@ -185,17 +121,83 @@
       ]
     }
   },
-  "hosts": {
-    "360.com": "127.0.0.1"
-  },
-  "servers": [
-      "223.5.5.5",
-      "223.6.6.6",
-      "localhost"
-  ],
   "policy": {
     "levels": {
       "0": {"uplinkOnly": 0}
     }
-  }
+  },
+  "inbound": {
+    "port": 1080,
+    "listen": "127.0.0.1",
+    "protocol": "socks",
+    "settings": {
+      "auth": "noauth",
+      "udp": false,
+      "ip": "127.0.0.1"
+    }
+  },
+  "inboundDetour": [
+    {
+      "port": "1082",
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "allocate": {
+        "strategy": "always",
+        "refresh": 5,
+        "concurrency": 3
+      },
+      "settings": {},
+      "streamSettings": {},
+      "domainOverride": ["http", "tls"]
+    }
+  ],
+  "outbound": {
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "xxx.xxx.xxx.xxx",
+          "port": 12345,
+          "users": [
+            {
+              "id": "48d6b-6c0-4ba-a85-c12a",
+              "alterId": 64,
+              "security": "auto",
+              "level": 0
+            }
+          ]
+        }
+      ]
+    },
+    "streamSettings": {
+      "network": "ws",
+      "security": "tls",
+      "tlsSettings": {
+        "serverName": "xxxxxx.ml"
+      },
+      "wsSettings": {
+        "path": "/xxx"
+      }
+    },
+    "mux": {
+      "enabled": true,
+      "concurrency": 8
+    }
+  },
+  "outboundDetour": [
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "none"
+        }
+      },
+      "tag": "reject"
+    }
+  ]
 }
