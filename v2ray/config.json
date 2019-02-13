@@ -4,12 +4,19 @@
   },
   "dns": {
     "hosts": {
-      "360.com": "127.0.0.1"
+      "domain:360.com": "127.0.0.1"
     },
     "servers": [
-        "223.5.5.5",
-        "223.6.6.6",
-        "localhost"
+      {
+        "address": "114.114.114.114",
+        "port": 53,
+        "domains": [
+          "geosite:cn"
+        ]
+      },
+      "1.1.1.1",
+      "8.8.8.8",
+      "localhost"
     ]
   },
   "routing": {
@@ -142,7 +149,7 @@
   },
   "inboundDetour": [
     {
-      "port": "1082",
+      "port": 1082,
       "listen": "127.0.0.1",
       "protocol": "http",
       "allocate": {
