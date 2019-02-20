@@ -13,13 +13,12 @@
         {
           "id": "5d2afe77-ed4b-403f-9e04-fbxxxxxxxxx",
           "level": 1,
-          "alterId": 64
+          "alterId": 16
         }
       ]
     },
     "streamSettings": {
         "network": "ws",
-        "security": "auto",
         "wsSettings": {
             "connectionReuse": true,
             "path": "/ray"
