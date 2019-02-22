@@ -1,45 +1,44 @@
-    {
-      "log" : {
-        "access": "/var/log/v2ray/access.log",
-        "error": "/var/log/v2ray/error.log",
-        "loglevel": "warning"
-      },
-      "inbounds": [{
-        "port": 11111,
-        "protocol": "vmess",
-        "settings": {
-          "clients": [
-            {
-              "id": "882a2126-4cf4-4a70-951f-19f44538cff8",
-              "level": 1,
-              "alterId": 64
-            }
-          ]
-        },
-        "streamSettings": {
-            "network": "ws",
-            "wsSettings": {
-                "connectionReuse": true,
-                "path": "/proxy/path"
-            }
+{
+  "log" : {
+    "access": "/var/log/v2ray/access.log",
+    "error": "/var/log/v2ray/error.log",
+    "loglevel": "warning"
+  },
+  "inbounds": [{
+    "port": 11111,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "882a2126-4cf4-4a70-951f-19f44538cff8",
+          "level": 1,
+          "alterId": 64
         }
-      }],
-      "outbounds": [{
-        "protocol": "freedom",
-        "settings": {}
-      },{
-        "protocol": "blackhole",
-        "settings": {},
-        "tag": "blocked"
-      }],
-      "routing": {
-        "rules": [
-          {
-            "type": "field",
-            "ip": ["geoip:private"],
-            "outboundTag": "blocked"
-          }
-        ]
-      }
+      ]
+    },
+    "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+            "connectionReuse": true,
+            "path": "/proxy/path"
+        }
     }
-    
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {}
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  }],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "blocked"
+      }
+    ]
+  }
+}
