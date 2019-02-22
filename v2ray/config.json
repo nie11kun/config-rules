@@ -42,23 +42,15 @@
     }
   }],
   "outbounds": [{
-    "protocol": "freedom",
-    "settings": {},
-    "tag": "direct"
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  },{
     "protocol": "vmess",
     "settings": {
       "vnext": [
         {
-          "address": "xxx.xxx.xxx.xxx",
-          "port": 12345,
+          "address": "you.domain",
+          "port": 443,
           "users": [
             {
-              "id": "48d6b-6c0-4ba-a85-c12a",
+              "id": "UUID",
               "alterId": 64,
               "security": "auto",
               "level": 1
@@ -67,21 +59,29 @@
         }
       ]
     },
-    "tag": "toProxy",
+    "tag": "out-Proxy",
     "streamSettings": {
       "network": "ws",
       "security": "tls",
       "tlsSettings": {
-        "serverName": "xxxxxx.ml"
+        "serverName": "you.domain"
       },
       "wsSettings": {
-        "path": "/xxx"
+        "path": "/proxypath"
       }
     },
     "mux": {
       "enabled": true,
       "concurrency": 8
     }
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  },{
+    "protocol": "freedom",
+    "settings": {},
+    "tag": "direct"
   }],
   "routing": {
     "domainStrategy": "IPOnDemand",
@@ -168,7 +168,7 @@
           "221.179.183.0/24",
           "221.179.191.0/24"
         ],
-        "outboundTag": "reject"
+        "outboundTag": "blocked"
       },
       {
         "type": "field",
@@ -181,10 +181,6 @@
           "geosite:cn"
         ],
         "ip": [
-          "10.0.0.0/8",
-          "127.0.0.0/8",
-          "172.16.0.0/12",
-          "192.168.0.0/16",
           "geoip:cn"
         ],
         "outboundTag": "direct"

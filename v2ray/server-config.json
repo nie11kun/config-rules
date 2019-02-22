@@ -10,7 +10,7 @@
     "settings": {
       "clients": [
         {
-          "id": "882a2126-4cf4-4a70-951f-19f44538cff8",
+          "id": "UUID",
           "level": 1,
           "alterId": 64
         }
@@ -20,7 +20,7 @@
         "network": "ws",
         "wsSettings": {
             "connectionReuse": true,
-            "path": "/proxy/path"
+            "path": "/proxypath"
         }
     }
   }],
