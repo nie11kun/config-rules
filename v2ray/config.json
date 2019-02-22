@@ -2,26 +2,100 @@
   "log": {
     "loglevel": "warning"
   },
-  "dns": {
-    "hosts": {
-      "domain:360.com": "127.0.0.1"
+  "inbounds": [{
+    "port": 1080,
+    "listen": "127.0.0.1",
+    "tag": "socks-inbound",
+    "protocol": "socks",
+    "settings": {
+      "auth": "noauth",
+      "udp": false,
+      "ip": "127.0.0.1"
     },
-    "servers": [
-      {
-        "address": "114.114.114.114",
-        "port": 53,
-        "domains": [
-          "geosite:cn"
-        ]
+    "sniffing": {
+      "enable": true,
+      "destOverride": ["http", "tls"]
+    },
+    "allocate": {
+      "strategy": "always",
+      "refresh": 5,
+      "concurrency": 3
+    }
+  },{
+    "port": 1082,
+    "listen": "127.0.0.1",
+    "tag": "http-inbound",
+    "protocol": "http",
+    "settings": {
+      "auth": "noauth",
+      "udp": false,
+      "ip": "127.0.0.1"
+    },
+    "sniffing": {
+      "enable": true,
+      "destOverride": ["http", "tls"]
+    },
+    "allocate": {
+      "strategy": "always",
+      "refresh": 5,
+      "concurrency": 3
+    }
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {},
+    "tag": "direct"
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  },{
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "xxx.xxx.xxx.xxx",
+          "port": 12345,
+          "users": [
+            {
+              "id": "48d6b-6c0-4ba-a85-c12a",
+              "alterId": 64,
+              "security": "auto",
+              "level": 1
+            }
+          ]
+        }
+      ]
+    },
+    "tag": "toProxy",
+    "streamSettings": {
+      "network": "ws",
+      "security": "tls",
+      "tlsSettings": {
+        "serverName": "xxxxxx.ml"
       },
-      "1.1.1.1",
-      "8.8.8.8",
-      "localhost"
-    ]
-  },
+      "wsSettings": {
+        "path": "/xxx"
+      }
+    },
+    "mux": {
+      "enabled": true,
+      "concurrency": 8
+    }
+  }],
   "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
+    "domainStrategy": "IPOnDemand",
+    "rules":[
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "blocked"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:category-ads"],
+        "outboundTag": "blocked"
+      },
       {
         "type": "field",
         "domain": [
@@ -125,6 +199,23 @@
       }
     ]
   },
+  "dns": {
+    "hosts": {
+      "domain:360.com": "127.0.0.1"
+    },
+    "servers": [
+      "1.1.1.1",
+      {
+        "address": "114.114.114.114",
+        "port": 53,
+        "domains": [
+          "geosite:cn"
+        ]
+      },
+      "8.8.8.8",
+      "localhost"
+    ]
+  },
   "policy": {
     "levels": {
       "0": {
@@ -137,78 +228,5 @@
       "statsInboundDownlink": false
     }
   },
-  "inbound": {
-    "port": 1080,
-    "listen": "127.0.0.1",
-    "protocol": "socks",
-    "domainOverride": ["http", "tls"],
-    "settings": {
-      "auth": "noauth",
-      "udp": false
-    }
-  },
-  "inboundDetour": [
-    {
-      "port": 1082,
-      "listen": "127.0.0.1",
-      "protocol": "http",
-      "allocate": {
-        "strategy": "always",
-        "refresh": 5,
-        "concurrency": 3
-      },
-      "settings": {},
-      "streamSettings": {},
-      "domainOverride": ["http", "tls"]
-    }
-  ],
-  "outbound": {
-    "protocol": "vmess",
-    "settings": {
-      "vnext": [
-        {
-          "address": "xxx.xxx.xxx.xxx",
-          "port": 12345,
-          "users": [
-            {
-              "id": "48d6b-6c0-4ba-a85-c12a",
-              "alterId": 16,
-              "security": "auto",
-              "level": 0
-            }
-          ]
-        }
-      ]
-    },
-    "streamSettings": {
-      "network": "ws",
-      "security": "tls",
-      "tlsSettings": {
-        "serverName": "xxxxxx.ml"
-      },
-      "wsSettings": {
-        "path": "/xxx"
-      }
-    },
-    "mux": {
-      "enabled": true,
-      "concurrency": 8
-    }
-  },
-  "outboundDetour": [
-    {
-      "protocol": "freedom",
-      "settings": {},
-      "tag": "direct"
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {
-        "response": {
-          "type": "none"
-        }
-      },
-      "tag": "reject"
-    }
-  ]
+  "other": {}
 }
