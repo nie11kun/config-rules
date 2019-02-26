@@ -186,6 +186,13 @@
         "outboundTag": "direct"
       },
       {
+        "type": "field",
+        "ip": [
+          "8.8.8.8"
+        ],
+        "outboundTag": "out-Proxy"
+      },
+      {
         "type": "chinasites",
         "outboundTag": "direct"
       },
