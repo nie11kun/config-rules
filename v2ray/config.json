@@ -89,7 +89,7 @@
       {
         "type": "field",
         "ip": ["geoip:private"],
-        "outboundTag": "blocked"
+        "outboundTag": "direct"
       },
       {
         "type": "field",
