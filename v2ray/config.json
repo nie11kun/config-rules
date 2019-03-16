@@ -88,11 +88,6 @@
     "rules":[
       {
         "type": "field",
-        "ip": ["geoip:private"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
         "domain": ["geosite:category-ads"],
         "outboundTag": "blocked"
       },
@@ -172,6 +167,11 @@
       },
       {
         "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
         "domain": [
           "apple.com",
           "icloud.com",
@@ -187,18 +187,31 @@
       },
       {
         "type": "field",
+        "domain": ["geosite:cn"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:speedtest"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:google"],
+        "outboundTag": "out-Proxy"
+      },
+      {
+        "type": "field",
         "ip": [
           "8.8.8.8"
         ],
         "outboundTag": "out-Proxy"
-      },
+      }
+    ],
+    "balancers": [
       {
-        "type": "chinasites",
-        "outboundTag": "direct"
-      },
-      {
-        "type": "chinaip",
-        "outboundTag": "direct"
+        "tag": "balancer",
+        "selector": ["out"]
       }
     ]
   },
