@@ -167,32 +167,25 @@
       },
       {
         "type": "field",
-        "ip": ["geoip:private"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
         "domain": [
           "apple.com",
           "icloud.com",
           "itunes.com",
           "mzstatic.com",
-          "icloud-content.com",
-          "geosite:cn"
+          "icloud-content.com"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:cn",
+          "geosite:speedtest"
         ],
         "ip": [
+          "geoip:private",
           "geoip:cn"
         ],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "domain": ["geosite:cn"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "domain": ["geosite:speedtest"],
         "outboundTag": "direct"
       },
       {
