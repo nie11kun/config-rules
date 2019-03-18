@@ -169,6 +169,7 @@
         "type": "field",
         "domain": [
           "apple.com",
+          "mail.me.com",
           "icloud.com",
           "itunes.com",
           "mzstatic.com",
