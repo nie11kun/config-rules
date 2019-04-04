@@ -64,7 +64,8 @@
       "network": "ws",
       "security": "tls",
       "tlsSettings": {
-        "serverName": "you.domain"
+        "serverName": "you.domain",
+        "allowInsecure": false
       },
       "wsSettings": {
         "path": "/proxypath"
