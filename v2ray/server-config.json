@@ -15,7 +15,8 @@
           "level": 1,
           "alterId": 64
         }
-      ]
+      ],
+      "disableInsecureEncryption": true
     },
     "streamSettings": {
         "network": "ws",
