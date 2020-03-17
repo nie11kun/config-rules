@@ -4,7 +4,7 @@
   },
   "inbounds": [{
     "port": 1080,
-    "listen": "127.0.0.1",
+    "listen": "0.0.0.0",
     "tag": "socks-inbound",
     "protocol": "socks",
     "settings": {
@@ -23,7 +23,7 @@
     }
   },{
     "port": 1082,
-    "listen": "127.0.0.1",
+    "listen": "0.0.0.0",
     "tag": "http-inbound",
     "protocol": "http",
     "settings": {
