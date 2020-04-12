@@ -1,0 +1,24 @@
+{
+    "dns": {
+        "hosts": {
+            "domain:360.com": "127.0.0.1"
+        },
+        "servers": [
+            {
+                "address": "114.114.114.114",
+                "port": 53,
+                "domains": [
+                    "geosite:cn"
+                ],
+                "expectIPs": [
+                    "geoip:cn"
+                ]
+            },
+            "223.5.5.5",
+            "114.114.115.115",
+            "https://cloudflare-dns.com/dns-query",
+            "https://dns.google/dns-query",
+            "localhost"
+        ]
+    }
+}
