@@ -24,6 +24,9 @@
                 "security": "tls",
                 "tlsSettings": {
                     "serverName": "you.domain",
+                    "alpn": [
+                        "http/1.1"
+                    ],
                     "allowInsecure": false
                 },
                 "wsSettings": {
@@ -40,12 +43,18 @@
         },
         {
             "protocol": "blackhole",
-            "settings": {},
+            "settings": {
+                "response": {
+                    "type": "none"
+                }
+            },
             "tag": "blocked"
         },
         {
             "protocol": "freedom",
-            "settings": {},
+            "settings": {
+                "domainStrategy": "AsIs"
+            },
             "tag": "direct"
         }
     ]
