@@ -1,7 +1,8 @@
 {
     "dns": {
         "hosts": {
-            "domain:360.com": "127.0.0.1"
+            "domain:360.com": "127.0.0.1",
+            "domain:pandownload.com": "https://pandownload.niekun.net"
         },
         "servers": [
             {
