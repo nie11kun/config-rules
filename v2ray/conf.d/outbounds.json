@@ -53,9 +53,16 @@
         {
             "protocol": "freedom",
             "settings": {
+                "domainStrategy": "AsIs"
+            },
+            "tag": "direct-systemDNS"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
                 "domainStrategy": "UseIP"
             },
-            "tag": "direct"
+            "tag": "direct-customDNS"
         }
     ]
 }

@@ -42,7 +42,7 @@
                     "mzstatic.com",
                     "icloud-content.com"
                 ],
-                "outboundTag": "direct"
+                "outboundTag": "direct-customDNS"
             },
             {
                 "type": "field",
@@ -54,7 +54,14 @@
                     "geoip:private",
                     "geoip:cn"
                 ],
-                "outboundTag": "direct"
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "pandownload.com"
+                ],
+                "outboundTag": "direct-customDNS"
             },
             {
                 "type": "field",
