@@ -1,7 +1,7 @@
 {
     "dns": {
         "hosts": {
-            "domain:pandownload.com": "104.24.97.72"
+            "domain:pandownload.com": "pandownload.niekun.net"
         },
         "servers": [
             {
