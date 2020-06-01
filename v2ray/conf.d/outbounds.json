@@ -27,7 +27,8 @@
                     "alpn": [
                         "http/1.1"
                     ],
-                    "allowInsecure": false
+                    "allowInsecure": false,
+                    "allowInsecureCiphers": true
                 },
                 "wsSettings": {
                     "path": "/proxypath"
