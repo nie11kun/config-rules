@@ -12,6 +12,7 @@
                                 "id": "UUID",
                                 "alterId": 64,
                                 "security": "auto",
+                                "testsEnabled": "VMessAEAD",
                                 "level": 1
                             }
                         ]
@@ -27,8 +28,7 @@
                     "alpn": [
                         "http/1.1"
                     ],
-                    "allowInsecure": false,
-                    "allowInsecureCiphers": true
+                    "allowInsecure": false
                 },
                 "wsSettings": {
                     "path": "/proxypath"
