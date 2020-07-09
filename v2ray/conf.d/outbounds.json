@@ -12,6 +12,7 @@
                                 "id": "UUID",
                                 "alterId": 64,
                                 "security": "auto",
+                                "testsEnabled": "VMessAEAD",
                                 "level": 1
                             }
                         ]
