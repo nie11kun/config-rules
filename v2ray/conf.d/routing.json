@@ -34,6 +34,13 @@
             {
                 "type": "field",
                 "domain": [
+                    "testflight.apple.com"
+                ],
+                "outboundTag": "out-Proxy"
+            },
+            {
+                "type": "field",
+                "domain": [
                     "apple.com",
                     "mail.me.com",
                     "mail.me.com.akadns.net",
