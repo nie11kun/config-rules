@@ -29,15 +29,15 @@
     },
     "inbounds": [
         {
-            "port": 12652,
+            "port": 11111,
             "listen": "127.0.0.1",
             "protocol": "vless",
             "settings": {
                 "clients": [
                     {
-                        "id": "75850a7a-68f5-4c77-af3a-c06854ae8b86",
+                        "id": "UUID",
                         "level": 0,
-                        "email": "me@niekun.net"
+                        "email": "EMAIL"
                     }
                 ],
                 "decryption": "none"
@@ -51,16 +51,16 @@
             }
         },
         {
-            "port": 12651,
+            "port": 22222,
             "listen": "127.0.0.1",
             "protocol": "vmess",
             "settings": {
                 "clients": [
                     {
-                        "id": "27d1a15a-da6b-47b9-a226-765a5a158796",
-                        "alterId": 16,
+                        "id": "UUID",
+                        "alterId": 0,
                         "level": 0,
-                        "email": "me@niekun.net"
+                        "email": "EMAIL"
                     }
                 ]
             },

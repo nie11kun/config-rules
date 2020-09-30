@@ -1,28 +1,28 @@
 {
-    "outbounds": [{
-            "protocol": "vmess",
+    "outbounds": [
+        {
+            "protocol": "vless",
             "settings": {
-                "vnext": [{
-                    "address": "you.domain",
-                    "port": 443,
-                    "users": [{
-                        "id": "UUID",
-                        "alterId": 0,
-                        "security": "auto",
-                        "level": 1
-                    }]
-                }]
+                "vnext": [
+                    {
+                        "address": "you.domain",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "UUID",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
             },
             "tag": "out-Proxy",
             "streamSettings": {
                 "network": "ws",
                 "security": "tls",
                 "tlsSettings": {
-                    "serverName": "you.domain",
-                    "alpn": [
-                        "http/1.1"
-                    ],
-                    "allowInsecure": false
+                    "serverName": "you.domain"
                 },
                 "wsSettings": {
                     "path": "/proxypath"
