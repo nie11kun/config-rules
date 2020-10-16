@@ -1,0 +1,79 @@
+{
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "you.domain",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "UUID",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "tag": "out-Proxy",
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "you.domain"
+                },
+                "wsSettings": {
+                    "path": "/proxypath"
+                },
+                "sockopt": {
+                    "tcpFastOpen": true,
+                    "mark": 255
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            }
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "none"
+                }
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 255
+                }
+            },
+            "tag": "blocked"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "AsIs"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 255
+                }
+            },
+            "tag": "direct-systemDNS"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIP"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 255
+                }
+            },
+            "tag": "direct-customDNS"
+        }
+    ]
+}

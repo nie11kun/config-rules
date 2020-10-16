@@ -1,0 +1,22 @@
+{
+    "log": {
+        "access": "/var/log/access.log",
+        "error": "/var/log/error.log",
+        "loglevel": "warning"
+    },
+    "policy": {
+        "levels": {
+            "0": {
+                "handshake": 4,
+                "connIdle": 60,
+                "uplinkOnly": 0,
+                "downlinkOnly": 0
+            }
+        },
+        "system": {
+            "statsInboundUplink": false,
+            "statsInboundDownlink": false
+        }
+    },
+    "other": {}
+}

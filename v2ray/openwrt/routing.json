@@ -1,0 +1,97 @@
+{
+    "routing": {
+        "domainStrategy": "IPOnDemand",
+        "rules": [
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads"
+                ],
+                "outboundTag": "blocked"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "360.com",
+                    "360.cn",
+                    "api.map.baidu.com",
+                    "ps.map.baidu.com",
+                    "sv.map.baidu.com",
+                    "offnavi.map.baidu.com",
+                    "newvector.map.baidu.com",
+                    "ulog.imap.baidu.com",
+                    "newloc.map.n.shifen.com",
+                    "api.map.baidu.com",
+                    "ps.map.baidu.com",
+                    "sv.map.baidu.com",
+                    "offnavi.map.baidu.com",
+                    "newvector.map.baidu.com",
+                    "ulog.imap.baidu.com",
+                    "newloc.map.n.shifen.com"
+                ],
+                "outboundTag": "blocked"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "testflight.apple.com"
+                ],
+                "outboundTag": "out-Proxy"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "apple.com",
+                    "mail.me.com",
+                    "mail.me.com.akadns.net",
+                    "icloud.com",
+                    "itunes.com",
+                    "mzstatic.com",
+                    "icloud-content.com"
+                ],
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:cn",
+                    "geosite:speedtest"
+                ],
+                "ip": [
+                    "geoip:private",
+                    "geoip:cn"
+                ],
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "pandownload.com"
+                ],
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:google"
+                ],
+                "outboundTag": "out-Proxy"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "8.8.8.8"
+                ],
+                "outboundTag": "out-Proxy"
+            }
+        ],
+        "balancers": [
+            {
+                "tag": "balancer",
+                "selector": [
+                    "out"
+                ]
+            }
+        ]
+    }
+}
