@@ -1,7 +1,15 @@
 {
     "routing": {
         "domainStrategy": "IPOnDemand",
-        "rules": [
+        "rules": [{
+                "type": "field",
+                "inboundTag": [
+                    "dokodemo-door-inbound"
+                ],
+                "port": 53,
+                "network": "udp",
+                "outboundTag": "dns-out"
+            },
             {
                 "type": "field",
                 "domain": [
@@ -85,13 +93,11 @@
                 "outboundTag": "out-Proxy"
             }
         ],
-        "balancers": [
-            {
-                "tag": "balancer",
-                "selector": [
-                    "out"
-                ]
-            }
-        ]
+        "balancers": [{
+            "tag": "balancer",
+            "selector": [
+                "out"
+            ]
+        }]
     }
 }

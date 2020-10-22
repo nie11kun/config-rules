@@ -1,21 +1,16 @@
 {
-    "outbounds": [
-        {
+    "outbounds": [{
             "protocol": "vless",
             "settings": {
-                "vnext": [
-                    {
-                        "address": "you.domain",
-                        "port": 443,
-                        "users": [
-                            {
-                                "id": "UUID",
-                                "encryption": "none",
-                                "level": 0
-                            }
-                        ]
-                    }
-                ]
+                "vnext": [{
+                    "address": "you.domain",
+                    "port": 443,
+                    "users": [{
+                        "id": "UUID",
+                        "encryption": "none",
+                        "level": 0
+                    }]
+                }]
             },
             "tag": "out-Proxy",
             "streamSettings": {
@@ -28,8 +23,7 @@
                     "path": "/proxypath"
                 },
                 "sockopt": {
-                    "tcpFastOpen": true,
-                    "mark": 255
+                    "tcpFastOpen": true
                 }
             },
             "mux": {
@@ -44,22 +38,12 @@
                     "type": "none"
                 }
             },
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 255
-                }
-            },
             "tag": "blocked"
         },
         {
             "protocol": "freedom",
             "settings": {
                 "domainStrategy": "AsIs"
-            },
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 255
-                }
             },
             "tag": "direct-systemDNS"
         },
@@ -68,12 +52,11 @@
             "settings": {
                 "domainStrategy": "UseIP"
             },
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 255
-                }
-            },
             "tag": "direct-customDNS"
+        },
+        {
+            "tag": "dns-out",
+            "protocol": "dns"
         }
     ]
 }
