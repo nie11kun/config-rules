@@ -8,6 +8,10 @@
             "network": "tcp,udp",
             "timeout": 30,
             "followRedirect": true
+        },
+        "sniffing": {
+            "enabled": true,
+            "destOverride": ["http", "tls"]
         }
     }]
 }
