@@ -24,7 +24,7 @@
                 },
                 "sockopt": {
                     "tcpFastOpen": true,
-                    "mark": 1
+                    "mark": 255
                 }
             },
             "mux": {
@@ -41,7 +41,7 @@
             },
             "streamSettings": {
                 "sockopt": {
-                    "mark": 1
+                    "mark": 255
                 }
             },
             "tag": "blocked"
@@ -53,7 +53,7 @@
             },
             "streamSettings": {
                 "sockopt": {
-                    "mark": 1
+                    "mark": 255
                 }
             },
             "tag": "direct-systemDNS"
@@ -65,7 +65,7 @@
             },
             "streamSettings": {
                 "sockopt": {
-                    "mark": 1
+                    "mark": 255
                 }
             },
             "tag": "direct-customDNS"
@@ -75,7 +75,7 @@
             "protocol": "dns",
             "streamSettings": {
                 "sockopt": {
-                    "mark": 1
+                    "mark": 255
                 }
             }
         }
