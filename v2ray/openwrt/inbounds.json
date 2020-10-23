@@ -1,7 +1,6 @@
 {
     "inbounds": [{
             "port": 1081,
-            "listen": "0.0.0.0",
             "tag": "dokodemo-door-inbound",
             "protocol": "dokodemo-door",
             "settings": {
