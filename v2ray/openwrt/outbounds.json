@@ -23,7 +23,8 @@
                     "path": "/proxypath"
                 },
                 "sockopt": {
-                    "tcpFastOpen": true
+                    "tcpFastOpen": true,
+                    "mark": 1
                 }
             },
             "mux": {
@@ -38,12 +39,22 @@
                     "type": "none"
                 }
             },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 1
+                }
+            },
             "tag": "blocked"
         },
         {
             "protocol": "freedom",
             "settings": {
                 "domainStrategy": "AsIs"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 1
+                }
             },
             "tag": "direct-systemDNS"
         },
@@ -52,11 +63,21 @@
             "settings": {
                 "domainStrategy": "UseIP"
             },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 1
+                }
+            },
             "tag": "direct-customDNS"
         },
         {
             "tag": "dns-out",
-            "protocol": "dns"
+            "protocol": "dns",
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 1
+                }
+            }
         }
     ]
 }

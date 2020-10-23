@@ -1,17 +1,44 @@
 {
     "inbounds": [{
-        "port": 1081,
-        "listen": "0.0.0.0",
-        "tag": "dokodemo-door-inbound",
-        "protocol": "dokodemo-door",
-        "settings": {
-            "network": "tcp,udp",
-            "timeout": 30,
-            "followRedirect": true
+            "port": 1081,
+            "listen": "0.0.0.0",
+            "tag": "dokodemo-door-inbound",
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp,udp",
+                "timeout": 30,
+                "followRedirect": true
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": ["http", "tls"]
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "tproxy": "tproxy"
+                }
+            }
         },
-        "sniffing": {
-            "enabled": true,
-            "destOverride": ["http", "tls"]
+        {
+            "port": 1082,
+            "listen": "0.0.0.0",
+            "tag": "http-inbound",
+            "protocol": "http",
+            "settings": {
+                "timeout": 0
+            },
+            "sniffing": {
+                "enable": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
+            "allocate": {
+                "strategy": "always",
+                "refresh": 5,
+                "concurrency": 3
+            }
         }
-    }]
+    ]
 }
