@@ -47,7 +47,8 @@
                     "icloud.com",
                     "itunes.com",
                     "mzstatic.com",
-                    "icloud-content.com"
+                    "icloud-content.com",
+                    "niekun.net"
                 ],
                 "outboundTag": "direct-customDNS"
             },
