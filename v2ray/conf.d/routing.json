@@ -45,6 +45,7 @@
                     "mail.me.com",
                     "mail.me.com.akadns.net",
                     "icloud.com",
+                    "icloud.com.cn",
                     "itunes.com",
                     "mzstatic.com",
                     "icloud-content.com",
@@ -59,10 +60,11 @@
                     "geosite:speedtest"
                 ],
                 "ip": [
+                    "27.168.0.0/16",
                     "geoip:private",
                     "geoip:cn"
                 ],
-                "outboundTag": "direct-customDNS"
+                "outboundTag": "direct-systemDNS"
             },
             {
                 "type": "field",
