@@ -5,42 +5,49 @@
             {
                 "type": "field",
                 "domain": [
-                    "geosite:category-ads"
-                ],
-                "outboundTag": "blocked"
-            },
-            {
-                "type": "field",
-                "domain": [
+                    "geosite:category-ads",
                     "360.com",
                     "360.cn",
-                    "api.map.baidu.com",
-                    "ps.map.baidu.com",
-                    "sv.map.baidu.com",
-                    "offnavi.map.baidu.com",
-                    "newvector.map.baidu.com",
-                    "ulog.imap.baidu.com",
-                    "newloc.map.n.shifen.com",
-                    "api.map.baidu.com",
-                    "ps.map.baidu.com",
-                    "sv.map.baidu.com",
-                    "offnavi.map.baidu.com",
-                    "newvector.map.baidu.com",
-                    "ulog.imap.baidu.com",
-                    "newloc.map.n.shifen.com"
+                    "5lyq.com",
+                    "51ads.com",
+                    "51yes.com.com",
+                    "5leji.com",
+                    "51y5.net",
+                    "ad.ximalaya.com",
+                    "adbehavior.wsa.ximalaya.com",
+                    "adbs.ximalaya.com",
+                    "adse.wsa.ximalaya.com",
+                    "adse.ximalaya.com",
+                    "adsebs.ximalaya.com",
+                    "location.ximalaya.com",
+                    "xdcs-collector.ximalaya.com",
+                    "eclick.baidu.com",
+                    "entry.baidu.com",
+                    "hmma.baidu.com",
+                    "mobads-logs.baidu.com",
+                    "mobads.baidu.com",
+                    "mtj.baidu.com",
+                    "nsclick.baidu.com",
+                    "static.tieba.baidu.com",
+                    "ucstat.baidu.com",
+                    "union.baidu.com",
+                    "imageplus.baidu.com",
+                    "t10.baidu.com",
+                    "t11.baidu.com",
+                    "t12.baidu.com",
+                    "google-analytics.com",
+                    "taboola.com",
+                    "trc.taboola.com",
+                    ".inmobi.cn",
+                    ".criteo.com"
                 ],
                 "outboundTag": "blocked"
             },
             {
                 "type": "field",
                 "domain": [
-                    "testflight.apple.com"
-                ],
-                "outboundTag": "out-Proxy"
-            },
-            {
-                "type": "field",
-                "domain": [
+                    "geosite:cn",
+                    "geosite:speedtest",
                     "apple.com",
                     "mail.me.com",
                     "mail.me.com.akadns.net",
@@ -49,39 +56,35 @@
                     "itunes.com",
                     "mzstatic.com",
                     "icloud-content.com",
-                    "niekun.net"
+                    "niekun.net",
+                    "wappass.baidu.com",
+                    "passport.baidu.com",
+                    "yun.baidu.com",
+                    "pan.baidu.com",
+                    "wenku.baidu.com",
+                    "zhidao.baidu.com",
+                    "baike.baidu.com"
+                ],
+                "ip": [
+                    "geoip:cn"
                 ],
                 "outboundTag": "direct-customDNS"
             },
             {
                 "type": "field",
-                "domain": [
-                    "geosite:cn",
-                    "geosite:speedtest"
-                ],
                 "ip": [
                     "27.168.0.0/16",
-                    "geoip:private",
-                    "geoip:cn"
+                    "geoip:private"
                 ],
                 "outboundTag": "direct-systemDNS"
             },
             {
                 "type": "field",
                 "domain": [
-                    "pandownload.com"
+                    "geosite:google",
+                    "app-measurement.com",
+                    "testflight.apple.com"
                 ],
-                "outboundTag": "direct-customDNS"
-            },
-            {
-                "type": "field",
-                "domain": [
-                    "geosite:google"
-                ],
-                "outboundTag": "out-Proxy"
-            },
-            {
-                "type": "field",
                 "ip": [
                     "8.8.8.8"
                 ],
