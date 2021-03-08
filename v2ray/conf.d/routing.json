@@ -1,6 +1,7 @@
 {
     "routing": {
         "domainStrategy": "IPOnDemand",
+        "domainMatcher": "hybrid",
         "rules": [
             {
                 "type": "field",

@@ -18,6 +18,7 @@
                 ]
             },
             "tag": "out-Proxy",
+            "transportLayer": true,
             "streamSettings": {
                 "network": "ws",
                 "security": "tls",
