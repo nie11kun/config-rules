@@ -1,18 +1,29 @@
 {
     "dns": {
-        "servers": [{
-                "address": "114.114.114.114",
+        "hosts": {
+            "domain:360.com": "127.0.0.1"
+        },
+        "servers": [
+            {
+                "address": "119.29.29.29",
                 "port": 53,
                 "domains": [
-                    "geosite:cn"
+                    "geosite:cn",
+                    "niekun.net"
                 ],
                 "expectIPs": [
                     "geoip:cn"
                 ]
             },
-            "223.5.5.5",
-            "114.114.115.115",
+            "119.29.29.29",
+            "114.114.114.114",
+            "1.1.1.1",
+            "8.8.8.8",
+            "https://cloudflare-dns.com/dns-query",
+            "https://dns.google/dns-query",
             "localhost"
-        ]
+        ],
+        "disableCache": false,
+        "tag": "dns_inbound"
     }
 }

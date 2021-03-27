@@ -1,18 +1,24 @@
 {
-    "outbounds": [{
+    "outbounds": [
+        {
             "protocol": "vless",
             "settings": {
-                "vnext": [{
-                    "address": "you.domain",
-                    "port": 443,
-                    "users": [{
-                        "id": "UUID",
-                        "encryption": "none",
-                        "level": 0
-                    }]
-                }]
+                "vnext": [
+                    {
+                        "address": "you.domain",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "UUID",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
             },
             "tag": "out-Proxy",
+            "transportLayer": true,
             "streamSettings": {
                 "network": "ws",
                 "security": "tls",
@@ -24,7 +30,7 @@
                 },
                 "sockopt": {
                     "tcpFastOpen": true,
-                    "mark": 255
+                    "mark": 2
                 }
             },
             "mux": {
@@ -39,11 +45,6 @@
                     "type": "none"
                 }
             },
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 255
-                }
-            },
             "tag": "blocked"
         },
         {
@@ -51,33 +52,33 @@
             "settings": {
                 "domainStrategy": "AsIs"
             },
+            "tag": "direct-systemDNS",
             "streamSettings": {
                 "sockopt": {
-                    "mark": 255
+                    "mark": 2
                 }
-            },
-            "tag": "direct-systemDNS"
+            }
         },
         {
             "protocol": "freedom",
             "settings": {
                 "domainStrategy": "UseIP"
             },
+            "tag": "direct-customDNS",
             "streamSettings": {
                 "sockopt": {
-                    "mark": 255
+                    "mark": 2
                 }
-            },
-            "tag": "direct-customDNS"
+            }
         },
         {
             "tag": "dns-out",
             "protocol": "dns",
             "streamSettings": {
-                "sockopt": {
-                    "mark": 255
-                }
-            }
+              "sockopt": {
+                "mark": 2
+              }
+            }  
         }
     ]
 }

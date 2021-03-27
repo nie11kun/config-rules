@@ -1,7 +1,7 @@
 {
     "log": {
-        "access": "/var/log/v2ray_access.log",
-        "error": "/var/log//v2ray_error.log",
+        "access": "/etc/v2ray/log/v2ray_access.log",
+        "error": "/etc/v2ray/log//v2ray_error.log",
         "loglevel": "warning"
     },
     "policy": {
