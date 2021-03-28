@@ -1,7 +1,9 @@
 {
     "dns": {
         "hosts": {
-            "domain:360.com": "127.0.0.1"
+            "domain:marco.openwrt": "192.168.1.1",
+            "domain:marco.router": "192.168.0.1",
+            "domain:marco.exsi": "192.168.123.122"
         },
         "servers": [
             {
@@ -16,11 +18,9 @@
                 ]
             },
             "119.29.29.29",
-            "114.114.114.114",
+            "223.5.5.5",
             "1.1.1.1",
             "8.8.8.8",
-            "https://cloudflare-dns.com/dns-query",
-            "https://dns.google/dns-query",
             "localhost"
         ],
         "disableCache": false,

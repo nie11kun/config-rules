@@ -85,7 +85,9 @@
                     "baike.baidu.com"
                 ],
                 "ip": [
-                    "geoip:cn"
+                    "geoip:cn",
+                    "119.29.29.29",
+                    "223.5.5.5"
                 ],
                 "outboundTag": "direct-customDNS"
             },
