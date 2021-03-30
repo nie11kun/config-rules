@@ -2,7 +2,7 @@
 START=99
 USE_PROCD=1
 boot() {
-    sleep 60
+    sleep 1
     rc_procd start_service
 }
 start_instance() {
