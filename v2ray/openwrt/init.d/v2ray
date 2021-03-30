@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-START=100
+START=99
 start() {
     /usr/bin/v2ray -confdir /etc/v2ray/conf.d &
     /sbin/ip rule add fwmark 1 table 100
