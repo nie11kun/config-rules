@@ -19,6 +19,7 @@ iptables -t mangle -A V2RAY -d 203.0.113.0/24 -j RETURN
 iptables -t mangle -A V2RAY -d 224.0.0.0/4 -j RETURN
 iptables -t mangle -A V2RAY -d 240.0.0.0/4 -j RETURN
 iptables -t mangle -A V2RAY -d 255.255.255.255/32 -j RETURN
+iptables -t mangle -A V2RAY -d 104.224.160.217 -j RETURN
 iptables -t mangle -A V2RAY -p udp --dport 53 -j RETURN
 iptables -t mangle -A V2RAY -j RETURN -m mark --mark 2
 iptables -t mangle -A V2RAY -p tcp -j TPROXY --on-port 1081 --tproxy-mark 1
@@ -42,6 +43,7 @@ iptables -t mangle -A V2RAY_MARK -d 203.0.113.0/24 -j RETURN
 iptables -t mangle -A V2RAY_MARK -d 224.0.0.0/4 -j RETURN
 iptables -t mangle -A V2RAY_MARK -d 240.0.0.0/4 -j RETURN
 iptables -t mangle -A V2RAY_MARK -d 255.255.255.255/32 -j RETURN
+iptables -t mangle -A V2RAY_MARK -d 104.224.160.217 -j RETURN
 iptables -t mangle -A V2RAY_MARK -p udp --dport 53 -j RETURN
 iptables -t mangle -A V2RAY_MARK -j RETURN -m mark --mark 2
 iptables -t mangle -A V2RAY_MARK -p tcp -j MARK --set-mark 1
