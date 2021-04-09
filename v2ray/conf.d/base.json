@@ -18,5 +18,8 @@
             "statsInboundDownlink": false
         }
     },
-    "other": {}
+    "browserForwarder": {
+        "listenAddr": "127.0.0.1",
+        "listenPort": 8887
+    }
 }
