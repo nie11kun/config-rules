@@ -26,7 +26,9 @@
                     "serverName": "you.domain"
                 },
                 "wsSettings": {
-                    "path": "/proxypath"
+                    "path": "/proxypath",
+                    "maxEarlyData": 1024,
+                    "useBrowserForwarding": false
                 },
                 "sockopt": {
                     "tcpFastOpen": true
@@ -56,7 +58,7 @@
         {
             "protocol": "freedom",
             "settings": {
-                "domainStrategy": "UseIP"
+                "domainStrategy": "UseIPv4"
             },
             "tag": "direct-customDNS"
         }

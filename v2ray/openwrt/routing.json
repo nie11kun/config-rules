@@ -93,6 +93,16 @@
             },
             {
                 "type": "field",
+                "inboundTag": [
+                    "transparent"
+                ],
+                "protocol": [
+                    "bittorrent"
+                ],
+                "outboundTag": "direct-systemDNS"
+            },
+            {
+                "type": "field",
                 "ip": [
                     "27.168.0.0/16",
                     "geoip:private"

@@ -8,7 +8,8 @@
                 "address": "119.29.29.29",
                 "port": 53,
                 "domains": [
-                    "geosite:cn"
+                    "geosite:cn",
+                    "domain:qq.com"
                 ],
                 "expectIPs": [
                     "geoip:cn"
@@ -22,7 +23,8 @@
             "https://dns.google/dns-query",
             "localhost"
         ],
-        "disableCache": true,
+        "queryStrategy": "UseIPv4",
+        "disableCache": false,
         "tag": "dns_inbound"
     }
 }
