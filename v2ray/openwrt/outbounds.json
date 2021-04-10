@@ -39,45 +39,33 @@
             }
         },
         {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIP"
+            },
+            "tag": "direct",
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 2
+                }
+            }
+        },
+        {
             "protocol": "blackhole",
             "settings": {
                 "response": {
-                    "type": "none"
+                    "type": "http"
                 }
             },
             "tag": "blocked"
         },
         {
-            "protocol": "freedom",
-            "settings": {
-                "domainStrategy": "AsIs"
-            },
-            "tag": "direct-systemDNS",
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 2
-                }
-            }
-        },
-        {
-            "protocol": "freedom",
-            "settings": {
-                "domainStrategy": "UseIP"
-            },
-            "tag": "direct-customDNS",
-            "streamSettings": {
-                "sockopt": {
-                    "mark": 2
-                }
-            }
-        },
-        {
             "tag": "dns-out",
             "protocol": "dns",
             "streamSettings": {
-              "sockopt": {
-                "mark": 2
-              }
+                "sockopt": {
+                    "mark": 2
+                }
             }  
         }
     ]

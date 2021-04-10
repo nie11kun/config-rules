@@ -1,7 +1,6 @@
 {
     "routing": {
         "domainStrategy": "IPIfNonMatch",
-        "domainMatcher": "mph",
         "rules": [
             {
                 "type": "field",
@@ -11,124 +10,25 @@
                 "port": 53,
                 "network": "udp",
                 "outboundTag": "dns-out" 
-              },
-              {
-                "type": "field",
-                "inboundTag": [
-                  "transparent"
-                ],
-                "port": 123,
-                "network": "udp",
-                "outboundTag": "direct-customDNS" 
-            }, 
-            {
-                "type": "field",
-                "domain": [
-                    "geosite:category-ads",
-                    "360.com",
-                    "360.cn",
-                    "5lyq.com",
-                    "51ads.com",
-                    "51yes.com.com",
-                    "5leji.com",
-                    "51y5.net",
-                    "ad.ximalaya.com",
-                    "adbehavior.wsa.ximalaya.com",
-                    "adbs.ximalaya.com",
-                    "adse.wsa.ximalaya.com",
-                    "adse.ximalaya.com",
-                    "adsebs.ximalaya.com",
-                    "location.ximalaya.com",
-                    "xdcs-collector.ximalaya.com",
-                    "eclick.baidu.com",
-                    "entry.baidu.com",
-                    "hmma.baidu.com",
-                    "mobads-logs.baidu.com",
-                    "mobads.baidu.com",
-                    "mtj.baidu.com",
-                    "nsclick.baidu.com",
-                    "static.tieba.baidu.com",
-                    "ucstat.baidu.com",
-                    "union.baidu.com",
-                    "imageplus.baidu.com",
-                    "t10.baidu.com",
-                    "t11.baidu.com",
-                    "t12.baidu.com",
-                    "google-analytics.com",
-                    "taboola.com",
-                    "trc.taboola.com",
-                    ".inmobi.cn",
-                    ".criteo.com"
-                ],
-                "outboundTag": "blocked"
             },
             {
                 "type": "field",
                 "domain": [
                     "geosite:cn",
-                    "geosite:speedtest",
-                    "apple.com",
-                    "mail.me.com",
-                    "mail.me.com.akadns.net",
-                    "icloud.com",
-                    "icloud.com.cn",
-                    "itunes.com",
-                    "mzstatic.com",
-                    "icloud-content.com",
-                    "niekun.net",
-                    "wappass.baidu.com",
-                    "passport.baidu.com",
-                    "yun.baidu.com",
-                    "pan.baidu.com",
-                    "wenku.baidu.com",
-                    "zhidao.baidu.com",
-                    "baike.baidu.com"
+                    "geoip:private"
                 ],
                 "ip": [
                     "geoip:cn",
-                    "119.29.29.29",
-                    "223.5.5.5"
+                    "114.114.114.114"
                 ],
-                "outboundTag": "direct-customDNS"
-            },
-            {
-                "type": "field",
-                "inboundTag": [
-                    "transparent"
-                ],
-                "protocol": [
-                    "bittorrent"
-                ],
-                "outboundTag": "direct-systemDNS"
+                "outboundTag": "direct"
             },
             {
                 "type": "field",
                 "ip": [
-                    "27.168.0.0/16",
-                    "geoip:private"
-                ],
-                "outboundTag": "direct-systemDNS"
-            },
-            {
-                "type": "field",
-                "domain": [
-                    "geosite:google",
-                    "app-measurement.com",
-                    "testflight.apple.com"
-                ],
-                "ip": [
-                    "8.8.8.8",
                     "1.1.1.1"
                 ],
                 "outboundTag": "out-Proxy"
-            }
-        ],
-        "balancers": [
-            {
-                "tag": "balancer",
-                "selector": [
-                    "out"
-                ]
             }
         ]
     }

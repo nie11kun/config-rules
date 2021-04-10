@@ -1,29 +1,20 @@
 {
     "dns": {
         "hosts": {
-            "domain:marco.openwrt": "192.168.1.1",
-            "domain:marco.router": "192.168.0.1",
-            "domain:marco.exsi": "192.168.123.122"
+            "360.com": "127.0.0.1"
         },
         "servers": [
             {
-                "address": "119.29.29.29",
+                "address": "114.114.114.114",
                 "port": 53,
                 "domains": [
-                    "geosite:cn",
-                    "niekun.net"
+                    "geosite:cn"
                 ],
                 "expectIPs": [
                     "geoip:cn"
                 ]
             },
-            "119.29.29.29",
-            "223.5.5.5",
-            "1.1.1.1",
-            "8.8.8.8",
-            "localhost"
-        ],
-        "disableCache": false,
-        "tag": "dns_inbound"
+            "1.1.1.1"
+        ]
     }
 }
