@@ -4,29 +4,26 @@
         "rules": [
             {
                 "type": "field",
-                "inboundTag": [
-                  "transparent"
-                ],
-                "port": 53,
-                "network": "udp",
-                "outboundTag": "dns-out" 
-            },
-            {
-                "type": "field",
                 "domain": [
-                    "geosite:cn",
-                    "geoip:private"
+                    "geosite:cn"
                 ],
                 "ip": [
                     "geoip:cn",
-                    "114.114.114.114"
+                    "geoip:private",
+                    "114.114.114.114",
+                    "223.5.5.5"
                 ],
                 "outboundTag": "direct"
             },
             {
                 "type": "field",
+                "domain": [
+                    "geosite:geolocation-!cn"
+                ],
                 "ip": [
-                    "1.1.1.1"
+                    "geoip:telegram",
+                    "1.1.1.1",
+                    "8.8.8.8"
                 ],
                 "outboundTag": "out-Proxy"
             }
