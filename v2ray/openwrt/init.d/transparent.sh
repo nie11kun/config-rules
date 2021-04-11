@@ -6,7 +6,7 @@ ipset create gfwlist hash:ip
 
 ipset -X gfwlist_ext
 ipset create gfwlist_ext hash:net
-for ip in $(cat /etc/dnsmasq/extn_ips.txt);
+for ip in $(cat /etc/dnsmasq/proxy_ip.txt);
     do ipset add gfwlist_ext $ip;
 done
 
