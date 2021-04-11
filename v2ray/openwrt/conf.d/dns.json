@@ -25,7 +25,11 @@
                 ]
             },
             "1.1.1.1",
-            "8.8.8.8"
-        ]
+            "8.8.8.8",
+            "localhost"
+        ],
+        "queryStrategy": "UseIPv4",
+        "disableCache": false,
+        "tag": "dns_inbound"
     }
 }
