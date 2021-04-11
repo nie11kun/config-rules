@@ -21,7 +21,6 @@
                     "geosite:geolocation-!cn"
                 ],
                 "ip": [
-                    "geoip:telegram",
                     "1.1.1.1",
                     "8.8.8.8"
                 ],
