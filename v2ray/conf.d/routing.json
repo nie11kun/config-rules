@@ -86,7 +86,6 @@
                 "type": "field",
                 "domain": [
                     "geosite:google",
-                    "app-measurement.com",
                     "testflight.apple.com"
                 ],
                 "ip": [
