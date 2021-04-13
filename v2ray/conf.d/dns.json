@@ -4,6 +4,7 @@
             "domain:360.com": "127.0.0.1"
         },
         "servers": [
+            "8.8.8.8",
             {
                 "address": "119.29.29.29",
                 "port": 53,
@@ -18,7 +19,6 @@
             "119.29.29.29",
             "114.114.114.114",
             "1.1.1.1",
-            "8.8.8.8",
             "https://cloudflare-dns.com/dns-query",
             "https://dns.google/dns-query",
             "localhost"
