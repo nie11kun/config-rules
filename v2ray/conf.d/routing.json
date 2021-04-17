@@ -100,7 +100,10 @@
                 "tag": "balancer",
                 "selector": [
                     "out"
-                ]
+                ],
+                "strategy": {
+                    "type": "leastPing"
+                }
             }
         ]
     }
