@@ -13,9 +13,9 @@
             "sniffing": {
                 "enable": true,
                 "destOverride": [
-                    "http",
-                    "tls"
-                ]
+                    "fakedns+others"
+                ],
+                "metadataOnly": false
             },
             "allocate": {
                 "strategy": "always",
@@ -34,9 +34,9 @@
             "sniffing": {
                 "enable": true,
                 "destOverride": [
-                    "http",
-                    "tls"
-                ]
+                    "fakedns+others"
+                ],
+                "metadataOnly": false
             },
             "allocate": {
                 "strategy": "always",
