@@ -10,10 +10,7 @@
             },
             "sniffing": {
                 "enabled": true,
-                "destOverride": [
-                    "fakedns+others"
-                ],
-                "metadataOnly": false
+                "destOverride": ["http", "tls"]
             },
             "streamSettings": {
                 "sockopt": {
@@ -33,10 +30,7 @@
             },
             "sniffing": {
                 "enable": true,
-                "destOverride": [
-                    "fakedns+others"
-                ],
-                "metadataOnly": false
+                "destOverride": ["http", "tls"]
             },
             "allocate": {
                 "strategy": "always",
@@ -54,10 +48,7 @@
             },
             "sniffing": {
                 "enable": true,
-                "destOverride": [
-                    "fakedns+others"
-                ],
-                "metadataOnly": false
+                "destOverride": ["http", "tls"]
             },
             "allocate": {
                 "strategy": "always",
