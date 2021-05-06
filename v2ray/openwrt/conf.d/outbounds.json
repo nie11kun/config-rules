@@ -23,11 +23,7 @@
                 "network": "ws",
                 "security": "tls",
                 "tlsSettings": {
-                    "serverName": "you.domain",
-                    "alpn": [
-                        "h2",
-                        "http/1.1"
-                    ]
+                    "serverName": "you.domain"
                 },
                 "wsSettings": {
                     "path": "/proxypath",
