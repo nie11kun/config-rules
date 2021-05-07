@@ -67,6 +67,10 @@
                     "zhidao.baidu.com",
                     "baike.baidu.com"
                 ],
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
                 "ip": [
                     "geoip:cn",
                     "114.114.114.114",
@@ -89,6 +93,10 @@
                     "geosite:google",
                     "testflight.apple.com"
                 ],
+                "outboundTag": "out-Proxy"
+            },
+            {
+                "type": "field",
                 "ip": [
                     "1.1.1.1",
                     "8.8.8.8"

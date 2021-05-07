@@ -9,6 +9,10 @@
                     "geosite:cn",
                     "geosite:speedtest"
                 ],
+                "outboundTag": "direct"
+            },
+            {
+                "type": "field",
                 "ip": [
                     "geoip:cn",
                     "geoip:private",
@@ -23,6 +27,10 @@
                 "domain": [
                     "geosite:geolocation-!cn"
                 ],
+                "outboundTag": "out-Proxy"
+            },
+            {
+                "type": "field",
                 "ip": [
                     "1.1.1.1",
                     "8.8.8.8"
