@@ -65,7 +65,9 @@
                     "pan.baidu.com",
                     "wenku.baidu.com",
                     "zhidao.baidu.com",
-                    "baike.baidu.com"
+                    "baike.baidu.com",
+                    "rerevod.info",
+                    "rerevod.net"
                 ],
                 "outboundTag": "direct-customDNS"
             },
