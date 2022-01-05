@@ -61,6 +61,10 @@
                 "domainStrategy": "UseIPv4"
             },
             "tag": "direct-customDNS"
+        },
+        {
+            "protocol": "dns",
+            "tag": "dns-out"
         }
     ]
 }

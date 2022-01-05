@@ -26,6 +26,7 @@
         ],
         "queryStrategy": "UseIPv4",
         "disableCache": false,
+        "disableFallback": true,
         "tag": "dns_inbound"
     }
 }

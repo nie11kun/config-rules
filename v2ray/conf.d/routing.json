@@ -5,6 +5,15 @@
         "rules": [
             {
                 "type": "field",
+                "inboundTag": [
+                    "http-inbound",
+                    "socks-inbound"
+                ],
+                "port": 53,
+                "outboundTag": "dns-out"
+            },
+            {
+                "type": "field",
                 "domain": [
                     "geosite:category-ads",
                     "360.com",
