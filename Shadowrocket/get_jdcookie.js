@@ -6,8 +6,6 @@ Safari浏览器打开登录 https://home.m.jd.com/myJd/newhome.action 点击"我
 hostname = api.m.jd.com
 *************************/
 
-GetCookie();
-
 const GetCookie = () => {
     const req = $request;
     if (req.method != 'OPTIONS' && req.headers) {
@@ -22,3 +20,5 @@ const GetCookie = () => {
 const notify = (title, subtitle, message) => {
     $notification.post(title, subtitle, message, undefined)
 }
+
+GetCookie();
