@@ -6,25 +6,19 @@ Safari浏览器打开登录 https://home.m.jd.com/myJd/newhome.action 点击"我
 hostname = api.m.jd.com
 *************************/
 
-var $nobyda = nobyda();
-
 GetCookie();
 
-function GetCookie() {
+const GetCookie = () => {
     const req = $request;
     if (req.method != 'OPTIONS' && req.headers) {
         const CV = (req.headers['Cookie'] || req.headers['cookie'] || '');
         const ckItems = CV.match(/(pt_key|pt_pin)=.+?;/g);
-        $nobyda.notify(`cookie`, `successful get jd cookie`, `${ckItems}`);
+        notify(`cookie`, `successful get jd cookie`, `${ckItems}`);
     } else if (!req.headers) {
         throw new Error("error found");
     }
 }
 
-function nobyda() {
-    const notify = (title, subtitle, message) => {
-        $notification.post(title, subtitle, message, undefined)
-    }
-
-    return notify;
-};
+const notify = (title, subtitle, message) => {
+    $notification.post(title, subtitle, message, undefined)
+}
