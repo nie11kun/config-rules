@@ -144,9 +144,12 @@ proxies:
     # skip-cert-verify: true
     # servername: example.com # 优先级高于 wss host
     network: ws
-    ws-path: /vmess
-    # ws-headers:
-    #   Host: v2ray.com
+    ws-opts:
+      path: /vmess
+      # headers:
+      #   Host: v2ray.com
+      # max-early-data: 2048
+      # early-data-header-name: Sec-WebSocket-Protocol
 
 rule-providers:
   apple-proxy:
