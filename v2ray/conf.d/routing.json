@@ -76,7 +76,11 @@
                     "zhidao.baidu.com",
                     "baike.baidu.com",
                     "rerevod.info",
-                    "rerevod.net"
+                    "rerevod.net",
+                    "rrty66.com",
+                    "sportnanoapi.com",
+                    "rtoieurvoncenter.xyz",
+                    "youlixinxi.com"
                 ],
                 "outboundTag": "direct-customDNS"
             },
