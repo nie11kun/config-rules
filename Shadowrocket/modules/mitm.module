@@ -1,0 +1,3 @@
+[MITM]
+enable = true
+hostname = *.googlevideo.com,www.youtube.com,s.youtube.com,youtubei.googleapis.com,api.m.jd.com,mp.weixin.qq.com

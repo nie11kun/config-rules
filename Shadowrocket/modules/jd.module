@@ -1,7 +1,3 @@
 [Script]
 jd_historical_price = type=http-response,script-path=https://raw.githubusercontent.com/yichahucha/surge/master/jd_price.js,pattern=^https?://api\.m\.jd\.com/client\.action\?functionId=(wareBusiness|serverConfig|basicConfig),max-size=1048576,requires-body=true,timeout=60,script-update-interval=90000,enable=true
 get_jdcookie = type=http-request,script-path=https://raw.githubusercontent.com/nie11kun/config-rules/master/Shadowrocket/get_jdcookie.js,pattern=^https?://api\.m\.jd\.com/client\.action\?functionId=GetJDUserInfoUnion,max-size=131072,timeout=10,enable=true
-
-[MITM]
-enable = true
-hostname = api.m.jd.com

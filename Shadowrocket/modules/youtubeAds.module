@@ -9,7 +9,3 @@
 ^https?:\/\/.+\.youtube\.com\/api\/stats\/.+adformat _ reject-img
 ^https?:\/\/.+\.youtube\.com\/pagead\/ _ reject-img
 ^https?:\/\/.+\.youtube\.com\/ptracking _ reject-img
-
-[MITM]
-enable = true
-hostname = *.googlevideo.com,www.youtube.com,s.youtube.com,youtubei.googleapis.com
