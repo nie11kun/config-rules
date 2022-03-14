@@ -1,11 +1,7 @@
 [URL Rewrite]
-^https?:\/\/.+\.googlevideo\.com\/.+&oad _ reject-img
-^https?:\/\/.+\.googlevideo\.com\/.+ctier _ reject-img
-^https?:\/\/youtubei\.googleapis\.com\/youtubei\/.+ad_ _ reject-img
-^https?:\/\/youtubei\.googleapis\.com\/youtubei\/.+log_ _ reject-img
-^https?:\/\/.+\.youtube\.com\/get_midroll_ _ reject-img
-^https?:\/\/premiumyva\.appspot\.com\/vmclickstoadvertisersite _ reject-img
-^https?:\/\/.+\.youtube\.com\/api\/stats\/ads _ reject-img
-^https?:\/\/.+\.youtube\.com\/api\/stats\/.+adformat _ reject-img
-^https?:\/\/.+\.youtube\.com\/pagead\/ _ reject-img
-^https?:\/\/.+\.youtube\.com\/ptracking _ reject-img
+(^https?:\/\/[\w-]+\.googlevideo\.com\/(?!dclk_video_ads).+?)&ctier=L(&.+?),ctier,(.+) $1$2$3 header
+^https?:\/\/[\w-]+\.googlevideo\.com\/(?!(dclk_video_ads|videoplayback\?)).+&oad - reject
+^https?:\/\/youtubei\.googleapis\.com\/youtubei\/v\d\/player\/ad_break - reject
+^https?:\/\/(www|s)\.youtube\.com\/api\/stats\/ads - reject
+^https?:\/\/(www|s)\.youtube\.com\/(pagead|ptracking) - reject
+^https?:\/\/s\.youtube\.com\/api\/stats\/qoe\?adcontext - reject
