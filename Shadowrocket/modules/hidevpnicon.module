@@ -1,0 +1,2 @@
+[General]
+tun-excluded-routes = %APPEND% 0.0.0.0/31
