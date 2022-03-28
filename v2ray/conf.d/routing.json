@@ -113,7 +113,7 @@
                     "geosite:google",
                     "testflight.apple.com"
                 ],
-                "outboundTag": "out-Proxy"
+                "outboundTag": "out-balancer"
             },
             {
                 "type": "field",
@@ -121,12 +121,12 @@
                     "1.1.1.1",
                     "8.8.8.8"
                 ],
-                "outboundTag": "out-Proxy"
+                "outboundTag": "out-balancer"
             }
         ],
         "balancers": [
             {
-                "tag": "balancer",
+                "tag": "out-balancer",
                 "selector": [
                     "out"
                 ],

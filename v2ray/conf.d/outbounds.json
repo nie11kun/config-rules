@@ -17,7 +17,7 @@
                     }
                 ]
             },
-            "tag": "out-Proxy",
+            "tag": "out-Proxy-1",
             "transportLayer": true,
             "streamSettings": {
                 "network": "ws",

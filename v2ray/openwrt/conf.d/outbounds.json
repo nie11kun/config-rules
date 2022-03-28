@@ -17,7 +17,7 @@
                     }
                 ]
             },
-            "tag": "out-Proxy",
+            "tag": "out-Proxy-1",
             "transportLayer": true,
             "streamSettings": {
                 "network": "ws",
@@ -30,6 +30,39 @@
                     "maxEarlyData": 1024,
                     "useBrowserForwarding": false
                 },
+                "sockopt": {
+                    "tcpFastOpen": true,
+                    "mark": 2
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            }
+        },
+        {
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "you.domain",
+                        "port": 1234,
+                        "users": [
+                            {
+                                "id": "UUID",
+                                "alterId": 0,
+                                "security": "auto",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "tag": "out-Proxy-2",
+            "transportLayer": true,
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
                 "sockopt": {
                     "tcpFastOpen": true,
                     "mark": 2

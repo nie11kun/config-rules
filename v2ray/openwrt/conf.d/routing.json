@@ -27,7 +27,7 @@
                 "domain": [
                     "geosite:geolocation-!cn"
                 ],
-                "outboundTag": "out-Proxy"
+                "outboundTag": "out-balancer"
             },
             {
                 "type": "field",
@@ -35,7 +35,7 @@
                     "1.1.1.1",
                     "8.8.8.8"
                 ],
-                "outboundTag": "out-Proxy"
+                "outboundTag": "out-balancer"
             },
             {
                 "type": "field",
@@ -51,6 +51,17 @@
                   ],
                 "protocol":["bittorrent"], 
                 "outboundTag": "direct"
+            }
+        ],
+        "balancers": [
+            {
+                "tag": "out-balancer",
+                "selector": [
+                    "out"
+                ],
+                "strategy": {
+                    "type": "leastPing"
+                }
             }
         ]
     }
