@@ -30,6 +30,7 @@
     "observatory": {
         "subjectSelector":[
             "out"
-        ]
+        ],
+        "probeInterval": "60s"
     }
 }
