@@ -13,3 +13,5 @@ iptables -t mangle -D PREROUTING -p tcp -m set --match-set gfwlist_ext dst -j TP
 iptables -t mangle -D PREROUTING -p udp -m set --match-set gfwlist_ext dst -j TPROXY --on-port 1081 --tproxy-mark 1
 iptables -t mangle -D OUTPUT -p tcp -m set --match-set gfwlist_ext dst -j MARK --set-mark 1
 iptables -t mangle -D OUTPUT -p udp -m set --match-set gfwlist_ext dst -j MARK --set-mark 1
+
+iptables -t mangle -D OUTPUT -j RETURN -m mark --mark 0x02
