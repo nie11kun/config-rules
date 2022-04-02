@@ -20,5 +20,10 @@
         "statsInboundDownlink": false,
         "statsOutboundUplink": false,
         "statsOutboundDownlink": false
+    },
+    "observatory": {
+        "subjectSelector":[
+            "out"
+        ]
     }
 }
