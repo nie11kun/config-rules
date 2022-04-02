@@ -2,7 +2,7 @@
     "log": {
         "access": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\access.log",
         "error": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\error.log",
-        "loglevel": "error"
+        "loglevel": "warning"
     },
     "policy": {
         "levels": {

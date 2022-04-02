@@ -6,8 +6,22 @@
             {
                 "type": "field",
                 "domain": [
+                    "geosite:category-ads-all",
+                    "360.com",
+                    "360.cn"
+                ],
+                "outboundTag": "blocked"
+            },
+            {
+                "type": "field",
+                "domain": [
                     "geosite:cn",
-                    "geosite:speedtest"
+                    "geosite:speedtest",
+                    "geosite:apple-cn",
+                    "geosite:google-cn",
+                    "geosite:category-games@cn",
+                    "hdchina.org",
+                    "niekun.net"
                 ],
                 "outboundTag": "direct"
             },
@@ -16,6 +30,7 @@
                 "ip": [
                     "geoip:cn",
                     "geoip:private",
+                    "27.168.0.0/16",
                     "114.114.114.114",
                     "223.5.5.5",
                     "119.29.29.29"
@@ -25,24 +40,21 @@
             {
                 "type": "field",
                 "domain": [
-                    "geosite:geolocation-!cn"
+                    "geosite:geolocation-!cn",
+                    "testflight.apple.com"
                 ],
-                "outboundTag": "out-balancer"
+                "balancerTag": "out-balancer"
             },
             {
                 "type": "field",
                 "ip": [
+                    "geoip:telegram",
+                    "geoip:google",
+                    "geoip:twitter",
                     "1.1.1.1",
                     "8.8.8.8"
                 ],
-                "outboundTag": "out-balancer"
-            },
-            {
-                "type": "field",
-                "domain": [
-                    "geosite:category-ads"
-                ],
-                "outboundTag": "blocked"
+                "balancerTag": "out-balancer"
             },
             {
                 "type": "field",

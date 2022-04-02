@@ -40,6 +40,47 @@
             }
         },
         {
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "you.domain",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "UUID",
+                                "alterId": 0,
+                                "security": "auto",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "tag": "out-Proxy-2",
+            "transportLayer": true,
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "you.domain"
+                },
+                "wsSettings": {
+                    "path": "/proxypath",
+                    "maxEarlyData": 1024,
+                    "useBrowserForwarding": false
+                },
+                "sockopt": {
+                    "tcpFastOpen": true,
+                    "mark": 2
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            }
+        },
+        {
             "protocol": "blackhole",
             "settings": {
                 "response": {

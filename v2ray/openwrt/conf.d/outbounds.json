@@ -46,7 +46,7 @@
                 "vnext": [
                     {
                         "address": "you.domain",
-                        "port": 1234,
+                        "port": 443,
                         "users": [
                             {
                                 "id": "UUID",
@@ -61,8 +61,16 @@
             "tag": "out-Proxy-2",
             "transportLayer": true,
             "streamSettings": {
-                "network": "tcp",
-                "security": "none",
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "you.domain"
+                },
+                "wsSettings": {
+                    "path": "/proxypath",
+                    "maxEarlyData": 1024,
+                    "useBrowserForwarding": false
+                },
                 "sockopt": {
                     "tcpFastOpen": true,
                     "mark": 2

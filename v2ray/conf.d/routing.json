@@ -15,41 +15,9 @@
             {
                 "type": "field",
                 "domain": [
-                    "geosite:category-ads",
+                    "geosite:category-ads-all",
                     "360.com",
-                    "360.cn",
-                    "5lyq.com",
-                    "51ads.com",
-                    "51yes.com.com",
-                    "5leji.com",
-                    "51y5.net",
-                    "ad.ximalaya.com",
-                    "adbehavior.wsa.ximalaya.com",
-                    "adbs.ximalaya.com",
-                    "adse.wsa.ximalaya.com",
-                    "adse.ximalaya.com",
-                    "adsebs.ximalaya.com",
-                    "location.ximalaya.com",
-                    "xdcs-collector.ximalaya.com",
-                    "eclick.baidu.com",
-                    "entry.baidu.com",
-                    "hmma.baidu.com",
-                    "mobads-logs.baidu.com",
-                    "mobads.baidu.com",
-                    "mtj.baidu.com",
-                    "nsclick.baidu.com",
-                    "static.tieba.baidu.com",
-                    "ucstat.baidu.com",
-                    "union.baidu.com",
-                    "imageplus.baidu.com",
-                    "t10.baidu.com",
-                    "t11.baidu.com",
-                    "t12.baidu.com",
-                    "google-analytics.com",
-                    "taboola.com",
-                    "trc.taboola.com",
-                    ".inmobi.cn",
-                    ".criteo.com"
+                    "360.cn"
                 ],
                 "outboundTag": "blocked"
             },
@@ -58,34 +26,11 @@
                 "domain": [
                     "geosite:cn",
                     "geosite:speedtest",
+                    "geosite:apple-cn",
+                    "geosite:google-cn",
+                    "geosite:category-games@cn",
                     "hdchina.org",
-                    "apple.com",
-                    "mail.me.com",
-                    "mail.me.com.akadns.net",
-                    "icloud.com",
-                    "icloud.com.cn",
-                    "itunes.com",
-                    "mzstatic.com",
-                    "icloud-content.com",
-                    "niekun.net",
-                    "wappass.baidu.com",
-                    "passport.baidu.com",
-                    "yun.baidu.com",
-                    "pan.baidu.com",
-                    "wenku.baidu.com",
-                    "zhidao.baidu.com",
-                    "baike.baidu.com",
-                    "rerevod.info",
-                    "rerevod.net",
-                    "rrty66.com",
-                    "sportnanoapi.com",
-                    "jsdelivr.net",
-                    "myqcloud.com",
-                    "cnzz.com",
-                    "rtoieurvoncenter.xyz",
-                    "youlixinxi.com",
-                    "luiyjtgfdsshop.xyz",
-                    "unpkg.com"
+                    "niekun.net"
                 ],
                 "outboundTag": "direct-customDNS"
             },
@@ -102,26 +47,34 @@
             {
                 "type": "field",
                 "ip": [
-                    "27.168.0.0/16",
-                    "geoip:private"
+                    "geoip:private",
+                    "27.168.0.0/16"
                 ],
                 "outboundTag": "direct-systemDNS"
             },
             {
                 "type": "field",
+                "protocol":["bittorrent"], 
+                "outboundTag": "direct-systemDNS"
+            },
+            {
+                "type": "field",
                 "domain": [
-                    "geosite:google",
+                    "geosite:geolocation-!cn",
                     "testflight.apple.com"
                 ],
-                "outboundTag": "out-balancer"
+                "balancerTag": "out-balancer"
             },
             {
                 "type": "field",
                 "ip": [
+                    "geoip:telegram",
+                    "geoip:google",
+                    "geoip:twitter",
                     "1.1.1.1",
                     "8.8.8.8"
                 ],
-                "outboundTag": "out-balancer"
+                "balancerTag": "out-balancer"
             }
         ],
         "balancers": [
