@@ -10,7 +10,7 @@ for ip in $(cat /etc/dnsmasq/proxy_ip.txt);
     do ipset add gfwlist_ext $ip;
 done
 
-iptables -t mangle -A OUTPUT -j RETURN -m mark --mark 0x02 #防止v2ray处理过的流量回环
+iptables -t mangle -A OUTPUT -j RETURN -m mark --mark 0x02 #防止v2ray处理过的流量回环 需放在第一句最先判断
 
 iptables -t mangle -A PREROUTING -p tcp -m set --match-set gfwlist dst -j TPROXY --on-port 1081 --tproxy-mark 1
 iptables -t mangle -A PREROUTING -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 1081 --tproxy-mark 1
