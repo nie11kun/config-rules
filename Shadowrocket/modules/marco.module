@@ -1,3 +1,4 @@
 
 [Rule]
 DOMAIN-SUFFIX,home.marco,ESXI-HTTP_PROXY
+DOMAIN-SUFFIX,work.marco,LENOVO-HTTP_PROXY # windows 下需配置 hosts 使 自定义URL指向本机本地IP
