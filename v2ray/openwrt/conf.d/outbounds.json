@@ -27,7 +27,7 @@
                 },
                 "wsSettings": {
                     "path": "/proxypath",
-                    "maxEarlyData": 1024,
+                    "maxEarlyData": 2048,
                     "useBrowserForwarding": false
                 },
                 "sockopt": {
@@ -68,7 +68,7 @@
                 },
                 "wsSettings": {
                     "path": "/proxypath",
-                    "maxEarlyData": 1024,
+                    "maxEarlyData": 2048,
                     "useBrowserForwarding": false
                 },
                 "sockopt": {
