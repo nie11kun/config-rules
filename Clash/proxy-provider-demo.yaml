@@ -15,7 +15,7 @@ proxies:
     network: ws
     ws-opts:
       path: /path
-      max-early-data: 1024
+      max-early-data: 2048
       early-data-header-name: Sec-WebSocket-Protocol
 
   - name: "out-proxy-2"
