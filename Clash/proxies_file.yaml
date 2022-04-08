@@ -1,0 +1,32 @@
+proxies:
+  # vmess
+  # 支持加密方式：auto / aes-128-gcm / chacha20-poly1305 / none
+  - name: "out-proxy-1"
+    type: vmess
+    server: xxx.xxx
+    port: 1234
+    uuid: uuid
+    alterId: 0
+    cipher: auto
+    udp: false
+    tls: true
+    skip-cert-verify: false
+    servername: xxx.xxx # 优先级高于 wss host
+    network: ws
+    ws-opts:
+      path: /path
+      max-early-data: 1024
+      early-data-header-name: Sec-WebSocket-Protocol
+
+  - name: "out-proxy-2"
+    type: vless
+    server: xxx.xxx
+    port: 1234
+    uuid: uuid
+    network: ws
+    tls: true
+    skip-cert-verify: false
+    ws-opts:
+      path: /path
+      headers:
+        Host: xxx.xxx
