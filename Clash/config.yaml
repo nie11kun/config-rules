@@ -65,7 +65,7 @@ dns:
 proxy-providers:
   out-proxy-1:
     type: File   #type of the provider, it can be a HTTP or a File
-    path: /Stash/ProxyProvider/proxies_file.yaml
+    path: ./proxies_file.yaml
     interval: 3600
     filter: 'out-proxy-1'
     health-check:
@@ -74,7 +74,7 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
   out-proxy-2:
     type: File   #type of the provider, it can be a HTTP or a File
-    path: /Stash/ProxyProvider/proxies_file.yaml
+    path: ./proxies_file.yaml
     interval: 3600
     filter: 'out-proxy-2'
     health-check:
