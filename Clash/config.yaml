@@ -93,7 +93,7 @@ proxy-groups:
 
   # select 用来允许用户手动选择 代理服务器 或 服务器组
   # 您也可以使用 RESTful API 去切换服务器，这种方式推荐在 GUI 中使用
-  - name: proxy
+  - name: PROXY
     type: select
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png
     use:
@@ -110,13 +110,13 @@ proxy-groups:
       - out-proxy-1
       - out-proxy-2
     proxies:
-      - proxy
+      - PROXY
       - auto
       - DIRECT
     ssid-policy:
       # 在 SSID 为 ssid-1 的 Wi-Fi 中自动切换为 auto 策略
       # 其他的 SSID 以及蜂窝数据，默认为 DIRECT
-      ssid-1: proxy
+      ssid-1: PROXY
       default: DIRECT
 
 rule-providers:
