@@ -64,7 +64,7 @@ dns:
 
 proxy-providers:
   out-proxy-1:
-    url:
+    url:  # 下载此配置文件后，复制为本地文件，然后修改这里的 url 为你的 proxy-providers 文件地址
     interval: 3600
     filter: 'out-proxy-1'
     health-check:
@@ -72,7 +72,7 @@ proxy-providers:
       interval: 600
       url: http://www.gstatic.com/generate_204
   out-proxy-2:
-    url:
+    url:  # 下载此配置文件后，复制为本地文件，然后修改这里的 url 为你的 proxy-providers 文件地址
     interval: 3600
     filter: 'out-proxy-2'
     health-check:
