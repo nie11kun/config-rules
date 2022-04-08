@@ -21,10 +21,18 @@ http:
       type: response
       require-body: true
       timeout: 10
+    - match: ^https?://api\.m\.jd\.com/client\.action\?functionId=GetJDUserInfoUnion
+      name: get_jdcookie
+      type: response
+      require-body: true
+      timeout: 10
 
 script-providers:
   jd_historical_price:
     url: https://raw.githubusercontent.com/yichahucha/surge/master/jd_price.js
+    interval: 86400
+  get_jdcookie:
+    url: https://raw.githubusercontent.com/nie11kun/config-rules/master/Shadowrocket/get_jdcookie.js
     interval: 86400
     
 script:
@@ -126,17 +134,17 @@ rule-providers:
     url: "https://ghproxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml"
     interval: 86400
 
-  Advertising:
-    type: http
-    behavior: classical
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml"
-    interval: 86400
+  # Advertising:
+  #   type: http
+  #   behavior: classical
+  #   url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml"
+  #   interval: 86400
 
-  Advertising_Domain:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising_Domain.yaml"
-    interval: 86400
+  # Advertising_Domain:
+  #   type: http
+  #   behavior: domain
+  #   url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising_Domain.yaml"
+  #   interval: 86400
 
   ChinaMax:
     type: http
@@ -204,8 +212,8 @@ rules:
   - DOMAIN-SUFFIX,baike.baidu.com,DIRECT
 
   - SCRIPT,quic,REJECT
-  - RULE-SET,Advertising,REJECT
-  - RULE-SET,Advertising_Domain,REJECT
+  - # RULE-SET,Advertising,REJECT
+  - # RULE-SET,Advertising_Domain,REJECT
 
   - RULE-SET,Lan,DIRECT
   - RULE-SET,ChinaMax,DIRECT
