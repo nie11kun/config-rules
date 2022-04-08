@@ -2,7 +2,7 @@ mixed-port: 7890 #监听代理开放端口
 allow-lan: true
 bind-address: '*' #外部访问开放所有地址
 mode: rule
-log-level: info
+log-level: warning
 ipv6: false
 external-controller: 127.0.0.1:9090 #外部控制地址
 
