@@ -46,8 +46,6 @@ dns:
     # 不建议配置超过 2 个 DNS 服务器，会增加系统功耗
     - 223.5.5.5
     - 114.114.114.114
-    - 1.1.1.1
-    - 8.8.8.8
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
 
@@ -66,6 +64,7 @@ dns:
 
 proxy-providers:
   out-proxy-1:
+    type: File   #type of the provider, it can be a HTTP or a File
     path: /Stash/ProxyProvider/proxies_file.yaml
     interval: 3600
     filter: 'out-proxy-1'
@@ -74,6 +73,7 @@ proxy-providers:
       interval: 600
       url: http://www.gstatic.com/generate_204
   out-proxy-2:
+    type: File   #type of the provider, it can be a HTTP or a File
     path: /Stash/ProxyProvider/proxies_file.yaml
     interval: 3600
     filter: 'out-proxy-2'
