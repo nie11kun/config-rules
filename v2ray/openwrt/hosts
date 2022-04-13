@@ -1,0 +1,12 @@
+127.0.0.1 localhost
+
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+# force my domain to nearest cf IP to speed up access
+132.145.113.6        niekun.net
+140.83.35.4          niekun.net
+140.83.36.102        niekun.net
+140.83.39.70         niekun.net
+140.238.34.163       niekun.net
