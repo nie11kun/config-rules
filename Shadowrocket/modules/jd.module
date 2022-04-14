@@ -1,7 +1,7 @@
 # 获取 cookie: 浏览器打开登录 https://home.m.jd.com/myJd/newhome.action 点击"我的"页面
 
 [Script]
-jd_historical_price = type=http-response,script-path=https://raw.githubusercontent.com/yichahucha/surge/master/jd_price.js,pattern=^https?://api\.m\.jd\.com/client\.action\?functionId=(wareBusiness|serverConfig|basicConfig),max-size=1048576,requires-body=true,timeout=60,script-update-interval=90000,enable=true
+jd_historical_price = type=http-response,script-path=https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js,pattern=^https?://api\.m\.jd\.com/(client\.action|api)\?functionId=(wareBusiness|serverConfig|basicConfig|lite_wareBusiness|pingou_item),max-size=1048576,requires-body=true,timeout=60,script-update-interval=90000,enable=true
 get_jdcookie = type=http-request,script-path=https://raw.githubusercontent.com/nie11kun/config-rules/master/Shadowrocket/get_jdcookie.js,pattern=^https?://api\.m\.jd\.com/client\.action\?functionId=GetJDUserInfoUnion,max-size=131072,timeout=10,script-update-interval=90000,enable=true
 
 [MITM]
