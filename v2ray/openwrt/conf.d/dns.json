@@ -1,14 +1,11 @@
 {
     "dns": {
         "hosts": {
-            // 给我的域名指定 CF 中转地址，加速访问速度 使用 Oracle Cloud - 日本东京线路 IP
-            // https://github.com/ip-scanner/cloudflare/blob/daily/Oracle%20Cloud%20-%20%E6%97%A5%E6%9C%AC%20%E4%B8%9C%E4%BA%AC.txt
+            // 给我的域名指定 CF 中转地址，加速访问速度
+            // https://github.com/ip-scanner/cloudflare/blob/daily
             "domain:niekun.net": [
-                "132.145.113.6",
-                "140.83.35.4",
-                "140.83.36.102",
-                "140.83.39.70",
-                "140.238.34.163"
+                "152.32.229.149",
+                "34.92.10.35"
             ]
         },
         "servers": [
