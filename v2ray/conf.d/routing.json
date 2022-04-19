@@ -29,7 +29,6 @@
                     "geosite:apple-cn",
                     "geosite:google-cn",
                     "geosite:category-games@cn",
-                    "hdchina.org",
                     "niekun.net"
                 ],
                 "outboundTag": "direct-customDNS"
