@@ -22,19 +22,33 @@
                     "geosite:category-games@cn",
                     "niekun.net"
                 ],
-                "outboundTag": "direct"
+                "outboundTag": "direct-customDNS"
             },
             {
                 "type": "field",
                 "ip": [
                     "geoip:cn",
-                    "geoip:private",
-                    "27.168.0.0/16",
                     "114.114.114.114",
                     "223.5.5.5",
                     "119.29.29.29"
                 ],
-                "outboundTag": "direct"
+                "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private",
+                    "27.168.0.0/16"
+                ],
+                "outboundTag": "direct-systemDNS"
+            },
+            {
+                "type": "field",
+                "inboundTag": [
+                    "transparent"
+                  ],
+                "protocol":["bittorrent"], 
+                "outboundTag": "direct-systemDNS"
             },
             {
                 "type": "field",
@@ -54,14 +68,6 @@
                     "8.8.8.8"
                 ],
                 "balancerTag": "out-balancer"
-            },
-            {
-                "type": "field",
-                "inboundTag": [
-                    "transparent"
-                  ],
-                "protocol":["bittorrent"], 
-                "outboundTag": "direct"
             }
         ],
         "balancers": [

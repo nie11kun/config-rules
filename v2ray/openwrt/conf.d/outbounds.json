@@ -84,9 +84,21 @@
         {
             "protocol": "freedom",
             "settings": {
+                "domainStrategy": "AsIs"
+            },
+            "tag": "direct-systemDNS",
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 2
+                }
+            }
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
                 "domainStrategy": "UseIPv4"
             },
-            "tag": "direct",
+            "tag": "direct-customDNS",
             "streamSettings": {
                 "sockopt": {
                     "mark": 2
