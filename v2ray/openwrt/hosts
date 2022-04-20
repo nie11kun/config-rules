@@ -8,3 +8,4 @@ ff02::2 ip6-allrouters
 # https://github.com/ip-scanner/cloudflare/blob/daily
 152.32.229.149       niekun.net
 34.92.10.35          niekun.net
+34.92.10.35          blog.niekun.net
