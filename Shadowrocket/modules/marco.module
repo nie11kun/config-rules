@@ -1,3 +1,5 @@
+#!name=marco-marco-frp-proxy
+#!desc=personal use frp http-proxy
 
 [Rule]
 DOMAIN-SUFFIX,home.marco,ESXI-HTTP_PROXY

@@ -1,2 +1,5 @@
+#!name=marco-hidevpnicon
+#!desc=personal use hide vpn icon
+
 [General]
 tun-excluded-routes = %APPEND% 0.0.0.0/31
