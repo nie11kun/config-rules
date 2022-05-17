@@ -1,12 +1,7 @@
 {
     "dns": {
         "hosts": {
-            // 给我的域名指定 CF 中转地址，加速访问速度
-            // https://github.com/ip-scanner/cloudflare/blob/daily
-            "domain:niekun.net": [
-                "152.32.229.149",
-                "34.92.10.35"
-            ]
+            "domain:xxxxx.net": ["123.123.123.123"]
         },
         "servers": [
             "8.8.8.8",

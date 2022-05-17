@@ -19,8 +19,7 @@
                     "geosite:speedtest",
                     "geosite:apple-cn",
                     "geosite:google-cn",
-                    "geosite:category-games@cn",
-                    "niekun.net"
+                    "geosite:category-games@cn"
                 ],
                 "outboundTag": "direct-customDNS"
             },
@@ -33,6 +32,13 @@
                     "119.29.29.29"
                 ],
                 "outboundTag": "direct-customDNS"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "niekun.net"
+                ],
+                "outboundTag": "direct-systemDNS"
             },
             {
                 "type": "field",
