@@ -60,7 +60,8 @@
                 "type": "field",
                 "domain": [
                     "geosite:geolocation-!cn",
-                    "testflight.apple.com"
+                    "testflight.apple.com",
+                    "jsdelivr.net"
                 ],
                 "balancerTag": "out-balancer"
             },
