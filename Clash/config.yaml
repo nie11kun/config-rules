@@ -13,6 +13,7 @@ http:
     - g.cn
     - "*.google.cn"
     - api.m.jd.com
+    - testflight.apple.com
   rewrite:
     - ^https?:\/\/(www.)?(g|google)\.cn https://www.google.com 302
   script:
@@ -26,6 +27,11 @@ http:
       type: response
       require-body: true
       timeout: 10
+    - match: ^https:\/\/testflight\.apple\.com\/v\d\/(app|account|invite)s\/
+      name: testflight_account
+      type: request
+      require-body: true
+      timeout: 10
 
 script-providers:
   jd_historical_price:
@@ -33,6 +39,9 @@ script-providers:
     interval: 86400
   get_jdcookie:
     url: https://raw.githubusercontent.com/nie11kun/config-rules/master/Shadowrocket/get_jdcookie.js
+    interval: 86400
+  testflight_account:
+    url: https://raw.githubusercontent.com/NobyDa/Script/master/TestFlight/TestFlightAccount.js
     interval: 86400
     
 script:
