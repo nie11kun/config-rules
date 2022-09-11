@@ -5,5 +5,5 @@
 # https://github.com/ip-scanner/cloudflare/blob/daily
 
 [Host]
-niekun.net = 45.64.22.55
-blog.niekun.net = 45.64.22.55
+niekun.net = 45.64.22.6
+blog.niekun.net = 45.64.22.6
