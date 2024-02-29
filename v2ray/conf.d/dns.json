@@ -3,10 +3,10 @@
         "hosts": {
             // 给我的域名指定 CF 中转地址，加速访问速度
             // https://github.com/ip-scanner/cloudflare/blob/daily
-            "domain:niekun.net": [
-                "152.32.229.149",
-                "34.92.10.35"
-            ]
+            //"domain:niekun.net": [
+            //    "152.32.229.149",
+            //    "34.92.10.35"
+            //]
         },
         "servers": [
             "fakedns",
@@ -22,11 +22,9 @@
                     "geoip:cn"
                 ]
             },
-            "119.29.29.29",
+            "223.5.5.5",
             "114.114.114.114",
-            "1.1.1.1",
             "https://cloudflare-dns.com/dns-query",
-            "https://dns.google/dns-query",
             "localhost"
         ],
         "queryStrategy": "UseIPv4",

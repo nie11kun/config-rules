@@ -28,8 +28,7 @@
                     "geosite:speedtest",
                     "geosite:apple-cn",
                     "geosite:category-games@cn",
-                    "niekun.net",
-                    "rrty66.com"
+                    "niekun.net"
                 ],
                 "outboundTag": "direct-customDNS"
             },

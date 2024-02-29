@@ -18,8 +18,7 @@
                     "geosite:cn",
                     "geosite:speedtest",
                     "geosite:apple-cn",
-                    "geosite:category-games@cn",
-                    "rrty66.com"
+                    "geosite:category-games@cn"
                 ],
                 "outboundTag": "direct-customDNS"
             },
