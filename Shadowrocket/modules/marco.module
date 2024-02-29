@@ -5,6 +5,6 @@
 DOMAIN-SUFFIX,home.marco,ESXI-HTTP_PROXY
 
 # 如果不能配置路由器，windows 下需配置 hosts 使自定义 URL 指向本机本地 IP
-# 127.0.0.1 lenovo.work.marco
+# 127.0.0.1 pc.work.marco
 # 然后刷新 DNS：ipconfig /flushdns
 DOMAIN-SUFFIX,work.marco,LENOVO-HTTP_PROXY
