@@ -1,0 +1,78 @@
+{
+    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
+    "dns": {
+        "nameServer": [ // DNS 服务器列表
+            {
+                "address": { //DNS 服务器地址及端口
+                    "address": "114.114.114.114",
+                    "port": 53
+                },
+                //"clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
+                "prioritizedDomain": [ //一个域名列表，此列表包含的域名，将优先使用此dns服务器进行查询
+                    {
+                        "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
+                        "domain": "taobao.com" // string
+                    },
+                    {
+                        //"type": "Keyword",
+                        //"domain": "google"
+                    }
+                ]
+            },
+            {
+                "address": {
+                    "address": "119.29.29.29",
+                    "port": 53
+                }
+            },
+            {
+                "address": {
+                    "address": "223.5.5.5",
+                    "port": 53
+                }
+            },
+            {
+                "address": {
+                    "address": "localhost"
+                }
+            },
+            {
+                "address": {
+                    "address": "FakeDNS"
+                }
+            }
+        ],
+        //"clientIp": "221.11.101.54", // 当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
+        "staticHosts": [ // 静态域名映射
+            {
+                "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
+                "domain": "360.com",
+                "ip": [ // 匹配的域名所映射的 IP 地址列表
+                    "127.0.0.1"
+                ]
+            },
+            {
+                "type": "Full",
+                "domain": "360.cn",
+                "proxiedDomain": "google.com" // 匹配的域名将直接使用该域名的查询结果
+            }
+        ],
+        "fakeDns": { // FakeDNS 公共配置
+            "pools": [ // IP 地址池配置
+                {
+                    "ipPool": "198.18.0.0/15", // FakeDNS 分配 IP 的地址空间
+                    "lruSize": 65535 // FakeDNS 所记忆的「IP - 域名映射」数量
+                },
+                {
+                    "ipPool": "fc00::/18",
+                    "lruSize": 65535
+                }
+            ]
+        },
+        "domainMatcher": "mph", // 域名匹配算法
+        "queryStrategy": "USE_IP4", // 默认值为 USE_IP，即 DNS 同时查询域名的 A 和 AAAA 记录。USE_IP4 和 USE_IP6 分别为只查询 A 记录、只查询 AAAA 记录
+        "cacheStrategy": "CacheEnabled", //DNS 缓存策略
+        "fallbackStrategy": "Enabled", //DNS 回退（fallback）查询策略
+        "tag": "dns"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
+    "log": {
+        "access": {
+            "type": "File",// "None" | "Console" | "File"
+            "path": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\access.log",
+            //"path": "/tmp/v2ray/access.log",
+            "level": "Warning"//  "Debug" | "Info" | "Warning" | "Error" | "None"
+        },
+        "error": {
+            "type": "File",
+            "path": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\error.log",
+            //"path": "/tmp/v2ray/error.log",
+            "level": "Warning"
+        }
+    }
+}

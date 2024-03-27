@@ -1,0 +1,62 @@
+{
+    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
+    "log": {
+        "access": {
+            "type": "File",
+            "path": "/var/log/v2ray/access.log",
+            "level": "Warning"
+        },
+        "error": {
+            "type": "File",
+            "path": "/var/log/v2ray/error.log",
+            "level": "Warning"
+        }
+    },
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ],
+    "router": {
+        "domainStrategy": "AsIs",
+        "rule": [
+            {
+                "tag": "blocked",
+                "geoip": [
+                    {
+                        "code": "private",
+                        "filePath": "geoip.dat"
+                    }
+                ]
+            }
+        ]
+    },
+    "inbounds": [
+        {
+            "protocol": "vmess",
+            "settings": {
+                "users": [
+                    "uuid-here"
+                ]
+            },
+            "port": "12345",
+            "listen": "127.0.0.1",
+            "tag": "in_vmess",
+            "sniffing": {},
+            "streamSettings": {
+                "transport": "ws",
+                "transportSettings": {
+                    "path": "/proxyPath",
+                    "maxEarlyData": 2048
+                },
+                "security": "none"
+            }
+        }
+    ]
+}

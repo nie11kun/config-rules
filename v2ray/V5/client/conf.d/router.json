@@ -1,0 +1,202 @@
+{
+    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
+    "router": {
+        "domainStrategy": "IpIfNonMatch", // AsIs | UseIp | IpIfNonMatch | IpOnDemand
+        "rule": [
+            {
+                //一个  rule 里同时指定 domain geoDomain geoip portList networks inboundTag protocol 的话需要同时满足所有情况才可以匹配此条规则
+                
+                // "tag": "",//对应一个额外 出站连接配置 的标识
+                "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
+                "domain": [
+                    {
+                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
+                        "value": "testflight.apple.com"
+                    },
+                    {
+                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
+                        "value": "jsdelivr.net"
+                    }
+                ],
+                //"portList": "53,443,1000-2000",////当匹配目标 端口范围 时，此规则生效
+                //"networks": "tcp", // "tcp" | "udp" | "tcp,udp"  当连接方式是指定的方式时，此规则生效
+                //"inboundTag": [
+                //    ""
+                //], // 当某一项匹配入站协议的标识时，此规则生效
+                //"protocol": [
+                //    ""
+                //], // "http" | "tls" | "bittorrent"  某一个协议匹配当前连接的流量时，此规则生效
+                "domainMatcher": "mph" //域名匹配算法
+            },
+            {
+                "balancingTag": "balancer_sub1",
+                "geoDomain": [
+                    {
+                        //"domain": [
+                        //    {
+                        //        "type": "RootDomain",
+                        //        "value": ""
+                        //    }
+                        //],
+                        "code": "GEOLOCATION-!CN", // GeoDomain 的类别名称
+                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                "balancingTag": "balancer_sub1",
+                "geoip": [
+                    {
+                        //"cidr": [//一个数组，数组中每一项是一个 CIDR 地址块
+                        //    {
+                        //        "ipAddr": "119.29.0.0",
+                        //        "prefix": 16
+                        //    }
+                        //],
+                        //"inverseMatch": false,//反向匹配，当此项为 true 时，如果匹配则返回 false，否则返回 true
+                        "code": "TELEGRAM", // GeoIP 的双字符国家或地区代码
+                        "filePath": "geoip.dat" // GeoIP 文件路径
+                    },
+                    {
+                        "code": "GOOGLE",
+                        "filePath": "geoip.dat"
+                    },
+                    {
+                        "code": "TWITTER",
+                        "filePath": "geoip.dat"
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                "tag": "direct-customDNS",
+                "domain": [
+                    {
+                        "type": "RootDomain",
+                        "value": "niekun.net"
+                    },
+                    {
+                        "type": "RootDomain",
+                        "value": "pages.dev"
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                "tag": "direct-customDNS",
+                "geoDomain": [
+                    {
+                        "code": "CN",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "SPEEDTEST",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "APPLE-CN",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "GOOGLE-CN",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "AWS-CN",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "CLOUDFLARE-CN",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "CATEGORY-GAMES@CN",
+                        "filePath": "geosite.dat"
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                "tag": "direct-customDNS",
+                "geoip": [
+                    //{
+                    //    "cidr": [
+                    //        {
+                    //            "ipAddr": "111.111.111.111",
+                    //            "prefix": 32
+                    //        }
+                    //    ]
+                    //},
+                    {
+                        "code": "CN",
+                        "filePath": "geoip.dat"
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                "tag": "direct-systemDNS",
+                "geoip": [
+                    {
+                        "cidr": [
+                            {
+                                "ipAddr": "27.168.0.0",
+                                "prefix": 16
+                            }
+                        ]
+                    },
+                    {
+                        "code": "PRIVATE",
+                        "filePath": "geoip.dat"
+                    }
+                ]
+            },
+            {
+                "tag": "direct-systemDNS",
+                "protocol": [
+                    "bittorrent"
+                ]
+            },
+            {
+                "tag": "blocked",
+                "domain": [
+                    {
+                        "type": "RootDomain",
+                        "value": "360.com"
+                    },
+                    {
+                        "type": "RootDomain",
+                        "value": "360.cn"
+                    }
+                ]
+            },
+            {
+                "tag": "blocked",
+                "geoDomain": [
+                    {
+                        "code": "category-ads-all",
+                        "filePath": "geosite.dat"
+                    }
+                ]
+            },
+            {
+                "tag": "dns-out",
+                "portList": "53",
+                "inboundTag": [
+                    "http-inbound",
+                    "socks-inbound"
+                ]
+            }
+        ],
+        "balancingRule": [
+            {
+                "tag": "balancer_sub1", //此负载均衡器的标识，用于匹配 RuleObject 中的 balancerTag
+                "outbound_selector": [
+                    "sub1_"
+                ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
+                "strategy": "random" //"random" | "leastping" | "leastload"
+            }
+        ]
+    }
+}
