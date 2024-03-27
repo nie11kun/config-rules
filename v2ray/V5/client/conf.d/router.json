@@ -3,73 +3,30 @@
     "router": {
         "domainStrategy": "IpIfNonMatch", // AsIs | UseIp | IpIfNonMatch | IpOnDemand
         "rule": [
+            //一个  rule 里同时指定 domain geoDomain geoip portList networks inboundTag protocol 的话需要同时满足所有情况才可以匹配此条规则
+            //对于每一个连接，路由将根据这些规则依次进行判断，当一个规则生效时，即将这个连接转发至它所指定的 outboundTag 或 balancingTag。当没有匹配到任何规则时，流量默认被转发至第一个 outbound
+
             {
-                //一个  rule 里同时指定 domain geoDomain geoip portList networks inboundTag protocol 的话需要同时满足所有情况才可以匹配此条规则
-                
-                // "tag": "",//对应一个额外 出站连接配置 的标识
-                "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
+                "tag": "blocked",
                 "domain": [
                     {
-                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
-                        "value": "testflight.apple.com"
+                        "type": "RootDomain",
+                        "value": "360.com"
                     },
                     {
-                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
-                        "value": "jsdelivr.net"
+                        "type": "RootDomain",
+                        "value": "360.cn"
                     }
-                ],
-                //"portList": "53,443,1000-2000",////当匹配目标 端口范围 时，此规则生效
-                //"networks": "tcp", // "tcp" | "udp" | "tcp,udp"  当连接方式是指定的方式时，此规则生效
-                //"inboundTag": [
-                //    ""
-                //], // 当某一项匹配入站协议的标识时，此规则生效
-                //"protocol": [
-                //    ""
-                //], // "http" | "tls" | "bittorrent"  某一个协议匹配当前连接的流量时，此规则生效
-                "domainMatcher": "mph" //域名匹配算法
+                ]
             },
             {
-                "balancingTag": "balancer_sub1",
+                "tag": "blocked",
                 "geoDomain": [
                     {
-                        //"domain": [
-                        //    {
-                        //        "type": "RootDomain",
-                        //        "value": ""
-                        //    }
-                        //],
-                        "code": "GEOLOCATION-!CN", // GeoDomain 的类别名称
-                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                        "code": "category-ads-all",
+                        "filePath": "geosite.dat"
                     }
-                ],
-                "domainMatcher": "mph"
-            },
-            {
-                "balancingTag": "balancer_sub1",
-                "geoip": [
-                    {
-                        "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块
-                            {
-                                "ipAddr": "1.1.1.1",
-                                "prefix": 32
-                            }
-                        ],
-                        "inverseMatch": false //反向匹配，当此项为 true 时，如果匹配则返回 false，否则返回 true
-                    },
-                    {
-                        "code": "TELEGRAM", // GeoIP 的双字符国家或地区代码
-                        "filePath": "geoip.dat" // GeoIP 文件路径
-                    },
-                    {
-                        "code": "GOOGLE",
-                        "filePath": "geoip.dat"
-                    },
-                    {
-                        "code": "TWITTER",
-                        "filePath": "geoip.dat"
-                    }
-                ],
-                "domainMatcher": "mph"
+                ]
             },
             {
                 "tag": "direct-customDNS",
@@ -161,34 +118,80 @@
                 ]
             },
             {
-                "tag": "blocked",
-                "domain": [
-                    {
-                        "type": "RootDomain",
-                        "value": "360.com"
-                    },
-                    {
-                        "type": "RootDomain",
-                        "value": "360.cn"
-                    }
-                ]
-            },
-            {
-                "tag": "blocked",
-                "geoDomain": [
-                    {
-                        "code": "category-ads-all",
-                        "filePath": "geosite.dat"
-                    }
-                ]
-            },
-            {
                 "tag": "dns-out",
                 "portList": "53",
                 "inboundTag": [
                     "http-inbound",
                     "socks-inbound"
                 ]
+            },
+            {
+                // "tag": "out-vmess",//对应一个额外 出站连接配置 的标识
+                "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
+                "domain": [
+                    {
+                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
+                        "value": "testflight.apple.com"
+                    },
+                    {
+                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
+                        "value": "jsdelivr.net"
+                    }
+                ],
+                //"portList": "53,443,1000-2000",////当匹配目标 端口范围 时，此规则生效
+                //"networks": "tcp", // "tcp" | "udp" | "tcp,udp"  当连接方式是指定的方式时，此规则生效
+                //"inboundTag": [
+                //    ""
+                //], // 当某一项匹配入站协议的标识时，此规则生效
+                //"protocol": [
+                //    ""
+                //], // "http" | "tls" | "bittorrent"  某一个协议匹配当前连接的流量时，此规则生效
+                "domainMatcher": "mph" //域名匹配算法
+            },
+            {
+                // "tag": "out-vmess",
+                "balancingTag": "balancer_sub1",
+                "geoDomain": [
+                    {
+                        //"domain": [
+                        //    {
+                        //        "type": "RootDomain",
+                        //        "value": ""
+                        //    }
+                        //],
+                        "code": "GEOLOCATION-!CN", // GeoDomain 的类别名称
+                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                    }
+                ],
+                "domainMatcher": "mph"
+            },
+            {
+                // "tag": "out-vmess",
+                "balancingTag": "balancer_sub1",
+                "geoip": [
+                    {
+                        "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块
+                            {
+                                "ipAddr": "1.1.1.1",
+                                "prefix": 32
+                            }
+                        ],
+                        "inverseMatch": false //反向匹配，当此项为 true 时，如果匹配则返回 false，否则返回 true
+                    },
+                    {
+                        "code": "TELEGRAM", // GeoIP 的双字符国家或地区代码
+                        "filePath": "geoip.dat" // GeoIP 文件路径
+                    },
+                    {
+                        "code": "GOOGLE",
+                        "filePath": "geoip.dat"
+                    },
+                    {
+                        "code": "TWITTER",
+                        "filePath": "geoip.dat"
+                    }
+                ],
+                "domainMatcher": "mph"
             }
         ],
         "balancingRule": [
