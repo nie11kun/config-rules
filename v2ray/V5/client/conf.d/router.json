@@ -201,6 +201,8 @@
                     "sub1_"
                 ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
                 "strategy": "random" //"random" | "leastping" | "leastload"
+                //random 会从出站中随机选出一个作为最终的出站连接。
+                //leastPing 会根据观测记录选择 HTTPS GET 请求完成时间最快的一个出站连接
             }
         ]
     }
