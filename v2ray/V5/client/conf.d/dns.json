@@ -3,8 +3,19 @@
     "dns": {
         "nameServer": [ // DNS 服务器列表
             {
+                "address": {
+                    "address": "FakeDNS"
+                }
+            },
+            {
+                "address": {
+                    "address": "1.1.1.1", // 防止域名污染
+                    "port": 53
+                }
+            },
+            {
                 "address": { //DNS 服务器地址及端口
-                    "address": "114.114.114.114",
+                    "address": "223.5.5.5",
                     "port": 53
                 },
                 //"clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
@@ -21,24 +32,19 @@
             },
             {
                 "address": {
+                    "address": "114.114.114.114",
+                    "port": 53
+                }
+            },
+            {
+                "address": {
                     "address": "119.29.29.29",
                     "port": 53
                 }
             },
             {
                 "address": {
-                    "address": "223.5.5.5",
-                    "port": 53
-                }
-            },
-            {
-                "address": {
                     "address": "localhost"
-                }
-            },
-            {
-                "address": {
-                    "address": "FakeDNS"
                 }
             }
         ],
