@@ -4,9 +4,9 @@
         {
             "protocol": "vmess",
             "settings": {
-                "address": "your.domain",//服务器地址，支持 IP 地址或者域名。
-                "port": 443,//服务器端口号。
-                "uuid": "uuid-here"//服务器认可的 VMess 用户 ID，必须为合法的 UUID
+                "address": "your.domain", //服务器地址，支持 IP 地址或者域名。
+                "port": 443, //服务器端口号。
+                "uuid": "uuid-here" //服务器认可的 VMess 用户 ID，必须为合法的 UUID
             },
             "sendThrough": "0.0.0.0", //用于发送数据的 IP 地址，当主机有多个 IP 地址时有效，默认值为 "0.0.0.0"
             "tag": "out-vmess",
@@ -24,6 +24,10 @@
                     //"serverName": "you.domain",//当目标连接由域名指定时，比如在 Socks 入站时接收到了域名，或者由 Sniffing 功能探测出了域名，这个域名会自动用于 serverName，无须手动配置
                     //"nextProtocol": ["h2","http/1.1"], //一个字符串数组，指定了 TLS 握手时指定的 ALPN 数值。使用 h2 需要服务端支持 http2
                     "disableSystemRoot": false //是否禁用操作系统自带的 CA 证书。默认值为 false。当值为 true 时，V2Ray 只会使用 certificates 中指定的证书进行 TLS 握手。当值为 false 时，V2Ray 只会使用操作系统自带的 CA 证书进行 TLS 握手
+                },
+                "socketSettings": {
+                    "mark": 2, //当其值非零时，在出站连接上标记 SO_MARK  仅适用于 Linux 系统  需要 CAP_NET_ADMIN 权限
+                    "tcpFastOpen": true // 是否启用 TCP Fast Open 可用于入站出站连接
                 }
             },
             //"proxySettings": {
@@ -43,20 +47,36 @@
         {
             "protocol": "freedom",
             "tag": "direct-systemDNS",
-            "domainStrategy": "AsIs"
+            "domainStrategy": "AsIs",
+            "socketSettings": {
+                "mark": 2,
+                "tcpFastOpen": true
+            }
         },
         {
             "protocol": "freedom",
             "tag": "direct-customDNS",
-            "domainStrategy": "UseIP4"
+            "domainStrategy": "UseIP4",
+            "socketSettings": {
+                "mark": 2,
+                "tcpFastOpen": true
+            }
         },
         {
             "protocol": "blackhole",
-            "tag": "blocked"
+            "tag": "blocked",
+            "socketSettings": {
+                "mark": 2,
+                "tcpFastOpen": true
+            }
         },
         {
-            "protocol": "dns",//DNS 是一个出站协议，主要用于拦截和转发 DNS 查询。此出站协议只能接收 DNS 流量（包含基于 UDP 和 TCP 协议的查询），其它类型的流量会导致错误。在处理 DNS 查询时，此出站协议会将 IP 查询（即 A 和 AAAA）转发给内置的 DNS 服务器
-            "tag": "dns-out"
+            "protocol": "dns", //DNS 是一个出站协议，主要用于拦截和转发 DNS 查询。此出站协议只能接收 DNS 流量（包含基于 UDP 和 TCP 协议的查询），其它类型的流量会导致错误。在处理 DNS 查询时，此出站协议会将 IP 查询（即 A 和 AAAA）转发给内置的 DNS 服务器
+            "tag": "dns-out",
+            "socketSettings": {
+                "mark": 2,
+                "tcpFastOpen": true
+            }
         }
     ]
 }
