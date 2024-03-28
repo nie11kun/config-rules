@@ -21,16 +21,8 @@
                 "metadataOnly": false //是否仅使用元数据推断目标地址而不截取流量内容。只有元数据流量目标侦测模块会被激活
             },
             "streamSettings": { // 底层传输配置
-                "transport": "tcp",
-                "transportSettings": {
-                    "acceptProxyProtocol": false //仅用于入站，是否接收 Proxy Protocol，默认值为 false。该值为 true 时，底层 TCP 连接建立后，请求方必须先发送 Proxy Protocol，否则连接将被关闭
-                },
-                "security": "none",
                 "socketSettings": {
-                    "tcpFastOpen": true, // 是否启用 TCP Fast Open 可用于入站出站连接
-                    "tcpFastOpenQueueLength": 4096, //入站连接的 TCP Fast Open 队列长度，默认值为 4096，仅在 Linux 中可用
-                    "tproxy": "tproxy", //"redirect" | "tproxy" | "off" 是否开启透明代理（仅适用于 Linux）
-                    "tcpKeepAliveInterval": 600 // TCP 保持活跃的数据包的发送间隔，以秒为单位（仅适用于 Linux）
+                    "tproxy": "tproxy" //"redirect" | "tproxy" | "off" 是否开启透明代理（仅适用于 Linux）
                 }
             }
         },
