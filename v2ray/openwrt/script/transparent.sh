@@ -63,6 +63,6 @@ iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN
 # 给路由链流量标记 1   用于最上面定义的策略路由识别本机流量
 iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
 
-# output 链流量转发到 V2RAY_MASK 最后通过策略路由将流量包路由到本地网关 重新通过 PREROUTING 链转发到 V2RAY
+# output 链流量转发到 V2RAY_MASK 最后通过策略路由将流量包重新路由到本地网关 重新通过 PREROUTING 链转发到 V2RAY
 iptables -t mangle -A OUTPUT -p tcp -j V2RAY_MASK
 iptables -t mangle -A OUTPUT -p udp -j V2RAY_MASK
