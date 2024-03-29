@@ -1,17 +1,22 @@
-ip route del local default dev lo table 100
-ip rule del fwmark 1 lookup 100
+# 删除策略路由
+ip rule del fwmark 1 table 100
+ip route del local 0.0.0.0/0 dev lo table 100
 
-ipset -X gfwlist
-ipset -X gfwlist_ext
+# ********************************
 
-iptables -t mangle -D OUTPUT -j RETURN -m mark --mark 0x02
+# 先删除跳转规则
+iptables -t mangle -D PREROUTING -j V2RAY
 
-iptables -t mangle -D PREROUTING -p tcp -m set --match-set gfwlist dst -j TPROXY --on-port 1081 --tproxy-mark 1
-iptables -t mangle -D PREROUTING -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 1081 --tproxy-mark 1
-iptables -t mangle -D OUTPUT -p tcp -m set --match-set gfwlist dst -j MARK --set-mark 1
-iptables -t mangle -D OUTPUT -p udp -m set --match-set gfwlist dst -j MARK --set-mark 1
+# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
+iptables -t mangle -F
+iptables -t mangle -X V2RAY
 
-iptables -t mangle -D PREROUTING -p tcp -m set --match-set gfwlist_ext dst -j TPROXY --on-port 1081 --tproxy-mark 1
-iptables -t mangle -D PREROUTING -p udp -m set --match-set gfwlist_ext dst -j TPROXY --on-port 1081 --tproxy-mark 1
-iptables -t mangle -D OUTPUT -p tcp -m set --match-set gfwlist_ext dst -j MARK --set-mark 1
-iptables -t mangle -D OUTPUT -p udp -m set --match-set gfwlist_ext dst -j MARK --set-mark 1
+# ********************************
+
+# 先删除跳转规则
+iptables -t mangle -D OUTPUT -p tcp -j V2RAY_MASK
+iptables -t mangle -D OUTPUT -p udp -j V2RAY_MASK
+
+# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
+iptables -t mangle -F
+iptables -t mangle -X V2RAY_MASK
