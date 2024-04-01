@@ -126,7 +126,7 @@
                 ]
             },
             {
-                "tag": "out-vmess",//对应一个额外 出站连接配置 的标识
+                "tag": "out-vmess", //对应一个额外 出站连接配置 的标识
                 // "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
                 "domain": [
                     {
@@ -200,9 +200,12 @@
                 "outbound_selector": [
                     "sub1_"
                 ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
-                "strategy": "random" //"random" | "leastping" | "leastload"  当前只有 random 生效
+                "strategy": "random", //"random" | "leastping" | "leastload"  当前只有 random 生效
                 //random 会从出站中随机选出一个作为最终的出站连接。
                 //leastPing 会根据观测记录选择 HTTPS GET 请求完成时间最快的一个出站连接
+                "strategy_settings": {
+                    "aliveOnly": true // 只会在可用的 outbound 队列中负载均衡
+                }
             }
         ]
     }

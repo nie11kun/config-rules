@@ -18,17 +18,23 @@
                     "address": "223.5.5.5",
                     "port": 53
                 },
-                //"clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
-                "prioritizedDomain": [ //一个域名列表，此列表包含的域名，将优先使用此dns服务器进行查询
+                "geoDomain": [
                     {
-                        "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
-                        "domain": "taobao.com" // string
-                    },
-                    {
-                        //"type": "Keyword",
-                        //"domain": "google"
+                        "code": "CN", // GeoDomain 的类别名称
+                        "filePath": "geosite.dat" // GeoDomain 文件路径
                     }
                 ]
+                //"clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
+                //"prioritizedDomain": [ //一个域名列表，此列表包含的域名，将优先使用此dns服务器进行查询
+                //    {
+                //        "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
+                //        "domain": "taobao.com" // string
+                //    },
+                //    {
+                //        //"type": "Keyword",
+                //        //"domain": "google"
+                //    }
+                //]
             },
             {
                 "address": {
