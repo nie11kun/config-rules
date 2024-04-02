@@ -32,8 +32,11 @@ iptables -t mangle -N V2RAY
 # 目标地址为本地网络的走直连
 #  "网关所在ipv4网段" 通过运行命令"ip address | grep -w inet | awk '{print $2}'"获得，一般有多个
 iptables -t mangle -A V2RAY -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY -d 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY -d 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY -d 192.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY -d 27.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.19.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.18.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.17.0.1/16 -j RETURN
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
@@ -41,8 +44,11 @@ iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
 #如果网关作为主路由，则加上这一句   源访问设备的地址不在本地网关内则直连 防止外网用户访问本地设备走代理
 #网关LAN_IPv4地址段，运行命令"ip address | grep -w "inet" | awk '{print $2}'"获得，是其中的一个
 iptables -t mangle -A V2RAY ! -s 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY ! -s 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY ! -s 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY ! -s 192.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY ! -s 27.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY ! -s 172.19.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY ! -s 172.18.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY ! -s 172.17.0.1/16 -j RETURN
 
 # 给流量打标记 1，转发至 1081 端口
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
@@ -64,8 +70,11 @@ iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
 
 # 目标地址为本地网络的走直连
 iptables -t mangle -A V2RAY_MASK -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 192.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 27.168.0.0/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.19.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.18.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.17.0.1/16 -j RETURN
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN

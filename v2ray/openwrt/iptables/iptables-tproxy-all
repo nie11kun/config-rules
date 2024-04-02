@@ -76,3 +76,34 @@ iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
 # output 链流量转发到 V2RAY_MASK 最后通过策略路由将流量包重新路由到本地网关 重新通过 PREROUTING 链转发到 V2RAY
 iptables -t mangle -A OUTPUT -p tcp -j V2RAY_MASK
 iptables -t mangle -A OUTPUT -p udp -j V2RAY_MASK
+
+# ***********************************
+# ***********************************
+# ***********************************
+# ***********************************
+# ***********************************
+
+# 清除以上 iptables 规则的指令
+
+# 删除策略路由
+ip rule del fwmark 1 table 100
+ip route del local 0.0.0.0/0 dev lo table 100
+
+# ********************************
+
+# 先删除跳转规则
+iptables -t mangle -D PREROUTING -j V2RAY
+
+# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
+iptables -t mangle -F
+iptables -t mangle -X V2RAY
+
+# ********************************
+
+# 先删除跳转规则
+iptables -t mangle -D OUTPUT -p tcp -j V2RAY_MASK
+iptables -t mangle -D OUTPUT -p udp -j V2RAY_MASK
+
+# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
+iptables -t mangle -F
+iptables -t mangle -X V2RAY_MASK
