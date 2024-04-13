@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+# 通过使用特定 gid 的用户运行 v2ray 过滤 v2ray 出来的流量 防止回环
+
 # https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html
 # https://xtls.github.io/document/level-2/iptables_gid.html
 # https://guide.v2fly.org/app/tproxy.html#%E8%A7%A3%E5%86%B3-too-many-open-files-%E9%97%AE%E9%A2%98
@@ -24,31 +28,27 @@ ip route add local 0.0.0.0/0 dev lo table 100
 
 # *********************************************************
 
+# "网关所在ipv4网段" 通过运行命令"ip address | grep -w inet | awk '{print $2}'"获得，一般有多个
+LOCAL_IP=($(ip address | grep -w inet | awk '{print $2}'))
+
 # 代理局域网设备
 
 # 新建路由链条
 iptables -t mangle -N V2RAY
 
 # 目标地址为本地网络的走直连
-#  "网关所在ipv4网段" 通过运行命令"ip address | grep -w inet | awk '{print $2}'"获得，一般有多个
-iptables -t mangle -A V2RAY -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY -d 192.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY -d 27.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY -d 172.19.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY -d 172.18.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY -d 172.17.0.1/16 -j RETURN
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY -d $i -j RETURN
+done
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
 
-#如果网关作为主路由，则加上这一句   源访问设备的地址不在本地网关内则直连 防止外网用户访问本地设备走代理
-#网关LAN_IPv4地址段，运行命令"ip address | grep -w "inet" | awk '{print $2}'"获得，是其中的一个
-iptables -t mangle -A V2RAY ! -s 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY ! -s 192.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY ! -s 27.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY ! -s 172.19.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY ! -s 172.18.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY ! -s 172.17.0.1/16 -j RETURN
+# 实际测试加上以下内容会导致无法联网
+# 如果网关作为主路由，则加上这一句 源访问设备的地址不在本地网关内则直连 防止外网用户访问本地设备走代理
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY ! -s $i -j RETURN
+# done
 
 # 给流量打标记 1，转发至 1081 端口
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
@@ -69,12 +69,9 @@ iptables -t mangle -N V2RAY_MASK
 iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
 
 # 目标地址为本地网络的走直连
-iptables -t mangle -A V2RAY_MASK -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 192.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 27.168.0.0/16 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 172.19.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 172.18.0.1/16 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 172.17.0.1/16 -j RETURN
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
+done
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN
@@ -85,3 +82,11 @@ iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
 # output 链流量转发到 V2RAY_MASK 最后通过策略路由将流量包重新路由到本地网关 重新通过 PREROUTING 链转发到 V2RAY
 iptables -t mangle -A OUTPUT -p tcp -j V2RAY_MASK
 iptables -t mangle -A OUTPUT -p udp -j V2RAY_MASK
+
+# *********************************************************
+
+# 新建 DIVERT 规则，避免已有连接的包二次通过 TPROXY，理论上有一定的性能提升
+iptables -t mangle -N DIVERT
+iptables -t mangle -A DIVERT -j MARK --set-mark 1
+iptables -t mangle -A DIVERT -j ACCEPT
+iptables -t mangle -I PREROUTING -p tcp -m socket -j DIVERT

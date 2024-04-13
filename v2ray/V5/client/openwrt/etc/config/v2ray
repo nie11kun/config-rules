@@ -1,0 +1,10 @@
+config v2ray 'enabled'
+        option enabled '1'
+
+config v2ray 'config'
+        option confdir ''
+        list conffiles '/etc/v2ray/config.json'
+        option datadir '/usr/share/v2ray'
+        option format 'jsonv5'
+        option memconservative '1'
+        

@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+# 通过 iptables 识别特定 mark 标识的流量过滤 v2ray 出来的流量 防止回环  需要 v2ray 的 outbound 定义相同的 mark 标识
+
 # https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html
 # https://xtls.github.io/document/level-2/iptables_gid.html
 # https://guide.v2fly.org/app/tproxy.html#%E8%A7%A3%E5%86%B3-too-many-open-files-%E9%97%AE%E9%A2%98
@@ -32,17 +36,16 @@ iptables -t mangle -N V2RAY
 # 目标地址为本地网络的走直连
 #  "网关所在ipv4网段" 通过运行命令"ip address | grep -w inet | awk '{print $2}'"获得，一般有多个
 iptables -t mangle -A V2RAY -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY -d 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY -d 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY -d 172.19.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.18.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY -d 172.17.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY -d 192.168.0.0/16 -p tcp -j RETURN
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
 
-#如果网关作为主路由，则加上这一句   源访问设备的地址不在本地网关内则直连 防止外网用户访问本地设备走代理
-#网关LAN_IPv4地址段，运行命令"ip address | grep -w "inet" | awk '{print $2}'"获得，是其中的一个
-iptables -t mangle -A V2RAY ! -s 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY ! -s 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY ! -s 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY -d 192.168.0.0/16 -p udp ! --dport 53 -j RETURN # 直连局域网，53 端口除外（因为要使用 V2Ray 的 DNS)
+iptables -t mangle -A V2RAY -j RETURN -m mark --mark 0xff  # 过滤 v2ray 出来的流量防止回环  需要 outbound 设置 mark 255
 
 # 给流量打标记 1，转发至 1081 端口
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
@@ -58,17 +61,18 @@ iptables -t mangle -A PREROUTING -j V2RAY
 # 新建路由链
 iptables -t mangle -N V2RAY_MASK
 
-# 设置 iptables 规则不代理 gid 为 23333 的用户时的流量来让已经经过了 V2RAY 的流量直接发送出去 避免流量回环
-# 需要提前将 v2ray 运行在 gid 为 23333 的用户上
-iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
-
 # 目标地址为本地网络的走直连
 iptables -t mangle -A V2RAY_MASK -d 127.0.0.1/8 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 192.168.244.1/24 -j RETURN
-iptables -t mangle -A V2RAY_MASK -d 27.168.1.155/24 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.19.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.18.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 172.17.0.1/16 -j RETURN
+iptables -t mangle -A V2RAY_MASK -d 192.168.0.0/16 -p tcp -j RETURN
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN
+
+iptables -t mangle -A V2RAY_MASK -d 192.168.0.0/16 -p udp ! --dport 53 -j RETURN # 直连局域网，53 端口除外（因为要使用 V2Ray 的 DNS）
+iptables -t mangle -A V2RAY_MASK -j RETURN -m mark --mark 0xff  # 过滤 v2ray 出来的流量防止回环  需要 outbound 设置 mark 255
 
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
 iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
@@ -77,33 +81,10 @@ iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
 iptables -t mangle -A OUTPUT -p tcp -j V2RAY_MASK
 iptables -t mangle -A OUTPUT -p udp -j V2RAY_MASK
 
-# ***********************************
-# ***********************************
-# ***********************************
-# ***********************************
-# ***********************************
+# *********************************************************
 
-# 清除以上 iptables 规则的指令
-
-# 删除策略路由
-ip rule del fwmark 1 table 100
-ip route del local 0.0.0.0/0 dev lo table 100
-
-# ********************************
-
-# 先删除跳转规则
-iptables -t mangle -D PREROUTING -j V2RAY
-
-# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
-iptables -t mangle -F
-iptables -t mangle -X V2RAY
-
-# ********************************
-
-# 先删除跳转规则
-iptables -t mangle -D OUTPUT -p tcp -j V2RAY_MASK
-iptables -t mangle -D OUTPUT -p udp -j V2RAY_MASK
-
-# 先刷新路由表 否则删除链会报错 iptables: Directory not empty.
-iptables -t mangle -F
-iptables -t mangle -X V2RAY_MASK
+# 新建 DIVERT 规则，避免已有连接的包二次通过 TPROXY，理论上有一定的性能提升
+iptables -t mangle -N DIVERT
+iptables -t mangle -A DIVERT -j MARK --set-mark 1
+iptables -t mangle -A DIVERT -j ACCEPT
+iptables -t mangle -I PREROUTING -p tcp -m socket -j DIVERT

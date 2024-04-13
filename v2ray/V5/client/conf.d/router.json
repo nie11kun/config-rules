@@ -5,7 +5,6 @@
         "rule": [
             //一个  rule 里同时指定 domain geoDomain geoip portList networks inboundTag protocol 的话需要同时满足所有情况才可以匹配此条规则
             //对于每一个连接，路由将根据这些规则依次进行判断，当一个规则生效时，即将这个连接转发至它所指定的 outboundTag 或 balancingTag。当没有匹配到任何规则时，流量默认被转发至第一个 outbound
-
             {
                 "tag": "blocked",
                 "domain": [
@@ -26,6 +25,24 @@
                         "code": "category-ads-all",
                         "filePath": "geosite.dat"
                     }
+                ]
+            },
+            {
+                "tag": "dns-out",  // 放在最前面用于透明代理识别 dns 流量
+                "portList": "53",
+                "networks": "udp",
+                "inboundTag": [
+                    "http-inbound",
+                    "socks-inbound",
+                    "transparent"
+                ]
+            },
+            {
+                "tag": "direct-systemDNS",   // 放在最前面用于透明代理识别 NTP 时间校准流量
+                "portList": "123",
+                "networks": "udp",
+                "inboundTag": [
+                    "transparent"
                 ]
             },
             {
@@ -118,14 +135,6 @@
                 ]
             },
             {
-                "tag": "dns-out",
-                "portList": "53",
-                "inboundTag": [
-                    "http-inbound",
-                    "socks-inbound"
-                ]
-            },
-            {
                 "tag": "out-vmess", //对应一个额外 出站连接配置 的标识
                 // "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
                 "domain": [
@@ -173,6 +182,10 @@
                         "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块
                             {
                                 "ipAddr": "1.1.1.1",
+                                "prefix": 32
+                            },
+                            {
+                                "ipAddr": "8.8.8.8",
                                 "prefix": 32
                             }
                         ],

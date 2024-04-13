@@ -4,13 +4,15 @@
         "access": {
             "type": "File",// "None" | "Console" | "File"
             "path": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\access.log",
-            //"path": "/tmp/v2ray/access.log",
+            //"path": "/var/log/v2ray/access.log", // linux
+            //"path": "/etc/v2ray/log/access.log", // openwrt
             "level": "Warning"//  "Debug" | "Info" | "Warning" | "Error" | "None"
         },
         "error": {
             "type": "File",
             "path": "C:\\Users\\Marco Nie\\Application\\v2ray\\log\\error.log",
-            //"path": "/tmp/v2ray/error.log",
+            //"path": "/var/log/v2ray/error.log", // linux
+            //"path": "/etc/v2ray/log/error.log", // openwrt
             "level": "Warning"
         }
     }

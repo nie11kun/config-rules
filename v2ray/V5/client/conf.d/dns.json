@@ -60,7 +60,7 @@
                 "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
                 "domain": "abcd.com",
                 "ip": [ // 匹配的域名所映射的 IP 地址列表
-                    "127.0.0.1"
+                    "123.456.789.000"
                 ]
             },
             {
