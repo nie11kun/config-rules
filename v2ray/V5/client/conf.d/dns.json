@@ -5,7 +5,13 @@
             {
                 "address": {
                     "address": "FakeDNS"
-                }
+                },
+                "geoDomain": [
+                    {
+                        "code": "geolocation-!cn", // GeoDomain 的类别名称
+                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                    }
+                ]
             },
             {
                 "address": {
