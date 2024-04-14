@@ -2,11 +2,9 @@
 
 # 通过使用特定 gid 的用户运行 v2ray 过滤 v2ray 出来的流量 防止回环
 
-# 透明代理只能接管局域网用户的 dns 请求并交给 v2ray 处理
-# 本机 dns 请求仍然会走系统默认路径 如 /etc/hosts 和 dnsmasq 的方式，系统解析后返回的 IP 地址可以正常进入 v2ray 处理
-# 通过日志可以看到 access.log 中本机访问的流量全是 ip 地址而没有域名，这就是因为走系统 dns 已经将 ip 解析出来了才交给 v2ray 处理
-# 这样就可能由于解析出来的 ip 地址是被污染的导致影响本机网关的无法正常访问国外网站
-# 解决方法就是手动配置本机网关 http_proxy 和 https_proxy 为 v2ray 监听的 http 端口，这样就可以正常使用 v2ray 来进行本机的 dns 解析
+# 以下配置后 使用 fakedns 时本地网关的流量由于域名信息缺失导致访问不正常 需要删除dns中的 fakedns 配置， 局域网用户一切正常
+# 通过日志可以看到 access.log 中本机访问的流量全是 ip 地址而没有域名 会导致 router 中的域名相关配置失效
+# 可以手动配置本机网关 http_proxy 和 https_proxy 为 v2ray 监听的 http 端口，这样就可以正常使用 v2ray 来进行本机的 dns 解析 且日志也是域名
 
 # https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html
 # https://xtls.github.io/document/level-2/iptables_gid.html
@@ -42,10 +40,21 @@ LOCAL_IP=($(ip address | grep -w inet | awk '{print $2}'))
 # 新建路由链条
 iptables -t mangle -N V2RAY
 
-# 目标地址为本地网络的走直连
-for i in "${LOCAL_IP[@]}"; do
-        iptables -t mangle -A V2RAY -d $i -j RETURN
-done
+# # 目标地址为本地网络的走直连
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY -d $i -j RETURN
+# done
+
+# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
+ # 目标地址为本地网络的 tcp 流量走直连
+ for i in "${LOCAL_IP[@]}"; do
+         iptables -t mangle -A V2RAY -d $i -p tcp -j RETURN
+ done
+ # dns 53 端口请求要传入透明代理
+ for i in "${LOCAL_IP[@]}"; do
+         iptables -t mangle -A V2RAY -d $i -p udp ! --dport 53 -j RETURN
+ done
+# **************************************
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
@@ -72,10 +81,21 @@ iptables -t mangle -N V2RAY_MASK
 # 需要提前将 v2ray 运行在 gid 为 23333 的用户上
 iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
 
-# 目标地址为本地网络的走直连
-for i in "${LOCAL_IP[@]}"; do
-        iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
-done
+# # 目标地址为本地网络的走直连
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
+# done
+
+# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
+# 目标地址为本地网络的tcp 流量走直连
+ for i in "${LOCAL_IP[@]}"; do
+         iptables -t mangle -A V2RAY_MASK -d $i -p tcp -j RETURN
+ done
+ # dns 53 端口请求要传入透明代理
+ for i in "${LOCAL_IP[@]}"; do
+         iptables -t mangle -A V2RAY_MASK -d $i -p udp ! --dport 53 -j RETURN
+ done
+# **************************************
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN

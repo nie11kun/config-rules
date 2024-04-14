@@ -2,17 +2,17 @@
     "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
     "dns": {
         "nameServer": [ // DNS 服务器列表
-            {
-                "address": {
-                    "address": "FakeDNS"
-                },
-                "geoDomain": [
-                    {
-                        "code": "geolocation-!cn", // GeoDomain 的类别名称
-                        "filePath": "geosite.dat" // GeoDomain 文件路径
-                    }
-                ]
-            },
+            //{   // 透明代理 本机网关访问网络不识别 fakedns 流量
+            //    "address": {
+            //        "address": "FakeDNS"
+            //    },
+            //    "geoDomain": [
+            //        {
+            //            "code": "geolocation-!cn", // GeoDomain 的类别名称
+            //            "filePath": "geosite.dat" // GeoDomain 文件路径
+            //        }
+            //    ]
+            //},
             {
                 "address": {
                     "address": "1.1.1.1", // 防止域名污染
