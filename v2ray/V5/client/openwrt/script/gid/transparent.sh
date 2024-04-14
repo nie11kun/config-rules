@@ -2,9 +2,10 @@
 
 # 通过使用特定 gid 的用户运行 v2ray 过滤 v2ray 出来的流量 防止回环
 
-# 以下配置后 使用 fakedns 时本地网关的流量由于域名信息缺失导致访问不正常 需要删除dns中的 fakedns 配置， 局域网用户一切正常
+# 使用透明代理通过内置 dns 解析后经过测试只能识别 router 中的 IP 规则，所有域名的规则都无效了
+# 以下配置后 使用 fakedns 流量由于域名信息缺失导致访问不正常 需要删除dns中的 fakedns 配置， 调用配置 socks 或 http 代理可正常访问
 # 通过日志可以看到 access.log 中本机访问的流量全是 ip 地址而没有域名 会导致 router 中的域名相关配置失效
-# 可以手动配置本机网关 http_proxy 和 https_proxy 为 v2ray 监听的 http 端口，这样就可以正常使用 v2ray 来进行本机的 dns 解析 且日志也是域名
+# 本机或局域网设备可以手动配置网关 http_proxy 和 https_proxy 为网关 v2ray 监听的 socks5 http 端口，这样就可以正常使用基于域名的一些规则了 且日志也是域名
 
 # https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html
 # https://xtls.github.io/document/level-2/iptables_gid.html

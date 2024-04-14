@@ -1,0 +1,155 @@
+{
+    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
+    "log": {
+        "access": {
+            "type": "File",
+            "path": "/etc/v2ray/log/access.log",
+            "level": "Warning"//  "Debug" | "Info" | "Warning" | "Error" | "None"
+        },
+        "error": {
+            "type": "File",
+            "path": "/etc/v2ray/log/error.log",
+            "level": "Warning"
+        }
+    },
+    "dns": {
+        "nameServer": [
+            {
+                "address": {
+                    "address": "1.1.1.1",
+                    "port": 53
+                }
+            }
+        ],
+        "domainMatcher": "mph",
+        "queryStrategy": "USE_IP4",
+        "cacheStrategy": "CacheEnabled",
+        "fallbackStrategy": "Enabled",
+        "tag": "dns"
+    },
+    "inbounds": [
+        {
+            "protocol": "dokodemo-door",
+            "settings": {
+                "networks": [
+                    "TCP",
+                    "UDP"
+                ],
+                "followRedirect": true
+            },
+            "port": "1081",
+            "listen": "0.0.0.0",
+            "tag": "transparent",
+            "sniffing": {
+                "enabled": true,
+                "destOverride": "fakedns+others",
+                "metadataOnly": false
+            },
+            "streamSettings": {
+                "socketSettings": {
+                    "tproxy": "tproxy"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vmess",
+            "settings": {
+                "address": "your.domain",
+                "port": 443,
+                "uuid": "uuid-here"
+            },
+            "sendThrough": "0.0.0.0",
+            "tag": "out-vmess",
+            "streamSettings": {
+                "transport": "ws",
+                "transportSettings": {
+                    "path": "/proxypath",
+                    "maxEarlyData": 2048,
+                    "useBrowserForwarding": false
+                },
+                "security": "tls",
+                "securitySettings": {
+                    "disableSystemRoot": false,
+                    "minVersion": "TLS1_1",
+                    "maxVersion": "TLS1_3"
+                },
+                "socketSettings": {
+                    "mark": 2,
+                    "tcpFastOpen": true
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            },
+            "domainStrategy": "UseIP4"
+            //"AsIs" : 让操作系统来解析。
+            //"UseIP" : 使用内置 dns 解析它，并使用结果中的任意 IP 地址。
+            //"UseIP4" : 使用内置 dns 解析它，并使用结果中的任意 IPv4 地址。
+            //"UseIP6" : 使用内置 dns 解析它，并使用结果中的任意 IPv6 地址。
+        },
+        {
+            "protocol": "freedom",
+            "tag": "direct-systemDNS",
+            "domainStrategy": "AsIs",
+            "socketSettings": {
+                "mark": 2
+            }
+        },
+        {
+            "protocol": "freedom",
+            "tag": "direct-customDNS",
+            "domainStrategy": "UseIP4",
+            "socketSettings": {
+                "mark": 2
+            }
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "blocked",
+            "socketSettings": {
+                "mark": 2
+            }
+        },
+        {
+            "protocol": "dns",
+            "tag": "dns-out",
+            "socketSettings": {
+                "mark": 2
+            }
+        }
+    ],
+    "router": {
+        "domainStrategy": "IpIfNonMatch", // AsIs | UseIp | IpIfNonMatch | IpOnDemand
+        "rule": [// 规则都匹配不上时会走第一个 outbound 规则
+            {
+                "tag": "dns-out",
+                "portList": "53",
+                "networks": "udp",
+                "inboundTag": [
+                    "transparent"
+                ]
+            },
+            {
+                "tag": "direct-systemDNS",
+                "portList": "123",
+                "networks": "udp",
+                "inboundTag": [
+                    "transparent"
+                ]
+            },
+            {
+                "tag": "direct-customDNS",
+                "domain": [
+                    {
+                        "type": "RootDomain",
+                        "value": "niekun.net"
+                    }
+                ],
+                "domainMatcher": "mph"
+            }
+        ]
+    }
+}

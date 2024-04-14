@@ -1,4 +1,6 @@
 # 配合 dnsmasq 对需要代理的域名和ip地址走 tproxy 的 iptables 规则
+# 可以避免全局透明代理时 v2ray router 中基于域名的规则都无效的问题
+# 使用此模式可以精简 v2ray config 配置，只需要保留进入的流量都走 vmess 出口即可 dns 只保留 1.1.1.1 即可 防止域名污染
 
 ip route add local default dev lo table 100
 ip rule add fwmark 1 table 100

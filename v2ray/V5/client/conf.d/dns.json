@@ -2,7 +2,7 @@
     "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
     "dns": {
         "nameServer": [ // DNS 服务器列表
-            //{   // 透明代理 本机网关访问网络不识别 fakedns 流量
+            //{   // 透明代理不识别 fakedns 流量
             //    "address": {
             //        "address": "FakeDNS"
             //    },
