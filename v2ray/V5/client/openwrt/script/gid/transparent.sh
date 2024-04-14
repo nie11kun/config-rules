@@ -44,11 +44,9 @@ done
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
 
-# 实际测试加上以下内容会导致无法联网
-# 如果网关作为主路由，则加上这一句 源访问设备的地址不在本地网关内则直连 防止外网用户访问本地设备走代理
-# for i in "${LOCAL_IP[@]}"; do
-#         iptables -t mangle -A V2RAY ! -s $i -j RETURN
-# done
+# 实际测试加上以下内容会导致主路由无法走代理
+# 如果网关作为主路由，则加上这一句 源访问设备的地址不在本地网关 lan 网段内则直连 防止外网用户访问本地设备走代理
+# iptables -t mangle -A V2RAY ! -s 192.168.244.1/24 -j RETURN
 
 # 给流量打标记 1，转发至 1081 端口
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
@@ -75,6 +73,10 @@ done
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN
+
+# 实际测试加上以下内容会导致主路由无法走代理
+# 如果网关作为主路由，则加上这一句 源访问设备的地址不在本地网关 lan 网段内则直连 防止外网用户访问本地设备走代理
+# iptables -t mangle -A V2RAY_MASK ! -s 192.168.244.1/24 -j RETURN
 
 # mark设置为1，以应用上面创建的策略路由 流量才能内送入代理程序
 iptables -t mangle -A V2RAY_MASK -j MARK --set-mark 1
