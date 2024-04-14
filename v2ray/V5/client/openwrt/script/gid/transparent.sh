@@ -2,6 +2,12 @@
 
 # 通过使用特定 gid 的用户运行 v2ray 过滤 v2ray 出来的流量 防止回环
 
+# 透明代理只能接管局域网用户的 dns 请求并交给 v2ray 处理
+# 本机 dns 请求仍然会走系统默认路径 如 /etc/hosts 和 dnsmasq 的方式，系统解析后返回的 IP 地址可以正常进入 v2ray 处理
+# 通过日志可以看到 access.log 中本机访问的流量全是 ip 地址而没有域名，这就是因为走系统 dns 已经将 ip 解析出来了才交给 v2ray 处理
+# 这样就可能由于解析出来的 ip 地址是被污染的导致影响本机网关的无法正常访问国外网站
+# 解决方法就是手动配置本机网关 http_proxy 和 https_proxy 为 v2ray 监听的 http 端口，这样就可以正常使用 v2ray 来进行本机的 dns 解析
+
 # https://xtls.github.io/document/level-2/transparent_proxy/transparent_proxy.html
 # https://xtls.github.io/document/level-2/iptables_gid.html
 # https://guide.v2fly.org/app/tproxy.html#%E8%A7%A3%E5%86%B3-too-many-open-files-%E9%97%AE%E9%A2%98
