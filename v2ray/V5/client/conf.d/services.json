@@ -11,6 +11,11 @@
         //             "defaultExpireSeconds": 86400 //默认的订阅过期时间 时间到后会自动重新拉取订阅
         //         }
         //     ]
+        //},
+        //"policy": {
+        //    "system": {
+        //        "overrideAccessLogDest": true // 替换 access 日志中目标地址为 sniffing 嗅探出的真实地址
+        //    }
         //}
     }
 }
