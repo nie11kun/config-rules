@@ -12,10 +12,16 @@
         //         }
         //     ]
         //},
-        //"policy": {
-        //    "system": {
-        //        "overrideAccessLogDest": true // 替换 access 日志中目标地址为 sniffing 嗅探出的真实地址
-        //    }
-        //}
+        "policy": {
+            "system": {
+                "overrideAccessLogDest": true, // 替换 access 日志中目标地址为 sniffing 嗅探出的真实地址
+                "stats": {
+                    "inboundUplink": true, //入站代理的上行流量统计
+                    "inboundDownlink": true, //入站代理的下行流量统计
+                    "outboundUplink": true, //出站代理的上行流量统计
+                    "outboundDownlink": true //出站代理的下行流量统计
+                }
+            }
+        }
     }
 }
