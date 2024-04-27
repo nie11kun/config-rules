@@ -15,7 +15,13 @@
             "tag": "transparent",
             "sniffing": { //入站连接的流量探测设置
                 "enabled": true,
-                "destOverride": "fakedns+others", // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "fakedns+others"
+                ], // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  
+                //dns 解析后会获取到目标地址的 ip，当基于 ip 的流量进入此 inbound 后 v2ray 会尝试通过以上配置的协议类型嗅探出此ip的原始域名信息并进入 router 进一步匹配规则
+                //fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
                 "metadataOnly": false //是否仅使用元数据推断目标地址而不截取流量内容。只有元数据流量目标侦测模块会被激活
             },
             "streamSettings": { // 底层传输配置
@@ -36,7 +42,13 @@
             "tag": "socks-inbound",
             "sniffing": { //入站连接的流量探测设置
                 "enabled": true,
-                "destOverride": "fakedns+others", // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "fakedns+others"
+                ], // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  
+                //dns 解析后会获取到目标地址的 ip，当基于 ip 的流量进入此 inbound 后 v2ray 会尝试通过以上配置的协议类型嗅探出此ip的原始域名信息并进入 router 进一步匹配规则
+                //fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
                 "metadataOnly": false //是否仅使用元数据推断目标地址而不截取流量内容。只有元数据流量目标侦测模块会被激活
             },
             "streamSettings": { // 底层传输配置
@@ -61,7 +73,13 @@
             "tag": "http-inbound",
             "sniffing": { //入站连接的流量探测设置
                 "enabled": true,
-                "destOverride": "fakedns+others", // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "fakedns+others"
+                ], // ["http" | "tls" | "quic" | "fakedns" | "fakedns+others"]  
+                //dns 解析后会获取到目标地址的 ip，当基于 ip 的流量进入此 inbound 后 v2ray 会尝试通过以上配置的协议类型嗅探出此ip的原始域名信息并进入 router 进一步匹配规则
+                //fakedns+others 选项会优先进行 FakeDNS 虚拟 DNS 服务器匹配。如果 IP 地址处于虚拟 DNS 服务器的 IP 地址区间内，但是没有找到相应的域名记录时，使用 http、tls 的匹配结果。此选项仅在 metadataOnly 为 false 时有效
                 "metadataOnly": false //是否仅使用元数据推断目标地址而不截取流量内容。只有元数据流量目标侦测模块会被激活
             },
             "streamSettings": { // 底层传输配置
