@@ -4,7 +4,7 @@
         "access": {
             "type": "File",
             "path": "/etc/v2ray/log/access.log",
-            "level": "Warning"//  "Debug" | "Info" | "Warning" | "Error" | "None"
+            "level": "Warning" //  "Debug" | "Info" | "Warning" | "Error" | "None"
         },
         "error": {
             "type": "File",
@@ -16,11 +16,34 @@
         "nameServer": [
             {
                 "address": {
+                    "address": "FakeDNS"
+                }
+            },
+            {
+                "address": {
                     "address": "1.1.1.1",
+                    "port": 53
+                }
+            },
+            {
+                "address": {
+                    "address": "8.8.8.8",
                     "port": 53
                 }
             }
         ],
+        "fakeDns": {
+            "pools": [
+                {
+                    "ipPool": "198.18.0.0/15",
+                    "lruSize": 65535
+                },
+                {
+                    "ipPool": "fc00::/18",
+                    "lruSize": 65535
+                }
+            ]
+        },
         "domainMatcher": "mph",
         "queryStrategy": "USE_IP4",
         "cacheStrategy": "CacheEnabled",
@@ -42,7 +65,11 @@
             "tag": "transparent",
             "sniffing": {
                 "enabled": true,
-                "destOverride": "fakedns+others",
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "fakedns"
+                ],
                 "metadataOnly": false
             },
             "streamSettings": {
@@ -123,7 +150,7 @@
     ],
     "router": {
         "domainStrategy": "IpIfNonMatch", // AsIs | UseIp | IpIfNonMatch | IpOnDemand
-        "rule": [// 规则都匹配不上时会走第一个 outbound 规则
+        "rule": [ // 规则都匹配不上时会走第一个 outbound 规则
             {
                 "tag": "dns-out",
                 "portList": "53",
@@ -151,5 +178,18 @@
                 "domainMatcher": "mph"
             }
         ]
+    },
+    "services": {
+        "policy": {
+            "system": {
+                "overrideAccessLogDest": true,
+                "stats": {
+                    "inboundUplink": true,
+                    "inboundDownlink": true,
+                    "outboundUplink": true,
+                    "outboundDownlink": true
+                }
+            }
+        }
     }
 }
