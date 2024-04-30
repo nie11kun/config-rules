@@ -1,0 +1,41 @@
+{
+    "dns": {
+        "staticHosts": [
+            {
+                "type": "Full",
+                "domain": "esxi.home.marco",
+                "ip": ["192.168.1.3"]
+            },
+            {
+                "type": "Full",
+                "domain": "openwrt.home.marco",
+                "ip": ["192.168.122.1"]
+            },
+            {
+                "type": "Full",
+                "domain": "ubuntu.home.marco",
+                "ip": ["192.168.122.2"]
+            },
+            {
+                "type": "Full",
+                "domain": "windows.home.marco",
+                "ip": ["192.168.122.3"]
+            },
+            {
+                "type": "Full",
+                "domain": "tv.home.marco",
+                "ip": ["192.168.122.4"]
+            },
+            {
+                "type": "Full",
+                "domain": "h99.home.marco",
+                "ip": ["192.168.122.5"]
+            },
+            {
+                "type": "Full",
+                "domain": "ax6.home.marco",
+                "ip": ["192.168.122.149"]
+            }
+        ]
+    }
+}
