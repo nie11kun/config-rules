@@ -28,7 +28,7 @@
                 ]
             },
             {
-                "tag": "dns-out",  // 放在最前面用于透明代理识别 dns 流量
+                "tag": "dns-out", // 放在最前面用于透明代理识别 dns 流量
                 "portList": "53",
                 "networks": "udp",
                 "inboundTag": [
@@ -38,7 +38,7 @@
                 ]
             },
             {
-                "tag": "direct-systemDNS",   // 放在最前面用于透明代理识别 NTP 时间校准流量
+                "tag": "direct-systemDNS", // 放在最前面用于透明代理识别 NTP 时间校准流量
                 "portList": "123",
                 "networks": "udp",
                 "inboundTag": [
@@ -96,14 +96,14 @@
             {
                 "tag": "direct-customDNS",
                 "geoip": [
-                    //{
-                    //    "cidr": [
-                    //        {
-                    //            "ipAddr": "111.111.111.111",
-                    //            "prefix": 32
-                    //        }
-                    //    ]
-                    //},
+                    {
+                        "cidr": [ //配置 vps ip 地址走直连 否则可能流量回环
+                            {
+                                "ipAddr": "111.111.111.111",
+                                "prefix": 32
+                            }
+                        ]
+                    },
                     {
                         "code": "CN",
                         "filePath": "geoip.dat"

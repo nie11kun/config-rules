@@ -41,7 +41,7 @@ start_service() {
 
         procd_set_param user v2ray_tproxy
         procd_set_param limits core="unlimited"
-        procd_set_param limits nofile="1000000 1000000"
+        procd_set_param limits nofile="100000 100000"
         procd_set_param stdout 1
         procd_set_param stderr 1
         procd_set_param respawn
