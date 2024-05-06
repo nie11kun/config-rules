@@ -41,20 +41,20 @@ LOCAL_IP=($(ip address | grep -w inet | awk '{print $2}'))
 # 新建路由链条
 iptables -t mangle -N V2RAY
 
-# # 目标地址为本地网络的走直连
-# for i in "${LOCAL_IP[@]}"; do
-#         iptables -t mangle -A V2RAY -d $i -j RETURN
-# done
+# 目标地址为本地网络的走直连 不需要单独定义 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY -d $i -j RETURN
+done
 
-# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
- # 目标地址为本地网络的 tcp 流量走直连
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY -d $i -p tcp -j RETURN
- done
- # dns 53 端口请求要传入透明代理
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY -d $i -p udp ! --dport 53 -j RETURN
- done
+# ******以下配置可以使本机网关 dns 解析也走 v2ray 但会引起 CPU 占用高问题*****
+# 目标地址为本地网络的 tcp 流量走直连
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY -d $i -p tcp -j RETURN
+# done
+# # dns 53 端口请求要传入透明代理
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY -d $i -p udp ! --dport 53 -j RETURN
+# done
 # **************************************
 
 # 组播地址/E类地址/广播地址直连
@@ -82,20 +82,20 @@ iptables -t mangle -N V2RAY_MASK
 # 需要提前将 v2ray 运行在 gid 为 23333 的用户上
 iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
 
-# # 目标地址为本地网络的走直连
-# for i in "${LOCAL_IP[@]}"; do
-#         iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
-# done
+# 目标地址为本地网络的走直连 不需要单独定义 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
+done
 
-# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
+# ******以下配置可以使本机网关 dns 解析也走 v2ray 但会引起 CPU 占用高问题*****
 # 目标地址为本地网络的tcp 流量走直连
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY_MASK -d $i -p tcp -j RETURN
- done
- # dns 53 端口请求要传入透明代理
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY_MASK -d $i -p udp ! --dport 53 -j RETURN
- done
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY_MASK -d $i -p tcp -j RETURN
+# done
+# dns 53 端口请求要传入透明代理
+# for i in "${LOCAL_IP[@]}"; do
+#         iptables -t mangle -A V2RAY_MASK -d $i -p udp ! --dport 53 -j RETURN
+# done
 # **************************************
 
 # 组播地址/E类地址/广播地址直连
