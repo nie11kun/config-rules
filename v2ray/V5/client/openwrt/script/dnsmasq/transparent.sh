@@ -6,10 +6,10 @@
 nft add table v2ray
 
 # 添加 set 表
-nft add set ip v2ray gfwlist { type ipv4_addr\; }
+nft add set ip v2ray gfwlist { type ipv4_addr \; flags interval \; }
 
 # 读取读取文件中的 ip 地址到 gfwlist 表中
-for ip in $(cat /etc/dnsmasq/proxy_ip.txt);
+for ip in $(awk '{print $1}' /etc/dnsmasq/proxy_ip.txt);
     do nft add element ip v2ray gfwlist { $ip };
 done
 
