@@ -32,6 +32,15 @@
                 }
             }
         ],
+        "staticHosts": [
+            {
+                "type": "Subdomain",
+                "domain": "your.vmess.domain", // 指定代理 vmess 域名优选 ip 地址
+                "ip": [
+                    "111.111.111.111"
+                ]
+            }
+        ],
         "fakeDns": {
             "pools": [
                 {
@@ -74,7 +83,7 @@
             },
             "streamSettings": {
                 "socketSettings": {
-                    "tproxy": "redirect"
+                    "tproxy": "redirect"  // 经过测试 nftables 只能配置 redirect 模式
                 }
             }
         }
@@ -83,7 +92,7 @@
         {
             "protocol": "vmess",
             "settings": {
-                "address": "your.domain",
+                "address": "your.vmess.domain",
                 "port": 443,
                 "uuid": "uuid-here"
             },
