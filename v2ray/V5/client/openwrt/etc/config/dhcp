@@ -1,2 +1,2 @@
 config dnsmasq
-        option confdir '/etc/dnsmasq'
+        option confdir '/etc/dnsmasq, *.conf'
