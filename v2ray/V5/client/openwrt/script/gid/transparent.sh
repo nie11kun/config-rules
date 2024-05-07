@@ -41,7 +41,7 @@ LOCAL_IP=($(ip address | grep -w inet | awk '{print $2}'))
 # 新建路由链条
 iptables -t mangle -N V2RAY
 
-# 目标地址为本地网络的走直连 不需要单独定义 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+# 目标地址为本地网络的走直连 不需要单独截获 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
 for i in "${LOCAL_IP[@]}"; do
         iptables -t mangle -A V2RAY -d $i -j RETURN
 done
@@ -82,7 +82,7 @@ iptables -t mangle -N V2RAY_MASK
 # 需要提前将 v2ray 运行在 gid 为 23333 的用户上
 iptables -t mangle -A V2RAY_MASK -m owner --gid-owner 23333 -j RETURN
 
-# 目标地址为本地网络的走直连 不需要单独定义 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+# 目标地址为本地网络的走直连 不需要单独截获 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
 for i in "${LOCAL_IP[@]}"; do
         iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
 done

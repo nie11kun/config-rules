@@ -17,15 +17,10 @@ LOCAL_IP=($(ip address | grep -w inet | awk '{print $2}'))
 # 新建路由链条
 iptables -t mangle -N V2RAY
 
-# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
- # 目标地址为本地网络的 tcp 流量走直连
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY -d $i -p tcp -j RETURN
- done
- # dns 53 端口请求要传入透明代理
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY -d $i -p udp ! --dport 53 -j RETURN
- done
+# 目标地址为本地网络的走直连 不需要单独截获 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY -d $i -j RETURN
+done
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY -d 224.0.0.0/3 -j RETURN
@@ -46,15 +41,10 @@ iptables -t mangle -A PREROUTING -j V2RAY
 # 新建路由链
 iptables -t mangle -N V2RAY_MASK
 
-# ******以下配置可以使本机网关 dns 解析也走 v2ray*****
-# 目标地址为本地网络的tcp 流量走直连
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY_MASK -d $i -p tcp -j RETURN
- done
- # dns 53 端口请求要传入透明代理
- for i in "${LOCAL_IP[@]}"; do
-         iptables -t mangle -A V2RAY_MASK -d $i -p udp ! --dport 53 -j RETURN
- done
+# 目标地址为本地网络的走直连 不需要单独截获 dns 端口 因为 sniffing 会获取域名并二次判断是否重新获取真实 IP 地址
+for i in "${LOCAL_IP[@]}"; do
+        iptables -t mangle -A V2RAY_MASK -d $i -j RETURN
+done
 
 # 组播地址/E类地址/广播地址直连
 iptables -t mangle -A V2RAY_MASK -d 224.0.0.0/3 -j RETURN
