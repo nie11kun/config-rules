@@ -74,7 +74,7 @@
             },
             "streamSettings": {
                 "socketSettings": {
-                    "tproxy": "tproxy"
+                    "tproxy": "redirect"
                 }
             }
         }
@@ -103,7 +103,7 @@
                     "maxVersion": "TLS1_3"
                 },
                 "socketSettings": {
-                    "mark": 2,
+                    //"mark": 255,
                     "tcpFastOpen": true
                 }
             },
@@ -122,7 +122,7 @@
             "tag": "direct-systemDNS",
             "domainStrategy": "AsIs",
             "socketSettings": {
-                "mark": 2
+                //"mark": 255
             }
         },
         {
@@ -130,21 +130,21 @@
             "tag": "direct-customDNS",
             "domainStrategy": "UseIP4",
             "socketSettings": {
-                "mark": 2
+                //"mark": 255
             }
         },
         {
             "protocol": "blackhole",
             "tag": "blocked",
             "socketSettings": {
-                "mark": 2
+                //"mark": 255
             }
         },
         {
             "protocol": "dns",
             "tag": "dns-out",
             "socketSettings": {
-                "mark": 2
+                //"mark": 255
             }
         }
     ],
