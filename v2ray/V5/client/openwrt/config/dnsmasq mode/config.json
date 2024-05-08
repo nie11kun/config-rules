@@ -4,12 +4,12 @@
         "access": {
             "type": "File",
             "path": "/etc/v2ray/log/access.log",
-            "level": "Warning" //  "Debug" | "Info" | "Warning" | "Error" | "None"
+            "level": "Error" //  "Debug" | "Info" | "Warning" | "Error" | "None"
         },
         "error": {
             "type": "File",
             "path": "/etc/v2ray/log/error.log",
-            "level": "Warning"
+            "level": "Error"
         }
     },
     "dns": {
