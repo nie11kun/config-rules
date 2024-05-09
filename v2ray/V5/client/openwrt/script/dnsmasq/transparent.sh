@@ -15,9 +15,9 @@ done
 # 局域网流量转发
 # 局域网流量目标地址是外部地址时传输路径为 prerouting -> forward -> postrouting hooks
 nft add chain ip v2ray prerouting { type nat hook prerouting priority 0 \; policy accept \; }
-nft add rule ip v2ray prerouting ip daddr @gfwlist ip protocol tcp redirect to :1081
+nft add rule ip v2ray prerouting ip daddr @gfwlist ip protocol tcp redirect to 1081
 
 # 本机网关流量转发
 # 本机网关流量目标地址时外部地址时传输路径为 本机 -> output -> postrouting hooks
 nft add chain ip v2ray output { type nat hook output priority 0 \; policy accept \; }
-nft add rule ip v2ray output ip daddr @gfwlist ip protocol tcp redirect to :1081
+nft add rule ip v2ray output ip daddr @gfwlist ip protocol tcp redirect to 1081
