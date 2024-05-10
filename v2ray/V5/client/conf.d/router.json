@@ -136,7 +136,7 @@
             },
             {
                 "tag": "out-vmess", //对应一个额外 出站连接配置 的标识
-                // "balancingTag": "balancer_sub1", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
+                "balancingTag": "balancer_out", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
                 "domain": [
                     {
                         "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
@@ -159,7 +159,7 @@
             },
             {
                 "tag": "out-vmess",
-                // "balancingTag": "balancer_sub1",
+                "balancingTag": "balancer_out",
                 "geoDomain": [
                     {
                         //"domain": [
@@ -176,7 +176,7 @@
             },
             {
                 "tag": "out-vmess",
-                // "balancingTag": "balancer_sub1",
+                "balancingTag": "balancer_out",
                 "geoip": [
                     {
                         "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块
@@ -209,9 +209,9 @@
         ],
         "balancingRule": [
             {
-                "tag": "balancer_sub1", //此负载均衡器的标识，用于匹配 RuleObject 中的 balancerTag
+                "tag": "balancer_out", //此负载均衡器的标识，用于匹配 RuleObject 中的 balancerTag
                 "outbound_selector": [
-                    "sub1_"
+                    "out-"
                 ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
                 "strategy": "random", //"random" | "leastping" | "leastload"  当前只有 random 生效
                 //random 会从出站中随机选出一个作为最终的出站连接。
