@@ -47,6 +47,41 @@
             //"UseIP6" : 使用内置 dns 解析它，并使用结果中的任意 IPv6 地址。
         },
         {
+            "protocol": "vless",
+            "settings": {
+                "address": "your.domain",
+                "port": 443,
+                "uuid": "uuid-here"
+            },
+            "sendThrough": "0.0.0.0",
+            "tag": "out-vless",
+            "streamSettings": {
+                "transport": "ws",
+                "transportSettings": {
+                    "path": "/proxypath",
+                    //"header": [{"h1":"abc"}],
+                    "maxEarlyData": 2048,
+                    "useBrowserForwarding": false
+                    //"earlyDataHeaderName": ""
+                },
+                "security": "tls",
+                "securitySettings": {
+                    "serverName": "you.domain",
+                    "disableSystemRoot": false,
+                    "minVersion": "TLS1_1",
+                    "maxVersion": "TLS1_3"
+                },
+                "socketSettings": {
+                    "tcpFastOpen": true
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            },
+            "domainStrategy": "UseIP4"
+        },
+        {
             "protocol": "freedom",
             "tag": "direct-systemDNS",
             "domainStrategy": "AsIs",
