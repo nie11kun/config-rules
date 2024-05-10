@@ -54,6 +54,10 @@
                     },
                     {
                         "type": "RootDomain",
+                        "value": "240128.xyz"
+                    },
+                    {
+                        "type": "RootDomain",
                         "value": "pages.dev"
                     }
                 ],
