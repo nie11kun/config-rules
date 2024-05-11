@@ -14,8 +14,13 @@
                 "transport": "ws",
                 "transportSettings": {
                     "path": "/proxypath", //WebSocket 所使用的 HTTP 协议路径，默认值为 "/"。
-                    //"header": [{"h1":"abc"}],//自定义 HTTP 头，一个键值对，每个键表示一个 HTTP 头的名称，对应的值是字符串。默认值为空。
-                    "maxEarlyData": 2048, //发送的前置数据的最长长度。用于减少连接建立的时间
+                    // "header": [
+                    //     {
+                    //         "key": "key1",
+                    //         "value": "abc"
+                    //     }
+                    // ], //自定义 HTTP 头，一个键值对，每个键表示一个 HTTP 头的名称，对应的值是字符串。默认值为空。
+                    "maxEarlyData": 2048, //发送的前置数据的最长长度。用于减少连接建立的时间  设置过小可能导致无法连接服务器
                     "useBrowserForwarding": false //是否启用浏览器转发
                     //"earlyDataHeaderName": ""//送的前置数据的 HTTP 头的名字，设置后启用基于 HTTP 头的前置数据。如果留空则使用基于路径的前置数据
                 },
@@ -38,7 +43,7 @@
             //},
             "mux": { //Mux 功能实现了在一条 TCP 连接上分发多条 TCP 连接的数据
                 "enabled": true, //是否启用 Mux，默认值为 false
-                "concurrency": 8 //大并发连接数。最小值 1，最大值 1024，默认值 8
+                "concurrency": 8 //大并发连接数。最小值 1，最大值 1024，默认值 8 如果填负数，如 -1，则不加载 Mux 模块
             },
             "domainStrategy": "UseIP4"
             //"AsIs" : 让操作系统来解析。
@@ -59,8 +64,13 @@
                 "transport": "ws",
                 "transportSettings": {
                     "path": "/proxypath",
-                    //"header": [{"h1":"abc"}],
-                    "maxEarlyData": 2048,
+                    // "header": [
+                    //     {
+                    //         "key": "key1",
+                    //         "value": "abc"
+                    //     }
+                    // ],
+                    // "maxEarlyData": 2048,
                     "useBrowserForwarding": false
                     //"earlyDataHeaderName": ""
                 },
@@ -72,12 +82,12 @@
                     "maxVersion": "TLS1_3"
                 },
                 "socketSettings": {
-                    "tcpFastOpen": true
+                    "tcpFastOpen": false
                 }
             },
             "mux": {
-                "enabled": true,
-                "concurrency": 8
+                "enabled": false,
+                "concurrency": -1
             },
             "domainStrategy": "UseIP4"
         },
