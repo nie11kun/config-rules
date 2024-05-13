@@ -12,6 +12,20 @@
             "level": "Warning"
         }
     },
+    "dns": {
+        "nameServer": [
+            {
+                "address": {
+                    "address": "https+local://1.1.1.1/dns-query" // 首选 1.1.1.1 的 DoH 查询 可防止 ISP 偷窥
+                }
+            },
+            {
+                "address": {
+                    "address": "localhost"
+                }
+            }
+        ]
+    },
     "outbounds": [
         {
             "protocol": "freedom",
@@ -26,6 +40,15 @@
     "router": {
         "domainStrategy": "AsIs",
         "rule": [
+            // { // 国内域名屏蔽 防止服务器直连国内被封 IP
+            //     "tag": "blocked",
+            //     "geoip": [
+            //         {
+            //             "code": "CN",
+            //             "filePath": "geoip.dat"
+            //         }
+            //     ]
+            // },
             {
                 "tag": "blocked",
                 "geoip": [
