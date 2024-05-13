@@ -183,7 +183,7 @@
                 "balancingTag": "balancer_out",
                 "geoip": [
                     {
-                        "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块
+                        "cidr": [ //一个数组，数组中每一项是一个 CIDR 地址块 规则需要匹配此地址块IP
                             {
                                 "ipAddr": "1.1.1.1",
                                 "prefix": 32

@@ -4,59 +4,80 @@
         "nameServer": [ // DNS 服务器列表
             { // 需要在 inbound sniffing 中配置嗅探 fakedns 流量 才能正常识别接收到访问的虚假 ip 背后真实的解析地址
                 "address": {
-                    "address": "FakeDNS"
+                    "address": "FakeDNS" // 全局使用 fakedns 然后开始匹配下面的 dns 服务器
+                }
+            },
+            // {
+            //     "address": { //DNS 服务器地址及端口
+            //         "address": "223.5.5.5",
+            //         "port": 53
+            //     },
+            //     "geoDomain": [
+            //         {
+            //             "code": "CN", // GeoDomain 的类别名称
+            //             "filePath": "geosite.dat" // GeoDomain 文件路径
+            //         }
+            //     ],
+            //     "clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
+            //     "prioritizedDomain": [ //一个域名列表，此列表包含的域名，将优先使用此dns服务器进行查询
+            //         {
+            //             "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
+            //             "domain": "taobao.com" // string
+            //         },
+            //         {
+            //             //"type": "Keyword",
+            //             //"domain": "google"
+            //         }
+            //     ],
+            //     "expectIPs": [ // 此选项在V5中暂时无法使用 当配置此项时，V2Ray DNS 会对返回的 IP 进行校验，只返回满足 expectIPs 列表的地址 如果 IP 不满足要求则跳过此 dns 服务器
+            //         {
+            //             "cidr": [
+            //                 {
+            //                     "ipAddr": "119.29.0.0", // 检查返回的 ip 是否在这个 ip 域内
+            //                     "prefix": 16
+            //                 }
+            //             ],
+            //             "inverseMatch": true // 是否反向匹配
+            //         },
+            //         {
+            //             "code": "CN", // 检查返回的 IP 是否在此 IP 范围
+            //             "filePath": "geoip.dat"
+            //         }
+            //     ]
+            // },
+            {
+                "address": {
+                    "address": "1.1.1.1", // 国外域名走 1.1.1.1 防止域名污染
+                    "port": 53
                 },
                 "geoDomain": [
                     {
-                        "code": "geolocation-!cn", // GeoDomain 的类别名称
-                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                        "code": "geolocation-!cn",
+                        "filePath": "geosite.dat"
                     }
                 ]
             },
             {
                 "address": {
-                    "address": "1.1.1.1", // 防止域名污染
-                    "port": 53
-                }
-            },
-            {
-                "address": { //DNS 服务器地址及端口
-                    "address": "223.5.5.5",
+                    "address": "223.5.5.5", // 国内域名及ip优先使用 国内 dns 服务器
                     "port": 53
                 },
                 "geoDomain": [
                     {
-                        "code": "CN", // GeoDomain 的类别名称
-                        "filePath": "geosite.dat" // GeoDomain 文件路径
+                        "code": "CN",
+                        "filePath": "geosite.dat"
                     }
                 ]
-                //"clientIp": "221.11.101.54", //当前网络的 IP 地址。用于 DNS 查询时通知 DNS 服务器，客户端所在的地理位置
-                //"prioritizedDomain": [ //一个域名列表，此列表包含的域名，将优先使用此dns服务器进行查询
-                //    {
-                //        "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
-                //        "domain": "taobao.com" // string
-                //    },
-                //    {
-                //        //"type": "Keyword",
-                //        //"domain": "google"
-                //    }
-                //]
             },
             {
                 "address": {
-                    "address": "114.114.114.114",
+                    "address": "114.114.114.114", // 如果上面的都没有匹配使用此备用 dns 服务器
                     "port": 53
                 }
             },
             {
                 "address": {
-                    "address": "119.29.29.29",
-                    "port": 53
-                }
-            },
-            {
-                "address": {
-                    "address": "localhost"
+                    "address": "localhost" // 如果都没有匹配使用本地 dns 查询
                 }
             }
         ],
