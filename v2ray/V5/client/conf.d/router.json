@@ -215,7 +215,7 @@
             {
                 "tag": "balancer_out", //此负载均衡器的标识，用于匹配 RuleObject 中的 balancerTag
                 "outbound_selector": [
-                    //"sub1_",
+                    //"sub1-",
                     "out-"
                 ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
                 "strategy": "random", //"random" | "leastping" | "leastload"  当前只有 random 生效
