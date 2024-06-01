@@ -2,11 +2,6 @@
 
 # 通过 iptables 识别特定 mark 标识的流量过滤 v2ray 出来的流量 防止回环  需要 v2ray 的 outbound 定义相同的 mark 标识
 
-# 阻止 QUIC 流量
-nft add rule inet fw4 input udp dport 443 drop
-nft add rule inet fw4 forward udp dport 443 drop
-nft add rule inet fw4 output udp dport 443 drop
-
 # 添加策略路由: 标记为1的包，走路由表100
 ip rule add fwmark 1 table 100
 # 添加一条路由规则到路由表100，将所有数据包的下一跳都指向本地 loopback，这样数据包才能被本地代理进程的 listener 看到
