@@ -26,6 +26,11 @@
 # 为了能将客户端请求重定向到代理进程，需要在代理服务器上创建下面的策略路由
 # 将标记有 1 的流量路由到本地 lo 回环网卡
 
+# 阻止 QUIC 流量
+nft add rule inet fw4 input udp dport 443 drop
+nft add rule inet fw4 forward udp dport 443 drop
+nft add rule inet fw4 output udp dport 443 drop
+
 # 添加策略路由: 标记为1的包，走路由表100
 ip rule add fwmark 1 table 100
 # 添加一条路由规则到路由表100，将所有数据包的下一跳都指向本地 loopback，这样数据包才能被本地代理进程的 listener 看到

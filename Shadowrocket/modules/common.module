@@ -18,6 +18,8 @@ dns-direct-fallback-proxy = true
 udp-policy-not-supported-behaviour = REJECT
 
 [Rule]
+# Block HTTP3/QUIC
+AND,((PROTOCOL,UDP),(DEST-PORT,443)),REJECT-NO-DROP
 # REJECT added
 DOMAIN-SUFFIX,360.com,REJECT
 DOMAIN-SUFFIX,360.cn,REJECT

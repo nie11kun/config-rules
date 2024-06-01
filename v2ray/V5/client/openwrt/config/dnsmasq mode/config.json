@@ -161,6 +161,11 @@
         "domainStrategy": "IpIfNonMatch", // AsIs | UseIp | IpIfNonMatch | IpOnDemand
         "rule": [ // 规则都匹配不上时会走第一个 outbound 规则
             {
+                "tag": "blocked", // Block HTTP3/QUIC
+                "portList": "80,443",
+                "networks": "udp"
+            },
+            {
                 "tag": "dns-out",
                 "portList": "53",
                 "networks": "udp",

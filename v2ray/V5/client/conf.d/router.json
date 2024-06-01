@@ -28,6 +28,11 @@
                 ]
             },
             {
+                "tag": "blocked", // Block HTTP3/QUIC
+                "portList": "80,443",
+                "networks": "udp"
+            },
+            {
                 "tag": "dns-out", // 放在最前面用于透明代理识别 dns 流量
                 "portList": "53",
                 "networks": "udp",

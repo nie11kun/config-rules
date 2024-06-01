@@ -1,6 +1,11 @@
 # 配合 dnsmasq 对需要代理的域名和ip地址走 redirect 的 nftables 规则 需要安装 dnsmasq-full
 # v2ray dokodemo-door 需要设置 "tproxy": "redirect"
 
+# 阻止 QUIC 流量
+nft add rule inet fw4 input udp dport 443 drop
+nft add rule inet fw4 forward udp dport 443 drop
+nft add rule inet fw4 output udp dport 443 drop
+
 # 新建路由表
 nft add table ip v2ray
 
