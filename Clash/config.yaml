@@ -12,38 +12,21 @@ http:
   mitm:
     - g.cn
     - "*.google.cn"
-    - api.m.jd.com
-    - testflight.apple.com
+    # - api.m.jd.com
   rewrite:
     - ^https?:\/\/(www.)?(g|google)\.cn https://www.google.com 302
   script:
-    - match: ^https?://api\.m\.jd\.com/client\.action\?functionId=(wareBusiness|serverConfig|basicConfig)
-      name: jd_historical_price
-      type: response
-      require-body: true
-      timeout: 10
-    - match: ^https?://api\.m\.jd\.com/client\.action\?functionId=GetJDUserInfoUnion
-      name: get_jdcookie
-      type: response
-      require-body: true
-      timeout: 10
-    - match: ^https:\/\/testflight\.apple\.com\/v\d\/(app|account|invite)s\/
-      name: testflight_account
-      type: request
-      require-body: true
-      timeout: 10
+    # - match: ^https?://api\.m\.jd\.com/client\.action\?functionId=(wareBusiness|serverConfig|basicConfig)
+    #   name: jd_historical_price
+    #   type: response
+    #   require-body: true
+    #   timeout: 10
 
 script-providers:
-  jd_historical_price:
-    url: https://raw.githubusercontent.com/yichahucha/surge/master/jd_price.js
-    interval: 86400
-  get_jdcookie:
-    url: https://raw.githubusercontent.com/nie11kun/config-rules/master/Shadowrocket/get_jdcookie.js
-    interval: 86400
-  testflight_account:
-    url: https://raw.githubusercontent.com/NobyDa/Script/master/TestFlight/TestFlightAccount.js
-    interval: 86400
-    
+  # jd_historical_price:
+  #   url: https://raw.githubusercontent.com/yichahucha/surge/master/jd_price.js
+  #   interval: 86400
+
 script:
   shortcuts: # 使用 Python 脚本编写自定义规则
     quic: network == 'udp' and (dst_port == 443) # 可以在 rule 中引用
@@ -57,18 +40,17 @@ dns:
   # 仅填写 DNS 服务器的 IP 地址
   default-nameserver:
     - 223.5.5.5
-    - 114.114.114.114
+    - 119.29.29.29
   # 解析域名使用的 dns 服务器，此处的 dns 地址会通过上面的 default dns 服务器解析
   nameserver:
     # 不建议配置超过 2 个 DNS 服务器，会增加系统功耗
     - 223.5.5.5
-    - 114.114.114.114
+    - 119.29.29.29
     - https://cloudflare-dns.com/dns-query
-    - https://dns.google/dns-query
 
   # 对部分域名使用单独的 DNS 服务器
   nameserver-policy:
-    "www.example.com": 223.5.5.5
+    "taobao.com": 223.5.5.5
 
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
@@ -88,14 +70,6 @@ proxy-providers:
       enable: true
       interval: 600
       url: http://www.gstatic.com/generate_204
-  out-proxy-2:
-    url:  # 下载此配置文件后，复制为本地文件，然后修改这里的 url 为你的 proxy-providers 文件地址
-    interval: 3600
-    filter: 'out-proxy-2'
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.gstatic.com/generate_204
 
 proxy-groups:
   # url-test 可以自动选择与指定 URL 测速后，延迟最短的服务器
@@ -104,7 +78,6 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png
     use:
       - out-proxy-1  # proxy-providers 里的节点需要用 use 调用
-      - out-proxy-2
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
@@ -115,7 +88,6 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png
     use:
       - out-proxy-1
-      - out-proxy-2
     proxies:
       - auto  # 当前 config 里定义的节点或组需要用 proxies 调用
 
@@ -125,7 +97,6 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/SSID.png
     use:
       - out-proxy-1
-      - out-proxy-2
     proxies:
       - PROXY
       - auto
@@ -142,18 +113,6 @@ rule-providers:
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml"
     interval: 86400
-
-  # Advertising:
-  #   type: http
-  #   behavior: classical
-  #   url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising.yaml"
-  #   interval: 86400
-
-  # Advertising_Domain:
-  #   type: http
-  #   behavior: domain
-  #   url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Advertising/Advertising_Domain.yaml"
-  #   interval: 86400
 
   ChinaMax:
     type: http
@@ -211,18 +170,8 @@ rules:
   - DOMAIN-SUFFIX,updates-http.cdn-apple.com,DIRECT
   - DOMAIN-SUFFIX,updates.cdn-apple.com,DIRECT
   - DOMAIN-SUFFIX,iosapps.itunes.apple.com,DIRECT
-  # DIRECT baidu
-  - DOMAIN-SUFFIX,wappass.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,passport.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,yun.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,pan.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,wenku.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,zhidao.baidu.com,DIRECT
-  - DOMAIN-SUFFIX,baike.baidu.com,DIRECT
 
   - SCRIPT,quic,REJECT
-  - # RULE-SET,Advertising,REJECT
-  - # RULE-SET,Advertising_Domain,REJECT
 
   - RULE-SET,Lan,DIRECT
   - RULE-SET,ChinaMax,DIRECT
