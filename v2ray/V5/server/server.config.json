@@ -35,6 +35,14 @@
             "protocol": "blackhole",
             "settings": {},
             "tag": "blocked"
+        },
+        {
+            "protocol": "socks",
+            "settings": {
+                "address": "127.0.0.1",
+                "port": 40000
+            },
+            "tag":"socks_out"
         }
     ],
     "router": {
@@ -57,6 +65,16 @@
                         "filePath": "geoip.dat"
                     }
                 ]
+            },
+            {
+                "tag": "socks_out",
+                "geoDomain": [
+                    {
+                        "code": "openai",
+                        "filePath": "geosite.dat"
+                    }
+                ],
+                "domainMatcher": "mph"
             }
         ]
     },
@@ -71,7 +89,13 @@
             "port": "12345",
             "listen": "127.0.0.1",
             "tag": "in_vmess",
-            "sniffing": {},
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
             "streamSettings": {
                 "transport": "ws",
                 "transportSettings": {
