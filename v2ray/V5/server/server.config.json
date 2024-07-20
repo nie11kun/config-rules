@@ -72,6 +72,10 @@
                     {
                         "code": "openai",
                         "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "perplexity",
+                        "filePath": "geosite.dat"
                     }
                 ],
                 "domainMatcher": "mph"
