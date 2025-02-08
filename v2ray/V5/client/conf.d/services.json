@@ -22,6 +22,15 @@
                     "outboundDownlink": true //出站代理的下行流量统计
                 }
             }
+        },
+        "filesystemstorage": { // 文件系统持久存储
+            "state_storage_root": "WorkDir", // 存储位置。目前，仅支持 WorkDir。这是 v2ray 运行的目录。
+            "instance_name": "inst0" // 当前实例的名称。这将成为存储状态的目录名。
+        },
+        "backgroundObservatory": { // 后台连接观测服务通过定时通过指定的出站连接建立连接来确定出站代理的状态
+            "subjectSelector": ["sub1-"], // 被匹配到的出站连接将被定时连接以确定是否可用
+            "probeInterval": 84600, // 发起探测的间隔 单位为秒
+            "persistentProbeResult": true // 是否将探测结果存储在持久存储中
         }
     }
 }
