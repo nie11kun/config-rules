@@ -2,7 +2,7 @@
 
 @echo off
 
-:: --- 如果你想要UTF-8中文正常显示，可以先:
+:: 如果想要在命令提示符下看到正常的中文，请先执行:
 chcp 65001 > nul
 
 :: Hard-code your URL and DEST
@@ -17,7 +17,7 @@ echo Downloading: %URL%
 echo Saving to: %DEST%
 echo.
 
-:: If user provides proxy parameter
+:: 如果未提供代理参数，直接下载；否则带代理下载
 if "%PROXY%"=="" (
     echo No proxy...
     curl --silent --output "%TMPFILE%" "%URL%"
@@ -26,13 +26,14 @@ if "%PROXY%"=="" (
     curl --silent --proxy "%PROXY%" --output "%TMPFILE%" "%URL%"
 )
 
-:: Check download
+:: 判断文件是否存在
 if not exist "%TMPFILE%" (
     echo [ERROR] "%TMPFILE%" not found!
     pause
     exit /b 1
 )
 
+:: 判断文件是否为空
 for %%A in ("%TMPFILE%") do if %%~zA==0 (
     echo [ERROR] "%TMPFILE%" is empty!
     del "%TMPFILE%"
@@ -41,11 +42,20 @@ for %%A in ("%TMPFILE%") do if %%~zA==0 (
 )
 
 echo Processing lines...
-:: 第一次调用，只写头部三行
-powershell -NoProfile -ExecutionPolicy Bypass -Command "( '# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat', '# 同步最新发布 gfwlist：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt', '#' ) | Out-File -FilePath '%DEST%' -Encoding UTF8 -Force"
-:: 第二次调用，处理文件内容并追加到目标文件
-powershell -NoProfile -ExecutionPolicy Bypass -Command "(Get-Content '%TMPFILE%') | ForEach-Object { if ($_ -ne '') { 'nftset=/' + $_ + '/4#ip#v2ray#gfwlist' } else { '' } } | Out-File -FilePath '%DEST%' -Encoding UTF8 -Append"
 
+:: 使用 PowerShell，实现：
+:: 1. 读取 TMPFILE 内容
+:: 2. 生成头部数组
+:: 3. 根据每行生成 "nftset=/<域名>/4#ip#v2ray#gfwlist"
+:: 4. 用 .NET UTF8Encoding($False) 写入无 BOM 的 UTF-8 文件
+powershell -NoProfile -ExecutionPolicy Bypass ^
+    -Command ^
+    "$lines = Get-Content '%TMPFILE%'; " ^
+    "$header = '# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat', '# 同步最新发布 gfwlist：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt', '#'; " ^
+    "$lines2 = $lines | ForEach-Object { if ($_ -ne '') { 'nftset=/' + $_ + '/4#ip#v2ray#gfwlist' } else { '' } }; " ^
+    "[System.IO.File]::WriteAllLines('%DEST%', ($header + $lines2), (New-Object System.Text.UTF8Encoding($false)))"
+
+:: 删除临时文件
 del "%TMPFILE%" >nul 2>&1
 
 echo Done!
