@@ -1,17 +1,18 @@
 {
     "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
     "services": {
-        // "subscription": { //订阅管理器自动刷新出站信息并将它们转换为出站实例
-        //     "imports": [
-        //         {
-        //             "name": "sub1", //订阅源名称
-        //             "url": "https://proxy-17q.pages.dev/cc219602-fe5b-46a7-9fd5-cbfcb136dc49", //订阅源的地址
-        //             "tagPrefix": "sub1-", //创建的订阅的出站实例前缀  用于给内部 router 识别特定标识的节点
-        //             //"importUsingTag": "",//指定下载订阅文档的出站代理标志  不写就是下载整个订阅节点
-        //             "defaultExpireSeconds": 86400 //默认的订阅过期时间 时间到后会自动重新拉取订阅
-        //         }
-        //     ]
-        //},
+         "subscription": { //订阅管理器自动刷新出站信息并将它们转换为出站实例
+             "imports": [
+                 {
+                     "name": "sub1", //订阅源名称
+                     "url": "https://xxx.pages.dev/uuid", //订阅源的地址
+                     "tagPrefix": "sub1-", //创建的订阅的出站实例前缀  用于给内部 router 识别特定标识的节点
+                     //"importUsingTag": "",//指定下载订阅文档的出站代理标志  不写就是下载整个订阅节点
+                     "defaultExpireSeconds": 86400 //默认的订阅过期时间 时间到后会自动重新拉取订阅
+                 }
+             ],
+             "persistence": true //默认的订阅过期时间 时间到后会自动重新拉取订阅
+        },
         "policy": {
             "system": {
                 "overrideAccessLogDest": true, // 替换 access 日志中目标地址为 sniffing 嗅探出的真实地址
