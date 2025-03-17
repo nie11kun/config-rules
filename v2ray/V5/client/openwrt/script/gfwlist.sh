@@ -1,4 +1,5 @@
 #!/bin/bash
+# bash '/Users/marconie/Development/VPN/config-rules/v2ray/V5/client/openwrt/script/gfwlist.sh'
 # 此脚本功能：
 # 1. 下载 https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt 到临时文件
 # 2. 检查文件是否存在及是否为空
