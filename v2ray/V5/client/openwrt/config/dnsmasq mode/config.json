@@ -102,18 +102,11 @@
                 "transport": "ws",
                 "transportSettings": {
                     "path": "/proxypath",
-                    "header": [
-                        {
-                            "key": "Host",
-                            "value": "you.domain"
-                        }
-                    ],
                     "maxEarlyData": 2048,
                     "useBrowserForwarding": false
                 },
                 "security": "tls",
                 "securitySettings": {
-                    "serverName": "you.domain",
                     "disableSystemRoot": false,
                     "minVersion": "TLS1_1",
                     "maxVersion": "TLS1_3"
