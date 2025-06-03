@@ -14,11 +14,11 @@
                 "transport": "ws",
                 "transportSettings": {
                     "path": "/proxypath", //WebSocket 所使用的 HTTP 协议路径，默认值为 "/"。
-                    // "header": [
-                    //     {
-                    //         "key": "key1",
-                    //         "value": "abc"
-                    //     }
+                    //"header": [
+                    //    {
+                    //        "key": "Host",
+                    //        "value": "niekun.net"
+                    //    }
                     // ], //自定义 HTTP 头，一个键值对，每个键表示一个 HTTP 头的名称，对应的值是字符串。默认值为空。
                     "maxEarlyData": 2048, //发送的前置数据的最长长度。用于减少连接建立的时间  设置过小可能导致无法连接服务器
                     "useBrowserForwarding": false //是否启用浏览器转发
