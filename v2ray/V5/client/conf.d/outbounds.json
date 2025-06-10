@@ -4,7 +4,7 @@
         {
             "protocol": "vmess",
             "settings": {
-                "address": "your.domain", //服务器地址，支持 IP 地址或者域名。
+                "address": "your.domain or ip", //服务器地址，支持 IP 地址或者域名。
                 "port": 443, //服务器端口号。
                 "uuid": "uuid-here" //服务器认可的 VMess 用户 ID，必须为合法的 UUID
             },
@@ -17,7 +17,7 @@
                     "header": [
                         {
                             "key": "Host",  // 指定 host 时下面的 serverName 必须定义
-                            "value": "niekun.net"
+                            "value": "your.domain"
                         }
                     ], //自定义 HTTP 头，一个键值对，每个键表示一个 HTTP 头的名称，对应的值是字符串。默认值为空。
                     "maxEarlyData": 2048, //发送的前置数据的最长长度。用于减少连接建立的时间  设置过小可能导致无法连接服务器
