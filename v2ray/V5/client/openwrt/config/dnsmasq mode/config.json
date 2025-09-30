@@ -136,32 +136,20 @@
         {
             "protocol": "freedom",
             "tag": "direct-systemDNS",
-            "domainStrategy": "AsIs",
-            "socketSettings": {
-                //"mark": 255
-            }
+            "domainStrategy": "AsIs"
         },
         {
             "protocol": "freedom",
             "tag": "direct-customDNS",
-            "domainStrategy": "UseIP4",
-            "socketSettings": {
-                //"mark": 255
-            }
+            "domainStrategy": "UseIP4"
         },
         {
             "protocol": "blackhole",
-            "tag": "blocked",
-            "socketSettings": {
-                //"mark": 255
-            }
+            "tag": "blocked"
         },
         {
             "protocol": "dns",
-            "tag": "dns-out",
-            "socketSettings": {
-                //"mark": 255
-            }
+            "tag": "dns-out"
         }
     ],
     "router": {

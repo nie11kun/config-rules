@@ -27,8 +27,8 @@
                 "security": "tls",
                 "securitySettings": {
                     "serverName": "you.domain",//当目标连接由域名指定时，比如在 Socks 入站时接收到了域名，或者由 Sniffing 功能探测出了域名，这个域名会自动用于 serverName，无须手动配置，当 address 是 IP 地址 且定义了 header 的 host 时，serverName 必须定义
-                    "echDOHserver": "dohserver",
-                    "echQueryDomain": "cloudflare-ech.com",
+                    //"echDOHserver": "dohserver",
+                    //"echQueryDomain": "cloudflare-ech.com",
                     //"nextProtocol": ["h2","http/1.1"], //一个字符串数组，指定了 TLS 握手时指定的 ALPN 数值。使用 h2 需要服务端支持 http2
                     "disableSystemRoot": false, //是否禁用操作系统自带的 CA 证书。默认值为 false。当值为 true 时，V2Ray 只会使用 certificates 中指定的证书进行 TLS 握手。当值为 false 时，V2Ray 只会使用操作系统自带的 CA 证书进行 TLS 握手
                     "minVersion": "TLS1_1", // 最小 tls version
@@ -96,32 +96,20 @@
         {
             "protocol": "freedom",
             "tag": "direct-systemDNS",
-            "domainStrategy": "AsIs",
-            "socketSettings": {
-                // "mark": 255
-            }
+            "domainStrategy": "AsIs"
         },
         {
             "protocol": "freedom",
             "tag": "direct-customDNS",
-            "domainStrategy": "UseIP4",
-            "socketSettings": {
-                // "mark": 255
-            }
+            "domainStrategy": "UseIP4"
         },
         {
             "protocol": "blackhole",
-            "tag": "blocked",
-            "socketSettings": {
-                // "mark": 255
-            }
+            "tag": "blocked"
         },
         {
             "protocol": "dns", //DNS 是一个出站协议，主要用于拦截和转发 DNS 查询。此出站协议只能接收 DNS 流量（包含基于 UDP 和 TCP 协议的查询），其它类型的流量会导致错误。在处理 DNS 查询时，此出站协议会将 IP 查询（即 A 和 AAAA）转发给内置的 DNS 服务器
-            "tag": "dns-out",
-            "socketSettings": {
-                // "mark": 255
-            }
+            "tag": "dns-out"
         }
     ]
 }
