@@ -1,5 +1,4 @@
 {
-    "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
     "log": {
         "access": {
             "type": "File",
@@ -83,7 +82,7 @@
             },
             "streamSettings": {
                 "socketSettings": {
-                    "tproxy": "redirect"  // 经过测试 nftables 只能配置 redirect 模式
+                    "tproxy": "redirect" // 经过测试 nftables 只能配置 redirect 模式
                 }
             }
         }
