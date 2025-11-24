@@ -82,7 +82,7 @@
             },
             "streamSettings": {
                 "socketSettings": {
-                    "tproxy": "redirect"  // 经过测试 nftables 只能配置 redirect 模式
+                    "tproxy": "redirect" // 经过测试 nftables 只能配置 redirect 模式
                 }
             }
         }
