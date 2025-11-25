@@ -178,6 +178,10 @@
                         "filePath": "geosite.dat"
                     },
                     {
+                        "code": "google-gemini",
+                        "filePath": "geosite.dat"
+                    },
+                    {
                         "code": "perplexity",
                         "filePath": "geosite.dat"
                     }
