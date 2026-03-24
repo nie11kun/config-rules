@@ -1,7 +1,7 @@
 #!/bin/bash
 # bash '/Users/marconie/Development/VPN/config-rules/v2ray/V5/client/openwrt/script/gfwlist.sh'
 # 此脚本功能：
-# 1. 下载 https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt 到临时文件
+# 1. 下载 https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt 到临时文件
 # 2. 检查文件是否存在及是否为空
 # 3. 添加头部信息，并对每行进行转换，生成格式为：
 #    nftset=/<域名>/4#ip#v2ray#gfwlist
@@ -9,7 +9,7 @@
 # 5. 删除临时文件
 
 # 定义 URL、目标文件和临时文件路径
-URL="https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt"
+URL="https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
 DEST="v2ray/V5/client/openwrt/config/dnsmasq mode/dnsmasq/proxy-gfwlist.conf"
 PROXY="$1"
 TMPFILE="temp_download.txt"
@@ -50,9 +50,14 @@ mkdir -p "$(dirname "$DEST")"
 # 2. 再逐行读取 TMPFILE，并对非空行生成 "nftset=/<行内容>/4#ip#v2ray#gfwlist"
 {
   echo "# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat"
-  echo "# 同步最新发布 gfwlist：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt"
+  echo "# 同步最新发布 proxy-list：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
+  echo "# proxy list 比 gfwlist 更全"
   echo "#"
   while IFS= read -r line; do
+      # 跳过 regexp: 开头的行
+      case "$line" in regexp:*) continue ;; esac
+      # 去除 full: 前缀
+      line="${line#full:}"
       if [ -n "$line" ]; then
           echo "nftset=/${line}/4#ip#v2ray#gfwlist"
       else

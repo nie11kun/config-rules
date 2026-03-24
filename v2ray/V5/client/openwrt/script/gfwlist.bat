@@ -6,7 +6,7 @@
 chcp 65001 > nul
 
 :: Hard-code your URL and DEST
-set "URL=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt"
+set "URL=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
 set "DEST=v2ray\V5\client\openwrt\config\dnsmasq mode\dnsmasq\proxy-gfwlist.conf"
 set "PROXY=%~1"
 
@@ -51,8 +51,12 @@ echo Processing lines...
 powershell -NoProfile -ExecutionPolicy Bypass ^
     -Command ^
     "$lines = Get-Content '%TMPFILE%'; " ^
-    "$header = '# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat', '# 同步最新发布 gfwlist：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt', '#'; " ^
-    "$lines2 = $lines | ForEach-Object { if ($_ -ne '') { 'nftset=/' + $_ + '/4#ip#v2ray#gfwlist' } else { '' } }; " ^
+    "$header = '# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat', '# 同步最新发布 proxy-list：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt', '# proxy list 比 gfwlist 更全', '#'; " ^
+    "$lines2 = $lines | ForEach-Object { " ^
+    "  if ($_ -match '^regexp:') { return } " ^
+    "  $d = $_ -replace '^full:', ''; " ^
+    "  if ($d -ne '') { 'nftset=/' + $d + '/4#ip#v2ray#gfwlist' } else { '' } " ^
+    "}; " ^
     "[System.IO.File]::WriteAllLines('%DEST%', ($header + $lines2), (New-Object System.Text.UTF8Encoding($false)))"
 
 :: 删除临时文件
