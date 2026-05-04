@@ -16,6 +16,8 @@ private-ip-answer = true
 dns-direct-fallback-proxy = true
 # The fallback behavior when UDP traffic matches a policy that doesn't support the UDP relay. Possible values: DIRECT, REJECT.
 udp-policy-not-supported-behaviour = REJECT
+stun-response-ip = 1.1.1.1
+stun-response-ipv6 = ::1
 
 [Rule]
 # Block HTTP3/QUIC
