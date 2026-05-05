@@ -46,15 +46,18 @@ echo Processing lines...
 :: 使用 PowerShell，实现：
 :: 1. 读取 TMPFILE 内容
 :: 2. 生成头部数组
-:: 3. 根据每行生成 "nftset=/<域名>/4#ip#v2ray#gfwlist"
-:: 4. 用 .NET UTF8Encoding($False) 写入无 BOM 的 UTF-8 文件
+:: 3. 过滤需要跳过的域名（完全匹配）
+:: 4. 根据每行生成 "nftset=/<域名>/4#ip#v2ray#gfwlist"
+:: 5. 用 .NET UTF8Encoding($False) 写入无 BOM 的 UTF-8 文件
 powershell -NoProfile -ExecutionPolicy Bypass ^
     -Command ^
+    "$skipDomains = @('apple.com', 'qq.com'); " ^
     "$lines = Get-Content '%TMPFILE%'; " ^
     "$header = '# 更新自：https://github.com/Loyalsoldier/v2ray-rules-dat', '# 同步最新发布 proxy-list：https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt', '# proxy list 比 gfwlist 更全', '#'; " ^
     "$lines2 = $lines | ForEach-Object { " ^
     "  if ($_ -match '^regexp:') { return } " ^
     "  $d = $_ -replace '^full:', ''; " ^
+    "  if ($skipDomains -contains $d) { return } " ^
     "  if ($d -ne '') { 'nftset=/' + $d + '/4#ip#v2ray#gfwlist' } else { '' } " ^
     "}; " ^
     "[System.IO.File]::WriteAllLines('%DEST%', ($header + $lines2), (New-Object System.Text.UTF8Encoding($false)))"

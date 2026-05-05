@@ -14,6 +14,9 @@ DEST="v2ray/V5/client/openwrt/config/dnsmasq mode/dnsmasq/proxy-gfwlist.conf"
 PROXY="$1"
 TMPFILE="temp_download.txt"
 
+# 定义需要跳过的完整域名列表（仅当完全匹配时跳过）
+SKIP_DOMAINS=("apple.com" "qq.com")
+
 echo "Downloading: ${URL}"
 echo "Saving to: ${DEST}"
 echo ""
@@ -54,10 +57,25 @@ mkdir -p "$(dirname "$DEST")"
   echo "# proxy list 比 gfwlist 更全"
   echo "#"
   while IFS= read -r line; do
+      # 去除可能存在的 \r 回车符
+      line="${line%$'\r'}"
       # 跳过 regexp: 开头的行
       case "$line" in regexp:*) continue ;; esac
       # 去除 full: 前缀
       line="${line#full:}"
+      
+      # 检查是否在需要跳过的域名列表中（完全匹配）
+      skip=false
+      for domain in "${SKIP_DOMAINS[@]}"; do
+          if [ "$line" = "$domain" ]; then
+              skip=true
+              break
+          fi
+      done
+      if [ "$skip" = true ]; then
+          continue
+      fi
+
       if [ -n "$line" ]; then
           echo "nftset=/${line}/4#ip#v2ray#gfwlist"
       else
