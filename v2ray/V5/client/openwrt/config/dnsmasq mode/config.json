@@ -85,6 +85,18 @@
                     "tproxy": "redirect" // 经过测试 nftables 只能配置 redirect 模式
                 }
             }
+        },
+        {  // tailscale 用于初次握手使用
+            "tag": "http-proxy",
+            "port": "10809",
+            "listen": "0.0.0.0",
+            "protocol": "http"
+        },
+        { // tailscale 用于初次握手使用
+            "tag": "socks-proxy",
+            "port": "10808",
+            "listen": "0.0.0.0",
+            "protocol": "socks"
         }
     ],
     "outbounds": [
