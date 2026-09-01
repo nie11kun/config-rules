@@ -55,7 +55,11 @@
                 "domain": [
                     {
                         "type": "RootDomain",
-                        "value": " home.marco"
+                        "value": "ts.net"
+                    },
+                    {
+                        "type": "RootDomain",
+                        "value": "home.marco"
                     },
                     {
                         "type": "RootDomain",
@@ -151,6 +155,10 @@
                 "tag": "out-vmess", //对应一个额外 出站连接配置 的标识
                 "balancingTag": "balancer_out", //对应一个负载均衡器的标识。balancerTag 和 tag 须二选一。当同时指定时，balancingTag 生效
                 "domain": [
+                    {
+                        "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
+                        "value": "tailscale.com"
+                    },
                     {
                         "type": "RootDomain", // "Plain" | "Regex" | "RootDomain" | "Full"
                         "value": "testflight.apple.com"
