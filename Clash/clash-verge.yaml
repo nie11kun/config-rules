@@ -16,7 +16,7 @@ tun:
   - any:53
   mtu: 1500
   route-exclude-address: []
-  stack: mips
+  stack: mixed
   strict-route: false
   enable: true
 bind-address: '*'
@@ -115,7 +115,6 @@ proxies:
   cipher: auto
   udp: true
   tfo: false
-  interface-name: WLAN
   tls: true
   servername: xxx.com
   alpn:
