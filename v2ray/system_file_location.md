@@ -2,6 +2,8 @@
 
 下载地址：https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest
 
+仓库不再保存 `.dat` 文件，运行 `bash v2ray/update_geo.sh [代理地址]`（Windows 用 `.\v2ray\update_geo.bat [代理地址]`）下载最新版本到 `v2ray/` 目录。
+
 
 ## 默认安装路径
 

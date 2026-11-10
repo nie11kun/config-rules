@@ -1,1 +1,5 @@
 .DS_Store
+
+# geo 数据用 v2ray/update_geo.sh 下载，不纳入版本管理
+v2ray/*.dat
+v2ray/*.dat.tmp
