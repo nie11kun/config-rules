@@ -1,0 +1,283 @@
+# =====================================================================
+#  Stash for macOS 配置，由 Clash/clash-verge.yaml 移植
+#  需要 Stash macOS 4.3+（inline 规则集、DNS 引用 rule-set）
+#  端口、增强模式（TUN）、局域网共享等由 Stash 界面管理，不写在这里
+#  同一份配置也可用于 iOS（3.6+），PROCESS-NAME 规则在 iOS 上会被忽略
+# =====================================================================
+
+# ---------------- 基础设置 ----------------
+mode: rule
+log-level: warning
+ipv6: false
+
+# ---------------- 静态 hosts ----------------
+# 如果节点 server 填的是域名且需要固定 IP，在这里加映射：
+hosts:
+  "360.com": 1.2.3.4
+
+# ---------------- DNS ----------------
+# Stash 固定使用 fake-ip：命中代理规则的域名不在本地解析（域名直接交给节点），
+# 所以这里只需要国内 DNS，直连流量拿到国内 CDN 最优 IP。
+dns:
+  ipv6: false
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  nameserver-policy:
+    "+.home.marco": system # 局域网 / Tailscale 域名交给系统 DNS
+    "+.ts.net": system
+  fake-ip-filter:
+    - "rule-set:private_domain"
+    - "+.home.marco"
+    - "+.ts.net"
+    - "+.niekun.net"
+    - "+.pool.ntp.org"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "+.push.apple.com"
+    - "captive.apple.com"
+    - "localhost.ptlogin2.qq.com"
+
+# ---------------- 代理节点 ----------------
+proxies:
+  - name: out-vmess
+    type: vmess
+    server: 111.111.111.111 # ← 你的服务器地址
+    port: 443
+    uuid: uuid-uuid-uuid-uuid # ← 你的 UUID
+    alterId: 0
+    cipher: auto
+    udp: true
+    tls: true
+    servername: xxx.com
+    skip-cert-verify: false
+    network: ws
+    ws-opts:
+      path: /path # ← 你的 WebSocket 路径
+      headers:
+        Host: xxx.com
+
+# ---------------- 策略组 ----------------
+proxy-groups:
+  - name: 🚀 节点选择
+    type: select
+    proxies: [out-vmess, DIRECT]
+
+  - name: 🤖 AI 服务
+    type: select
+    proxies: [🚀 节点选择, out-vmess, DIRECT]
+
+  - name: 🛑 广告拦截
+    type: select
+    proxies: [DIRECT, REJECT]
+
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies: [🚀 节点选择, DIRECT]
+
+# ---------------- 规则集 ----------------
+rule-anchor:
+  domain: &domain { behavior: domain, format: yaml, interval: 86400 }
+  ipcidr: &ipcidr { behavior: ipcidr, format: yaml, interval: 86400 }
+
+rule-providers:
+  # —— 自定义内联列表 ——
+  custom_reject:
+    type: inline
+    behavior: domain
+    payload:
+      - "+.360.com"
+      - "+.360.cn"
+      - "+.datadoghq.com"
+  custom_direct:
+    type: inline
+    behavior: domain
+    payload:
+      - "+.ts.net"
+      - "+.home.marco"
+      - "+.niekun.net"
+      - "+.240128.xyz"
+      - "+.pages.dev"
+      - "+.push.apple.com" # 苹果推送长连接，直连更稳定
+  custom_proxy:
+    type: inline
+    behavior: domain
+    payload:
+      - "+.tailscale.com"
+      - "+.testflight.apple.com"
+      - "+.jsdelivr.net"
+  custom_proxy_ip:
+    type: inline
+    behavior: ipcidr
+    payload:
+      - 1.1.1.1/32
+      - 8.8.8.8/32
+  custom_direct_ip:
+    type: inline
+    behavior: ipcidr
+    payload:
+      - 27.168.0.0/16
+      - 104.224.160.217/32
+
+  # —— 域名规则集 ——
+  private_domain:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.yaml",
+    }
+  ads:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ads-all.yaml",
+    }
+  cn_domain:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.yaml",
+    }
+  speedtest:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/speedtest.yaml",
+    }
+  apple_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple-cn.yaml",
+    }
+  google_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-cn.yaml",
+    }
+  aws_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/aws-cn.yaml",
+    }
+  cloudflare_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cloudflare-cn.yaml",
+    }
+  games_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.yaml",
+    }
+  openai:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.yaml",
+    }
+  anthropic:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/anthropic.yaml",
+    }
+  gemini:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.yaml",
+    }
+  perplexity:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/perplexity.yaml",
+    }
+  geolocation_not_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.yaml",
+    }
+
+  # —— IP 规则集 ——
+  private_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.yaml",
+    }
+  cn_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.yaml",
+    }
+  telegram_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.yaml",
+    }
+  google_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.yaml",
+    }
+  twitter_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.yaml",
+    }
+
+# ---------------- 规则 ----------------
+rules:
+  # 内网 IP 最先直连（Tailscale 的端口映射、访问路由器等不会被送进代理）
+  - RULE-SET,private_ip,DIRECT,no-resolve
+  - RULE-SET,custom_direct_ip,DIRECT,no-resolve
+
+  # 国外 QUIC 拒绝，让浏览器回落到 TCP
+  - AND,((NETWORK,udp),(DST-PORT,443),(RULE-SET,geolocation_not_cn)),REJECT,no-track
+  # NTP 时间校准直连
+  - AND,((NETWORK,udp),(DST-PORT,123)),DIRECT
+
+  # Tailscale：UDP 打洞直连，TCP（控制面、DERP、测速）走代理
+  # 三个进程名分别对应：Homebrew 版 / App Store 版 / 官网独立版
+  - AND,((OR,((PROCESS-NAME,tailscaled),(PROCESS-NAME,IPNExtension),(PROCESS-NAME,io.tailscale.ipn.macsys.network-extension))),(NETWORK,udp)),DIRECT
+  - PROCESS-NAME,tailscaled,🚀 节点选择
+  - PROCESS-NAME,IPNExtension,🚀 节点选择
+  - PROCESS-NAME,io.tailscale.ipn.macsys.network-extension,🚀 节点选择
+  # RustDesk：UDP 打洞直连
+  - AND,((PROCESS-NAME,RustDesk),(NETWORK,udp)),DIRECT
+
+  - RULE-SET,custom_reject,REJECT
+  - RULE-SET,ads,🛑 广告拦截
+  - RULE-SET,private_domain,DIRECT
+  - RULE-SET,custom_direct,DIRECT
+
+  # 国内直连
+  - RULE-SET,cn_domain,DIRECT
+  - RULE-SET,speedtest,DIRECT
+  - RULE-SET,apple_cn,DIRECT
+  - RULE-SET,google_cn,DIRECT
+  - RULE-SET,aws_cn,DIRECT
+  - RULE-SET,cloudflare_cn,DIRECT
+  - RULE-SET,games_cn,DIRECT
+
+  # BT 客户端直连
+  - PROCESS-NAME,qbittorrent,DIRECT
+  - PROCESS-NAME,Transmission,DIRECT
+  - PROCESS-NAME,transmission-daemon,DIRECT
+
+  # AI 服务
+  - RULE-SET,openai,🤖 AI 服务
+  - RULE-SET,anthropic,🤖 AI 服务
+  - RULE-SET,gemini,🤖 AI 服务
+  - RULE-SET,perplexity,🤖 AI 服务
+
+  # 国外
+  - RULE-SET,custom_proxy,🚀 节点选择
+  - RULE-SET,geolocation_not_cn,🚀 节点选择
+
+  # IP 规则（放在所有域名规则之后）
+  - RULE-SET,custom_proxy_ip,🚀 节点选择,no-resolve
+  - RULE-SET,telegram_ip,🚀 节点选择,no-resolve
+  - RULE-SET,google_ip,🚀 节点选择,no-resolve
+  - RULE-SET,twitter_ip,🚀 节点选择,no-resolve
+  - RULE-SET,cn_ip,DIRECT
+
+  - MATCH,🐟 漏网之鱼
