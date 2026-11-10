@@ -126,7 +126,7 @@
                 "securitySettings": {
                     "serverName": "you.domain",
                     "disableSystemRoot": false,
-                    "minVersion": "TLS1_1",
+                    "minVersion": "TLS1_2",
                     "maxVersion": "TLS1_3"
                 },
                 "socketSettings": {

@@ -10,9 +10,11 @@
 
 # 定义 URL、目标文件和临时文件路径
 URL="https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
-DEST="v2ray/V5/client/openwrt/config/dnsmasq mode/dnsmasq/proxy-gfwlist.conf"
+# 输出路径相对脚本所在目录，可以在任意目录下运行
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DEST="$SCRIPT_DIR/../config/dnsmasq mode/dnsmasq/proxy-gfwlist.conf"
 PROXY="$1"
-TMPFILE="temp_download.txt"
+TMPFILE="$(mktemp)"
 
 # 定义需要跳过的完整域名列表（仅当完全匹配时跳过）
 SKIP_DOMAINS=("apple.com" "qq.com")

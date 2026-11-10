@@ -7,11 +7,11 @@ chcp 65001 > nul
 
 :: Hard-code your URL and DEST
 set "URL=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt"
-set "DEST=v2ray\V5\client\openwrt\config\dnsmasq mode\dnsmasq\proxy-gfwlist.conf"
+set "DEST=%~dp0..\config\dnsmasq mode\dnsmasq\proxy-gfwlist.conf"
 set "PROXY=%~1"
 
 :: 下载后暂存的文件
-set "TMPFILE=temp_download.txt"
+set "TMPFILE=%TEMP%\gfwlist_download.txt"
 
 echo Downloading: %URL%
 echo Saving to: %DEST%

@@ -87,12 +87,12 @@
                 "type": "Subdomain", // "Full" | "Subdomain" | "Keyword" | "Regex"
                 "domain": "abcd.com",
                 "ip": [ // 匹配的域名所映射的 IP 地址列表
-                    "123.456.789.000"
+                    "1.2.3.4"
                 ]
             },
             {
                 "type": "Regex",
-                "domain": "^(www.)?360.(cn|com)",
+                "domain": "^(www\\.)?360\\.(cn|com)$",
                 "proxiedDomain": "baidu.com" // 如指定 proxiedDomain，匹配的域名将直接使用该域名的查询结果
             }
         ],

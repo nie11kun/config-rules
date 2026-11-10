@@ -255,7 +255,7 @@
                 "tag": "balancer_out", //此负载均衡器的标识，用于匹配 RuleObject 中的 balancerTag
                 "outbound_selector": [
                     //"sub1-",
-                    "out-"
+                    "out-vmess" // 只写 "out-" 会同时匹配 out-vmess 和 out-vless，未使用的出站会分走流量
                 ], //一个字符串数组，其中每一个字符串将用于和出站协议标识的前缀匹配
                 "strategy": "random", //"random" | "leastping" | "leastload"  当前只有 random 生效
                 //random 会从出站中随机选出一个作为最终的出站连接。

@@ -2,6 +2,9 @@
 
 # 通过 iptables 识别特定 mark 标识的流量过滤 v2ray 出来的流量 防止回环  需要 v2ray 的 outbound 定义相同的 mark 标识
 
+# 先清理上一次运行留下的规则，保证脚本可重复执行（重启服务时不会叠加重复的 ip rule / iptables 规则）
+bash "$(dirname "$0")/transparent-clean.sh" >/dev/null 2>&1
+
 # 添加策略路由: 标记为1的包，走路由表100
 ip rule add fwmark 1 table 100
 # 添加一条路由规则到路由表100，将所有数据包的下一跳都指向本地 loopback，这样数据包才能被本地代理进程的 listener 看到

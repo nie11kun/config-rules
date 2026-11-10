@@ -31,7 +31,7 @@
                     //"echQueryDomain": "cloudflare-ech.com",
                     //"nextProtocol": ["h2","http/1.1"], //一个字符串数组，指定了 TLS 握手时指定的 ALPN 数值。使用 h2 需要服务端支持 http2
                     "disableSystemRoot": false, //是否禁用操作系统自带的 CA 证书。默认值为 false。当值为 true 时，V2Ray 只会使用 certificates 中指定的证书进行 TLS 握手。当值为 false 时，V2Ray 只会使用操作系统自带的 CA 证书进行 TLS 握手
-                    "minVersion": "TLS1_1", // 最小 tls version
+                    "minVersion": "TLS1_2", // 最小 tls version
                     "maxVersion": "TLS1_3" // 最大 tls version
                 },
                 "socketSettings": {
@@ -80,7 +80,7 @@
                 "securitySettings": {
                     "serverName": "you.domain",
                     "disableSystemRoot": false,
-                    "minVersion": "TLS1_1",
+                    "minVersion": "TLS1_2",
                     "maxVersion": "TLS1_3"
                 },
                 "socketSettings": {

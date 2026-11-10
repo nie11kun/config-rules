@@ -65,6 +65,12 @@
                     }
                 ]
             },
+            { // 拦截 BT 流量 防止 VPS 收到版权投诉
+                "tag": "blocked",
+                "protocol": [
+                    "bittorrent"
+                ]
+            },
             {
                 "tag": "socks_out",
                 "geoDomain": [
@@ -74,6 +80,10 @@
                     },
                     {
                         "code": "anthropic",
+                        "filePath": "geosite.dat"
+                    },
+                    {
+                        "code": "google-gemini",
                         "filePath": "geosite.dat"
                     },
                     {
@@ -106,7 +116,7 @@
             "streamSettings": {
                 "transport": "ws",
                 "transportSettings": {
-                    "path": "/proxyPath",
+                    "path": "/proxypath",
                     "maxEarlyData": 2048
                 },
                 "security": "none"
