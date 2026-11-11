@@ -13,7 +13,7 @@ My personal used proxy configs.
 | `v2ray/V5/client/conf.d/` | v2ray v5 客户端配置（jsonv5，多文件） |
 | `v2ray/V5/client/openwrt/` | OpenWrt 透明代理：配置、init.d、iptables / dnsmasq 脚本 |
 | `v2ray/V5/server/` | 服务端配置、nginx 反代、systemd 单元 |
-| `v2ray/V5/client/openwrt/script/v2ray-update.sh` | OpenWrt 一键更新：安装最新 ipk、检查 v5 启动配置、更新加强版 geo、重启；`install` 参数启用每日自动更新 |
+| `v2ray/V5/client/openwrt/script/v2ray-update.sh` | OpenWrt 一键更新：安装最新 ipk、检查 v5 启动配置、更新加强版 geo 和 dnsmasq 代理域名列表（需同目录的 `gfwlist.sh`）、重启；`install` 参数启用每日自动更新 |
 | `v2ray/V5/server/v2ray-update.sh` | VPS 一键更新：升级 v2ray、固定 jsonv5 启动、更新加强版 geo、重启；`install` 参数启用每日自动更新 |
 | `v2ray/update_geo.sh` / `update_geo.bat` | 下载最新 `geoip.dat` / `geosite.dat`（仓库不保存这两个文件），`.bat` 为 Windows 版 |
 | `v2ray/system_file_location.md` | 各平台 geo 数据文件的存放路径 |

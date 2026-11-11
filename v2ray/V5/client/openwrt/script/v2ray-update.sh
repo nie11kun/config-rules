@@ -3,6 +3,8 @@
 #   1. 确保 v2ray 正在运行（路由器本机访问 GitHub 要靠它代理）
 #   2. 先把所有文件下载到 /tmp：最新 ipk（与已安装包同名：v2ray-core 或 v2ray-core-mini）、
 #      Loyalsoldier 加强版 geoip.dat / geosite.dat（校验 sha256）。任何一个下载失败都直接退出，不做任何改动
+#   2.5 dnsmasq 模式下调用同目录的 gfwlist.sh 更新 /etc/dnsmasq/proxy-gfwlist.conf，有变化则重启 dnsmasq
+#      （失败只记警告并保留旧文件，不影响 v2ray 的更新）
 #   3. 安装 ipk（旧进程会继续运行到重启为止），再用加强版 geo 覆盖 ipk 自带的原版 geo
 #      新程序校验配置失败则恢复旧程序
 #   4. 检查 /etc/config/v2ray 是 jsonv5 格式，/etc/init.d/v2ray 与 install 时备份的一致，否则恢复
@@ -28,6 +30,9 @@ INIT="/etc/init.d/v2ray"
 UCI_CONF="/etc/config/v2ray"
 BACKUP_DIR="/etc/v2ray/backup"
 CRON_FILE="/etc/crontabs/root"
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+GFW_SCRIPT="$SCRIPT_DIR/gfwlist.sh"
+GFW_DEST="/etc/dnsmasq/proxy-gfwlist.conf"
 # 每天 05:00（路由器本地时间）
 CRON_TIME="0 5 * * *"
 
@@ -104,6 +109,49 @@ prepare_geo() {
     done
 }
 
+# ---------- dnsmasq 代理域名列表（gfwlist） ----------
+update_gfwlist() { # 失败只记警告，不中断 v2ray 的更新
+    local before after
+    if [ ! -f "$GFW_DEST" ]; then
+        log "没有 $GFW_DEST（不是 dnsmasq 模式），跳过 gfwlist 更新"
+        return 0
+    fi
+    if [ ! -f "$GFW_SCRIPT" ] || ! command -v bash > /dev/null 2>&1; then
+        log "警告：需要 $GFW_SCRIPT 和 bash 才能更新 gfwlist，已跳过"
+        return 0
+    fi
+
+    cp -p "$GFW_DEST" "$TMP/gfwlist.bak"
+    before="$(md5sum "$GFW_DEST" | awk '{print $1}')"
+    if ! bash "$GFW_SCRIPT" "$PROXY" "$GFW_DEST" > "$TMP/gfwlist.log" 2>&1; then
+        cat "$TMP/gfwlist.log" >&2
+        log "警告：gfwlist 更新失败，保留旧文件"
+        return 0
+    fi
+    after="$(md5sum "$GFW_DEST" | awk '{print $1}')"
+    if [ "$before" = "$after" ]; then
+        log "gfwlist 已是最新"
+        return 0
+    fi
+
+    # 新文件有语法问题时 dnsmasq 会起不来，整个局域网都没有 DNS，所以先检查
+    if ! dnsmasq --test --conf-file="$GFW_DEST" > "$TMP/dnsmasq-test.log" 2>&1; then
+        cat "$TMP/dnsmasq-test.log" >&2
+        replace_file "$TMP/gfwlist.bak" "$GFW_DEST"
+        log "警告：新的 gfwlist 没有通过 dnsmasq 检查，已恢复旧文件"
+        return 0
+    fi
+    /etc/init.d/dnsmasq restart
+    sleep 3
+    if ! pidof dnsmasq > /dev/null; then
+        replace_file "$TMP/gfwlist.bak" "$GFW_DEST"
+        /etc/init.d/dnsmasq restart
+        log "警告：使用新的 gfwlist 后 dnsmasq 没有启动，已恢复旧文件并重启 dnsmasq"
+        return 0
+    fi
+    log "gfwlist 已更新（$(grep -c '^nftset=' "$GFW_DEST") 条），已重启 dnsmasq"
+}
+
 # ---------- 应用阶段 ----------
 apply_core() { # 有更新时返回 0
     [ -n "$IPK_FILE" ] || return 1
@@ -166,6 +214,8 @@ do_update() {
     ensure_running
     prepare_core
     prepare_geo
+    # 放在下载完成之后：重启 dnsmasq 期间 DNS 会短暂不可用，而后面的步骤不再需要联网
+    update_gfwlist
 
     if apply_core; then need_restart=1; fi
     if apply_geo; then need_restart=1; fi
@@ -204,8 +254,8 @@ do_install() {
     /etc/init.d/cron restart
     log "已启用每日自动更新：$CRON_TIME（cron 调用的是 $self，移动脚本后需重新 install）"
 
-    # 系统升级（sysupgrade）时保留脚本、备份和 cron
-    for p in "$self" "$BACKUP_DIR" "$CRON_FILE"; do
+    # 系统升级（sysupgrade）时保留脚本目录（含 gfwlist.sh）、备份、dnsmasq 规则和 cron
+    for p in "$SCRIPT_DIR" "$BACKUP_DIR" /etc/dnsmasq "$CRON_FILE"; do
         grep -qxF "$p" /etc/sysupgrade.conf 2> /dev/null || echo "$p" >> /etc/sysupgrade.conf
     done
 }
