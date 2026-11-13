@@ -1,0 +1,438 @@
+# =====================================================================
+#  OpenClash（OpenWrt 23.05 + mihomo/Meta 内核）配置
+#  替代原 v2ray + dnsmasq nftset 透明代理方案
+#
+#  以下内容由 OpenClash 界面管理，启动时会覆写，不写在这里：
+#    端口（redir/tproxy/mixed）、DNS 监听端口、tun 段、enhanced-mode、
+#    fake-ip-range、external-controller
+#  界面推荐设置：
+#    插件设置 → 模式设置：Fake-IP（TUN）模式
+#    插件设置 → DNS 设置：本地 DNS 劫持 = 使用 Dnsmasq 转发
+#    覆写设置 → DNS：不要启用「自定义上游 DNS 服务器」，否则下面 dns 段的上游会被替换
+#
+#  内网域名 *.home.marco 由 dnsmasq 的 /etc/dnsmasq/base.conf 直接应答，不会到达 Clash
+# =====================================================================
+
+# ---------------- 基础设置 ----------------
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: warning
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+# 必须加引号：OpenClash 用 Ruby（YAML 1.1）改写配置，裸写 off 会变成布尔值 false，内核报 invalid find process mode
+find-process-mode: "off" # 路由器上只能识别本机进程，局域网设备的进程规则无效
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# ---------------- 静态 hosts ----------------
+# 节点 server 填域名且想固定优选 IP 时（对应原 v2ray staticHosts），取消注释：
+# hosts:
+#   "xxx.com": 111.111.111.111
+
+# ---------------- 流量嗅探 ----------------
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - "+.push.apple.com"
+    - "Mijia Cloud"
+    # 内网 / Tailscale 域名不用嗅探结果覆盖目标，否则 DIRECT 会拿域名去国内 DNS 解析而失败
+    - "+.home.marco"
+    - "+.ts.net"
+
+# ---------------- DNS ----------------
+dns:
+  enable: true
+  ipv6: false
+  use-hosts: true
+  fake-ip-filter-mode: blacklist
+  # 这些域名返回真实 IP（若 OpenClash 未采用，在 覆写设置 → DNS → Fake-IP-Filter 里再加一遍）
+  fake-ip-filter:
+    - "rule-set:private_domain" # 已含 +.lan、+.local、+.ts.net、+.home.arpa
+    - "+.home.marco"
+    - "+.niekun.net"
+    - "+.pool.ntp.org"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "localhost.ptlogin2.qq.com"
+    - "+.stun.*.*"
+    - "+.stun.*.*.*"
+
+  respect-rules: true # DNS 查询也遵循分流规则，国外 DoH 走代理
+  default-nameserver: # 只用于解析下面 DoH 服务器自身的域名，必须是 IP
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver: # 解析节点域名
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  direct-nameserver: # 直连流量用国内 DNS，拿国内 CDN 最优 IP
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  nameserver-policy:
+    # 内网域名交回本机 dnsmasq（base.conf 的 address= 本地应答，不会再转发回 Clash）
+    "+.home.marco": 127.0.0.1
+    "rule-set:private_domain,cn_domain,apple_cn,google_cn,aws_cn,cloudflare_cn,games_cn,speedtest":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+  nameserver:
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
+
+# ---------------- 代理节点 ----------------
+# 参数对应原 v2ray/V5/client/openwrt/config/dnsmasq mode/config.json 的 out-vmess
+# 原 v2ray 的 mux（mux.cool）mihomo 不支持，这里不开
+proxies:
+  - name: out-vmess
+    type: vmess
+    server: 111.111.111.111 # ← 服务器域名或 IP
+    port: 443
+    uuid: uuid-uuid-uuid-uuid # ← 你的 UUID
+    alterId: 0
+    cipher: auto
+    udp: true
+    tfo: true
+    tls: true
+    servername: xxx.com # ← TLS SNI
+    alpn: [http/1.1] # WebSocket 需要 HTTP/1.1
+    client-fingerprint: chrome
+    skip-cert-verify: false
+    network: ws
+    ws-opts:
+      path: /path # ← WebSocket 路径，与服务端 / nginx 一致
+      headers:
+        Host: xxx.com
+
+# ---------------- 策略组 ----------------
+proxy-groups:
+  - name: 🚀 节点选择
+    type: select
+    proxies: [out-vmess, DIRECT]
+
+  - name: 🤖 AI 服务
+    type: select
+    proxies: [🚀 节点选择, out-vmess, DIRECT]
+
+  - name: 🛑 广告拦截 # 去广告由这里负责（dnsmasq 的 reject-*.conf 已删除），默认 REJECT
+    type: select
+    proxies: [REJECT, DIRECT]
+
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies: [🚀 节点选择, DIRECT]
+
+  # 覆盖内置 GLOBAL 组：只在全局模式（mode: global）下生效，规则模式下选什么都不影响分流
+  # 全局模式会把内网、Tailscale 流量也送进代理，只建议临时排查用
+  - name: GLOBAL
+    type: select
+    proxies: [🚀 节点选择, out-vmess, DIRECT]
+
+# ---------------- 规则集 ----------------
+rule-anchor:
+  domain:
+    &domain {
+      type: http,
+      interval: 86400,
+      behavior: domain,
+      format: mrs,
+      proxy: 🚀 节点选择,
+    }
+  ipcidr:
+    &ipcidr {
+      type: http,
+      interval: 86400,
+      behavior: ipcidr,
+      format: mrs,
+      proxy: 🚀 节点选择,
+    }
+
+rule-providers:
+  # —— 自定义内联列表 ——
+  custom_reject: # 原 reject-added.conf
+    type: inline
+    behavior: domain
+    payload:
+      - "+.360.com"
+      - "+.360.cn"
+      - "+.datadoghq.com"
+  custom_direct:
+    type: inline
+    behavior: domain
+    payload:
+      - "+.home.marco"
+      - "+.niekun.net"
+      - "+.240128.xyz"
+      - "+.pages.dev"
+      - "+.msftncsi.com"
+      - "+.msftconnecttest.com"
+      - "+.push.apple.com" # 苹果推送长连接，直连更稳定
+  # 以下自定义列表只保留上游规则集没收录、或会被国内规则抢先命中的域名
+  # anthropic / openai / perplexity / gemini 规则集已收录的 claude、chatgpt 等不再重复列出
+  custom_ai: # AI 相关但不在 AI 规则集里的域名
+    type: inline
+    behavior: domain
+    payload:
+      - "+.openrouter.ai"
+      - "+.codeium.com"
+      - "+.gamma.app"
+      - "+.withpersona.com"
+  # 原 proxy-added.conf 中 geolocation-!cn 未收录的域名
+  # （docker、pypi、discord、Apple 海外服务等已被 geolocation-!cn 收录，不再列出）
+  custom_proxy:
+    type: inline
+    behavior: domain
+    payload:
+      # 开发 / 工具
+      - "+.thalesgroup.com"
+      - "+.mailgun.com"
+      - "+.freedownloadmanager.org"
+      - "+.my-netdata.io"
+      - "+.massgrave.dev"
+      - "+.activated.win"
+      # 镜像站
+      - "+.mirrorservice.org"
+      - "+.dotsrc.org"
+      - "+.syringanetworks.net"
+      - "+.fau.de"
+      - "+.karneval.cz"
+      - "+.weppel.nl"
+      - "+.osuosl.org"
+      - "+.garr.it"
+      - "+.rwth-aachen.de"
+      - "+.hro.nl"
+      - "+.umd.edu"
+      - "+.xmission.com"
+      - "+.heanet.ie"
+      - "+.os6.org"
+      - "+.utwente.nl"
+      # 媒体 / 刮削
+      - "+.opensubtitles.org"
+      - "+.theaudiodb.com"
+      - "+.fanart.tv"
+      - "+.thegamesdb.net"
+      - "+.chtbl.com"
+      - "+.podtrac.com"
+      - "+.livednow.com"
+      - "+.orz-7.com"
+      - "+.iptvx.one"
+      # 其他
+      - "+.maxon.net"
+      - "+.landingi.com"
+      - "+.64clouds.com"
+      - "+.devolutions.net"
+      - "+.remotedesktopmanager.com"
+      - "+.objective-see.com"
+      - "+.edovia.com"
+      - "+.nxmac.com"
+      - "+.torrentmac.net"
+      - "+.appstorrent.ru"
+      - "+.kuoruan.net"
+      - "+.hdchina.org" # 在 cn 规则集里，靠本条抢先走代理
+      - "+.1fichier.com"
+      - "+.ufile.io"
+      - "+.evozi.com"
+      - "+.apkkite.com"
+      - "+.apkmodking.com"
+      - "+.playmods.net"
+      - "+.repack.me"
+      - "+.weserv.nl"
+      - "+.pix.live"
+      - "+.waqi.info"
+      - "+.downloadtorrentfile.com"
+      - "+.rrty123.com"
+      - "+.haxnode.net"
+      - "+.rxresu.me"
+      - "ap-oversea-tls.agora.io" # 同上，agora.io 在 cn 规则集里
+  custom_proxy_ip: # 原 proxy_ip.txt（8.8.8.8 与 Telegram 网段已由 google_ip / telegram_ip 覆盖）
+    type: inline
+    behavior: ipcidr
+    payload:
+      - 1.1.1.1/32
+      - 5.28.192.0/18
+  # Tailscale 100.64.0.0/10、fd7a:115c:a1e0::/48 和内网 192.168.x.x 已由第一条 private_ip 规则直连
+  custom_direct_ip:
+    type: inline
+    behavior: ipcidr
+    payload:
+      - 27.168.0.0/16
+
+  # —— 域名规则集 ——
+  private_domain:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs",
+      path: ./ruleset/private_domain.mrs,
+    }
+  ads:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ads-all.mrs",
+      path: ./ruleset/ads.mrs,
+    }
+  cn_domain:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs",
+      path: ./ruleset/cn_domain.mrs,
+    }
+  speedtest:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/speedtest.mrs",
+      path: ./ruleset/speedtest.mrs,
+    }
+  apple_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple-cn.mrs",
+      path: ./ruleset/apple_cn.mrs,
+    }
+  google_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-cn.mrs",
+      path: ./ruleset/google_cn.mrs,
+    }
+  aws_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/aws-cn.mrs",
+      path: ./ruleset/aws_cn.mrs,
+    }
+  cloudflare_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cloudflare-cn.mrs",
+      path: ./ruleset/cloudflare_cn.mrs,
+    }
+  games_cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.mrs",
+      path: ./ruleset/games_cn.mrs,
+    }
+  openai:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs",
+      path: ./ruleset/openai.mrs,
+    }
+  anthropic:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/anthropic.mrs",
+      path: ./ruleset/anthropic.mrs,
+    }
+  gemini:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs",
+      path: ./ruleset/gemini.mrs,
+    }
+  perplexity:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/perplexity.mrs",
+      path: ./ruleset/perplexity.mrs,
+    }
+  geolocation_!cn:
+    {
+      <<: *domain,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs",
+      path: ./ruleset/geolocation_not_cn.mrs,
+    }
+
+  # —— IP 规则集 ——
+  private_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs",
+      path: ./ruleset/private_ip.mrs,
+    }
+  cn_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs",
+      path: ./ruleset/cn_ip.mrs,
+    }
+  telegram_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs",
+      path: ./ruleset/telegram_ip.mrs,
+    }
+  google_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs",
+      path: ./ruleset/google_ip.mrs,
+    }
+  twitter_ip:
+    {
+      <<: *ipcidr,
+      url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs",
+      path: ./ruleset/twitter_ip.mrs,
+    }
+
+# ---------------- 规则 ----------------
+rules:
+  # 内网 IP 最先直连（访问路由器、NAS、ESXi 等）
+  - RULE-SET,private_ip,DIRECT,no-resolve
+  - RULE-SET,custom_direct_ip,DIRECT,no-resolve
+
+  # 国外 QUIC 拒绝，让浏览器回落到 TCP（原方案丢弃全部 UDP 80/443）
+  - AND,((NETWORK,UDP),(DST-PORT,443),(RULE-SET,geolocation_!cn)),REJECT
+  # NTP 时间校准直连
+  - AND,((NETWORK,UDP),(DST-PORT,123)),DIRECT
+
+  - RULE-SET,custom_reject,REJECT
+  - RULE-SET,ads,🛑 广告拦截
+  - RULE-SET,private_domain,DIRECT
+  - RULE-SET,custom_direct,DIRECT
+
+  # 自定义代理（放在国内规则前面，像 testflight.apple.com 这类才不会被 apple_cn 先命中）
+  - RULE-SET,custom_ai,🤖 AI 服务
+  - RULE-SET,openai,🤖 AI 服务
+  - RULE-SET,anthropic,🤖 AI 服务
+  - RULE-SET,gemini,🤖 AI 服务
+  - RULE-SET,perplexity,🤖 AI 服务
+  - RULE-SET,custom_proxy,🚀 节点选择
+
+  # 国内直连
+  - RULE-SET,cn_domain,DIRECT
+  - RULE-SET,speedtest,DIRECT
+  - RULE-SET,apple_cn,DIRECT
+  - RULE-SET,google_cn,DIRECT
+  - RULE-SET,aws_cn,DIRECT
+  - RULE-SET,cloudflare_cn,DIRECT
+  - RULE-SET,games_cn,DIRECT
+
+  # 国外
+  - RULE-SET,geolocation_!cn,🚀 节点选择
+
+  # IP 规则（放在所有域名规则之后）
+  - RULE-SET,custom_proxy_ip,🚀 节点选择,no-resolve
+  - RULE-SET,telegram_ip,🚀 节点选择,no-resolve
+  - RULE-SET,google_ip,🚀 节点选择,no-resolve
+  - RULE-SET,twitter_ip,🚀 节点选择,no-resolve
+  - RULE-SET,cn_ip,DIRECT
+
+  # 未匹配的 UDP 直连：Tailscale / RustDesk 打洞、BT、游戏 P2P 等大多是纯 IP 的 UDP，
+  # 送进代理会打洞失败（原 v2ray 方案只代理 TCP，UDP 本来就是直连）
+  - NETWORK,UDP,DIRECT
+
+  - MATCH,🐟 漏网之鱼

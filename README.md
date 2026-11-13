@@ -7,6 +7,8 @@ My personal used proxy configs.
 | 目录 | 用途 |
 | --- | --- |
 | `Clash/clash-verge.yaml` | Clash Verge Rev（mihomo 内核）桌面端配置 |
+| `Clash/openclash.yaml` | OpenWrt OpenClash（Meta 内核，Fake-IP + TUN）配置，替代 v2ray + dnsmasq 透明代理 |
+| `Clash/openclash-openwrt-guide.md` | OpenWrt 23.05 安装配置 OpenClash 的完整教程（含迁移、验证、排障、回滚） |
 | `Stash/stash.yaml` | Stash 配置（macOS 4.3+ / iOS 3.6+），由 Clash 配置移植 |
 | `Shadowrocket/*.conf` | Shadowrocket 配置：`part_proxy`（分流）、`all_proxy`（全局代理）、`all_direct`（全局直连） |
 | `Shadowrocket/modules/` | Shadowrocket 模块，`common.module` 是三份配置共用的规则 |
