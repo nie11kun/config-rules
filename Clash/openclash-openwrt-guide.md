@@ -227,6 +227,18 @@ Smart 内核是 OpenClash 作者维护的 mihomo 分支，多了一种 `smart` �
 | --- | --- |
 | 本地 DNS 劫持 | 开启，方式选 **使用 Dnsmasq 转发** |
 | 覆写设置 → 自定义上游 DNS 服务器 | **不要启用**，否则配置文件里 `dns` 段的上游会被替换掉 |
+| 覆写设置 → DNS → respect-rules（遵循规则） | **开启**。OpenClash 会按这个开关改写配置文件里的 `respect-rules`，默认写成 `false` |
+
+**为什么必须开启 respect-rules**
+
+`respect-rules: false` 时，`nameserver` 里的 Cloudflare、Google DoH 会从路由器直连，在国内基本连不上。普通国外域名拿的是 fake-ip，真正的解析在代理服务器上完成，所以看不出问题；但 `fake-ip-filter` 里又不在国内规则集里的域名（比如 `time.google.com`）只能靠这两个 DoH，会全部返回空结果（`No answer`）。
+
+开关的 uci 名称可以这样查，启动后再确认生效值：
+
+```bash
+uci show openclash | grep -i respect
+grep -n "respect-rules" /etc/openclash/openclash.yaml   # 应为 true
+```
 
 ### 7.3 GEO 数据库订阅
 
@@ -258,6 +270,7 @@ Smart 内核是 OpenClash 作者维护的 mihomo 分支，多了一种 `smart` �
   - 在 `fake-ip-filter` 里，所以返回真实 IP，不会被分配假地址；
   - `nameserver-policy` 把它交给本机的 dnsmasq（`127.0.0.1`）解析；
   - 嗅探的 `skip-domain` 也包含它，避免直连时拿域名去国内 DNS 解析而失败。
+- **个人站 `niekun.net`**：直连，并且在 `fake-ip-filter` 里需要真实解析，所以在 `nameserver-policy` 里单独交给国内 DoH，不依赖经代理的国外 DoH。
 - **Tailscale 和内网网段**：`100.64.0.0/10`、`fd7a:115c:a1e0::/48`、`192.168.x.x` 都在 `private_ip` 规则集里，这是第一条规则，全部直连。
 - **未匹配的 UDP 直连**：Tailscale、RustDesk 打洞以及 BT、游戏 P2P 大多是直接连 IP 的 UDP。送进代理会导致打洞失败，所以兜底规则前面加了 `NETWORK,UDP,DIRECT`。
 - **自定义列表只放上游规则集没收录的域名**：增删前可以先查一下域名是否已在 `geolocation-!cn`、`cn` 等规则集里，避免重复。
@@ -432,6 +445,7 @@ OpenClash 自带 MetaCubeXD 等控制面板，可以切换规则、全局、直�
 | `/etc/openclash/ruleset/` 目录不存在 | OpenClash 把路径改成了 `rule_provider/` | 去 `/etc/openclash/rule_provider/` 下看 |
 | `rule_provider/` 是空的 | 节点不通，规则集经代理下载失败 | 检查节点配置，看 `/tmp/openclash.log` |
 | `*.home.marco` 返回 `198.18.x.x` | fake-ip-filter 没生效 | 在 覆写设置 → DNS → Fake-IP-Filter 里再加一遍 |
+| `niekun.net`、`time.google.com` 等 fake-ip-filter 里的域名 `nslookup` 返回 `No answer`，网站打不开 | OpenClash 把 `respect-rules` 改写成了 `false`，国外 DoH 被直连而失败 | 在界面开启 respect-rules（见 7.2），重启后用 `nslookup -port=7874 time.google.com 127.0.0.1` 验证 |
 | OpenClash 莫名其妙停了 | 之前的回滚定时器没取消，到点执行了 stop | 先清掉旧定时器再埋新的（见第 2 节）；守护进程通常会自动把内核拉起来 |
 | 游戏或语音的 UDP 不正常 | 堆栈兼容性问题 | 把 TUN 堆栈换成 gVisor 试试 |
 | Tailscale 远程连接断开 | 开了路由本机代理，或者用了全局模式 | 关闭路由本机代理，切回规则模式 |

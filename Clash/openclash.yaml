@@ -73,7 +73,10 @@ dns:
     - "+.stun.*.*"
     - "+.stun.*.*.*"
 
-  respect-rules: true # DNS 查询也遵循分流规则，国外 DoH 走代理
+  # DNS 查询也遵循分流规则，国外 DoH 走代理
+  # 注意：OpenClash 启动时会按界面开关改写此项（默认写成 false），需在界面里开启 respect-rules，
+  # 否则下面 nameserver 的国外 DoH 会从路由器直连而被墙，fake-ip-filter 里的国外域名全部解析失败
+  respect-rules: true
   default-nameserver: # 只用于解析下面 DoH 服务器自身的域名，必须是 IP
     - 223.5.5.5
     - 119.29.29.29
@@ -86,6 +89,10 @@ dns:
   nameserver-policy:
     # 内网域名交回本机 dnsmasq（base.conf 的 address= 本地应答，不会再转发回 Clash）
     "+.home.marco": 127.0.0.1
+    # 个人站：直连且在 fake-ip-filter 里，需要真实解析，交给国内 DNS（不依赖下面的国外 DoH）
+    "+.niekun.net":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
     "rule-set:private_domain,cn_domain,apple_cn,google_cn,aws_cn,cloudflare_cn,games_cn,speedtest":
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
