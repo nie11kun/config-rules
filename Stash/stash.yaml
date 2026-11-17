@@ -105,6 +105,11 @@ rule-providers:
       - "+.240128.xyz"
       - "+.pages.dev"
       - "+.push.apple.com" # 苹果推送长连接，直连更稳定
+      - "+.music.apple.com"
+      - "+.itunes.apple.com"
+      - "+.mzstatic.com"
+      - "+.ls.apple.com"
+      - "+.cdn-apple.com"
   custom_proxy:
     type: inline
     behavior: domain
