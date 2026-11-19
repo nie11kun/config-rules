@@ -41,7 +41,7 @@
                 "address": "127.0.0.1",
                 "port": 40000
             },
-            "tag":"socks_out"
+            "tag": "socks_out"
         }
     ],
     "router": {
@@ -82,10 +82,10 @@
                         "code": "anthropic",
                         "filePath": "geosite.dat"
                     },
-                    {
-                        "code": "google-gemini",
-                        "filePath": "geosite.dat"
-                    },
+                    // { gemini不可加入 warp 代理
+                    //     "code": "google-gemini",
+                    //     "filePath": "geosite.dat"
+                    // },
                     {
                         "code": "perplexity",
                         "filePath": "geosite.dat"
