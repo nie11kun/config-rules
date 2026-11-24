@@ -8,6 +8,7 @@
 #  界面推荐设置：
 #    插件设置 → 模式设置：Fake-IP（TUN）模式
 #    插件设置 → DNS 设置：本地 DNS 劫持 = 使用 Dnsmasq 转发
+#    覆写设置 → 常规设置：开启「Meta 流量嗅探」（enable_meta_sniffer），使纯 IP 的 DERP TLS 443 连接按 SNI 命中规则
 #    覆写设置 → DNS：不要启用「自定义上游 DNS 服务器」，否则下面 dns 段的上游会被替换
 #
 #  内网域名 *.home.marco 由 dnsmasq 的 /etc/dnsmasq/base.conf 直接应答，不会到达 Clash
@@ -64,6 +65,9 @@ dns:
     - "rule-set:private_domain" # 已含 +.lan、+.local、+.ts.net、+.home.arpa
     - "+.home.marco"
     - "+.niekun.net"
+    - "+.ts.net"
+    - "+.tailscale.com"
+    - "+.tailscale.io"
     - "+.pool.ntp.org"
     - "time.*.com"
     - "ntp.*.com"
@@ -93,6 +97,10 @@ dns:
     "+.niekun.net":
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
+    # Tailscale 控制面与 DERP：直连且在 fake-ip-filter 里，走国内 DoH 获取就近真实 IP
+    "+.tailscale.com,+.tailscale.io":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
     "rule-set:private_domain,cn_domain,apple_cn,google_cn,aws_cn,cloudflare_cn,games_cn,speedtest":
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
@@ -112,7 +120,7 @@ proxies:
     alterId: 0
     cipher: auto
     udp: true
-    tfo: true
+    tfo: false # 国内家宽对 TFO 易丢包超时，保持关闭
     tls: true
     servername: xxx.com # ← TLS SNI
     alpn: [http/1.1] # WebSocket 需要 HTTP/1.1
@@ -181,6 +189,9 @@ rule-providers:
     behavior: domain
     payload:
       - "+.home.marco"
+      - "+.ts.net"
+      - "+.tailscale.com"
+      - "+.tailscale.io"
       - "+.niekun.net"
       - "+.240128.xyz"
       - "+.pages.dev"
@@ -281,6 +292,7 @@ rule-providers:
     behavior: ipcidr
     payload:
       - 27.168.0.0/16
+      # - 111.111.111.111/32 # ← 你的 VPS IP，避免 frpc 隧道套娃走代理
 
   # —— 域名规则集 ——
   private_domain:

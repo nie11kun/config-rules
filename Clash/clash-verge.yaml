@@ -2,6 +2,7 @@
 #  Clash Verge Rev（mihomo 内核）配置
 #  TUN 相关设置（堆栈、排除网段等）由 Verge 界面管理，不写在这里：
 #    设置 → 虚拟网卡模式 → 齿轮 → 堆栈选 Mixed
+#    排除网段 (route-exclude-address) 添加：100.64.0.0/10、192.168.122.0/24
 # =====================================================================
 
 # ---------------- 基础设置 ----------------
@@ -47,12 +48,14 @@ dns:
   ipv6: false
   use-hosts: true
   enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
+  fake-ip-range: 198.19.0.1/16 # 与家里 OpenWrt 的 198.18.0.1/16 错开，避免 Tailscale 端点冲突
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - "rule-set:private_domain"
     - "+.home.marco"
     - "+.ts.net"
+    - "+.tailscale.com"
+    - "+.tailscale.io"
     - "+.niekun.net"
     - "+.pool.ntp.org"
     - "time.*.com"
@@ -60,6 +63,8 @@ dns:
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
     - "localhost.ptlogin2.qq.com"
+    - "+.stun.*.*"
+    - "+.stun.*.*.*"
 
   respect-rules: true # DNS 查询也遵循分流规则，国外 DoH 走代理
   default-nameserver:
@@ -72,7 +77,11 @@ dns:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   nameserver-policy:
-    "+.home.marco,+.ts.net": system # 局域网 / Tailscale 域名交给系统 DNS
+    "+.home.marco": [100.100.100.100, system] # 出门走 Tailscale Split DNS，在家回落系统 DNS
+    "+.ts.net": 100.100.100.100 # Tailscale MagicDNS，避免与系统 DNS 指向 Mihomo 形成回环
+    "+.tailscale.com,+.tailscale.io":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
     "rule-set:private_domain,cn_domain,apple_cn,google_cn,aws_cn,cloudflare_cn,games_cn,speedtest":
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
@@ -114,7 +123,7 @@ proxy-groups:
 
   - name: 🛑 广告拦截
     type: select
-    proxies: [DIRECT, REJECT]
+    proxies: [REJECT, DIRECT]
 
   - name: 🐟 漏网之鱼
     type: select
@@ -153,6 +162,8 @@ rule-providers:
     behavior: domain
     payload:
       - "+.ts.net"
+      - "+.tailscale.com"
+      - "+.tailscale.io"
       - "+.home.marco"
       - "+.niekun.net"
       - "+.240128.xyz"
@@ -169,7 +180,6 @@ rule-providers:
     type: inline
     behavior: domain
     payload:
-      - "+.tailscale.com"
       - "+.testflight.apple.com"
       - "+.jsdelivr.net"
   custom_proxy_ip:
@@ -313,9 +323,8 @@ rules:
   # NTP 时间校准直连
   - AND,((NETWORK,UDP),(DST-PORT,123)),DIRECT
 
-  # Tailscale：UDP 打洞直连，TCP（控制面、DERP、测速）走代理
-  - AND,((PROCESS-NAME,tailscaled.exe),(NETWORK,UDP)),DIRECT
-  - PROCESS-NAME,tailscaled.exe,🚀 节点选择
+  # Tailscale：直连避免 DERP 绕路，保证打洞与就近中继低延迟（若办公网封锁直连可改回 TCP 走代理）
+  - PROCESS-NAME,tailscaled.exe,DIRECT
   # RustDesk：UDP 打洞直连
   - AND,((PROCESS-NAME,RustDesk.exe),(NETWORK,UDP)),DIRECT
 

@@ -14,10 +14,11 @@
 8. [准备配置文件](#8-准备配置文件)
 9. [启动与验证](#9-启动与验证)
 10. [开机自启与计划任务](#10-开机自启与计划任务)
-11. [升级备份列表](#11-升级备份列表)
-12. [控制面板说明](#12-控制面板说明)
-13. [故障排查](#13-故障排查)
-14. [回滚到 v2ray 方案](#14-回滚到-v2ray-方案)
+11. [OpenWrt 系统与网络基础调优（x86 / ESXi）](#11-openwrt-系统与网络基础调优x86--esxi)
+12. [升级备份列表](#12-升级备份列表)
+13. [控制面板说明](#13-控制面板说明)
+14. [故障排查](#14-故障排查)
+15. [回滚到 v2ray 方案](#15-回滚到-v2ray-方案)
 
 ---
 
@@ -144,6 +145,17 @@ cp base.conf /etc/dnsmasq.bak/ && sed -i '/^all-servers/d;/^server=/d' base.conf
 
 dnsmasq 重启时可能输出 `udhcpc: no lease, failing`。这是启动脚本在检测局域网里有没有别的 DHCP 服务器，"no lease" 表示没有，属于正常输出。
 
+**清理局域网主机的旧代理环境变量**
+
+停用路由器上的 v2ray 后，原来 `10809` 等代理端口已不再监听。如果局域网内其他主机（如跑 Tailscale / Docker 的 Ubuntu、NAS）曾配置过指向路由器的代理环境变量，会导致这些服务在后台持续 `connection refused` 无法联网：
+
+```bash
+# 在局域网 Linux 主机上检查并清理旧代理（例如 192.168.122.1:10809）
+sudo grep -rn "10809" /etc/default/tailscaled /etc/systemd/system/ /etc/environment 2>/dev/null
+# 若 /etc/default/tailscaled 中有 HTTP_PROXY / HTTPS_PROXY，注释或删除后重启服务
+sudo systemctl daemon-reload && sudo systemctl restart tailscaled
+```
+
 ---
 
 ## 5. 安装 OpenClash
@@ -193,7 +205,8 @@ Smart 内核是 OpenClash 作者维护的 mihomo 分支，多了一种 `smart` �
 | --- | --- |
 | 运行模式 | **Fake-IP（TUN）模式**，对应 uci 里的 `en_mode='fake-ip-tun'` |
 | TUN 堆栈 | **Mixed**（见下表） |
-| 路由本机代理 | **关闭** |
+| 路由本机代理 | 按 `tailscaled` 部署位置选择（见下方说明） |
+| 防火墙软件流卸载 | **关闭**（`firewall.@defaults[0].flow_offloading='0'`） |
 
 **TUN 堆栈怎么选**
 
@@ -217,17 +230,33 @@ Smart 内核是 OpenClash 作者维护的 mihomo 分支，多了一种 `smart` �
 > uci set openclash.config.stack_type='mixed' && uci commit openclash && /etc/init.d/openclash restart
 > ```
 
-**为什么要关闭"路由本机代理"**
+**关于“路由本机代理”与关闭“软件流卸载”**
 
-关掉后，路由器自己的流量（`tailscaled`、opkg 等）不经过 Clash，只有局域网设备的流量会走代理。这样即使 OpenClash 出了问题，Tailscale 远程访问也不会断。
+- **路由本机代理**：如果 `tailscaled` 运行在**路由器本机**上，建议关闭，这样即使 OpenClash 异常，Tailscale 远程连接也不会一起断掉；如果 `tailscaled` 运行在**局域网其他主机**（例如 `ubuntu-home-marco`）上，可根据路由器自身是否需要通过代理运行 `opkg` / `curl` 决定是否开启。
+- **关闭防火墙软件流卸载（`flow_offloading`）**：OpenWrt 的软件流卸载会生成 `nft flowtable` 绕过 Netfilter 钩子，与 OpenClash Fake-IP TUN 冲突，容易导致长连接偶发断流或分流失效。确保关闭：
 
-### 7.2 DNS 设置
+```bash
+uci set firewall.@defaults[0].flow_offloading='0'
+uci commit firewall && /etc/init.d/firewall reload
+```
+
+### 7.2 DNS 与覆写设置
 
 | 选项 | 设置 |
 | --- | --- |
 | 本地 DNS 劫持 | 开启，方式选 **使用 Dnsmasq 转发** |
+| 覆写设置 → 常规设置 → Meta 流量嗅探 | **开启**（`enable_meta_sniffer='1'`） |
 | 覆写设置 → 自定义上游 DNS 服务器 | **不要启用**，否则配置文件里 `dns` 段的上游会被替换掉 |
 | 覆写设置 → DNS → respect-rules（遵循规则） | **开启**。OpenClash 会按这个开关改写配置文件里的 `respect-rules`，默认写成 `false` |
+
+**为什么必须开启 Meta 流量嗅探（`enable_meta_sniffer`）**
+
+和 `respect-rules` 一样，OpenClash 启动时会按界面开关覆写配置里的 `sniffer.enable`（默认写成 `false`）。像 Tailscale DERP 这类连接拿到列表后会直接用**纯 IP 发起 TLS 443 请求**，关掉嗅探就无法识别 TLS SNI 域名，导致命中 `MATCH` 走错路线。确认是否真正开启：
+
+```bash
+uci get openclash.config.enable_meta_sniffer   # 应为 1
+grep -A5 "^sniffer:" /etc/openclash/openclash.yaml
+```
 
 **为什么必须开启 respect-rules**
 
@@ -254,10 +283,11 @@ grep -n "respect-rules" /etc/openclash/openclash.yaml   # 应为 true
 
 | 占位符 | 替换为 |
 | --- | --- |
-| `111.111.111.111` | 服务器地址或域名 |
+| `111.111.111.111` | 服务器地址或域名（`proxies` 节点 `server`） |
 | `uuid-uuid-uuid-uuid` | UUID |
 | `xxx.com` | TLS SNI 和 WebSocket 的 Host |
 | `/path` | WebSocket 路径，与服务端、nginx 保持一致 |
+| `custom_direct_ip` 中的 VPS IP（注释行） | 如果局域网内有 `frpc` 连接同一台 VPS，取消注释并填入 `VPS_IP/32`，避免 FRP 隧道套娃走代理 |
 
 在 **配置文件管理** 上传这个文件。上传后它存放在 `/etc/openclash/config/` 下。
 
@@ -271,6 +301,9 @@ grep -n "respect-rules" /etc/openclash/openclash.yaml   # 应为 true
   - `nameserver-policy` 把它交给本机的 dnsmasq（`127.0.0.1`）解析；
   - 嗅探的 `skip-domain` 也包含它，避免直连时拿域名去国内 DNS 解析而失败。
 - **个人站 `niekun.net`**：直连，并且在 `fake-ip-filter` 里需要真实解析，所以在 `nameserver-policy` 里单独交给国内 DoH，不依赖经代理的国外 DoH。
+- **Tailscale 控制面与 DERP 防撕裂**：`+.ts.net`、`+.tailscale.com`、`+.tailscale.io` 需同时加入 `fake-ip-filter`、`nameserver-policy`（国内 DoH）和 `custom_direct`，配合 `enable_meta_sniffer='1'` 使用；避免控制面/DERP TCP 走代理超时而 UDP 打洞走直连导致路径撕裂。
+- **节点关闭 TFO（`tfo: false`）**：国内家宽和光猫对 TCP Fast Open 丢包率较高，容易造成 `context deadline exceeded` 或 `i/o timeout`，模板里默认关闭。
+- **多端 Fake-IP 网段错开**：如果电脑端同时运行 Clash Verge（mihomo），建议把电脑端的 `fake-ip-range` 设为 `198.19.0.1/16`（与路由器 `198.18.0.1/16` 错开），并在 Clash Verge TUN 排除网段中添加 `100.64.0.0/10` 和 `192.168.122.0/24`，同时把 Verge 的 `nameserver-policy` 中 `+.home.marco` 设为 `[100.100.100.100, system]`，确保在家和出门连 Tailscale 都能解析内网域名。
 - **Tailscale 和内网网段**：`100.64.0.0/10`、`fd7a:115c:a1e0::/48`、`192.168.x.x` 都在 `private_ip` 规则集里，这是第一条规则，全部直连。
 - **未匹配的 UDP 直连**：Tailscale、RustDesk 打洞以及 BT、游戏 P2P 大多是直接连 IP 的 UDP。送进代理会导致打洞失败，所以兜底规则前面加了 `NETWORK,UDP,DIRECT`。
 - **自定义列表只放上游规则集没收录的域名**：增删前可以先查一下域名是否已在 `geolocation-!cn`、`cn` 等规则集里，避免重复。
@@ -296,27 +329,32 @@ grep -n "respect-rules" /etc/openclash/openclash.yaml   # 应为 true
 
 ```bash
 nslookup nas.home.marco 127.0.0.1; nslookup google.com 127.0.0.1; nslookup baidu.com 127.0.0.1
+nslookup controlplane.tailscale.com 127.0.0.1; nslookup derp20b.tailscale.com 127.0.0.1
 ```
 
 | 域名 | 预期结果 |
 | --- | --- |
 | `nas.home.marco` | `192.168.122.5`，真实内网 IP |
+| `controlplane.tailscale.com` / `derp20b.tailscale.com` | 真实公网 IP（不是 `198.18.x.x`） |
 | `google.com` | `198.18.x.x`，fake-ip 生效 |
 | `baidu.com` | `198.18.x.x` 也正常，连接时会被 `cn_domain` 规则匹配后直连 |
 
-**3. 进程、TUN、堆栈**
+**3. 进程、TUN、堆栈、嗅探与流卸载**
 
 ```bash
 pgrep -af clash | head -3
 ip addr show utun | grep inet
 grep -A2 "^tun:" /etc/openclash/*.yaml
+grep -A5 "^sniffer:" /etc/openclash/openclash.yaml
+nft list ruleset | grep -i flowtable
 ```
 
 正常的话会看到：
 
 - 内核进程 `/etc/openclash/clash -d /etc/openclash ...` 和守护进程 `openclash_watchdog.sh`；
 - `inet 198.18.0.1/30`；
-- `stack: mixed`。
+- `stack: mixed`、`sniffer:` 下 `enable: true`；
+- `nft list ruleset | grep -i flowtable` 无输出（确认软件流卸载已关闭）。
 
 **4. 规则集**
 
@@ -384,7 +422,76 @@ uci get system.@system[0].zonename; date
 
 ---
 
-## 11. 升级备份列表
+## 11. OpenWrt 系统与网络基础调优（x86 / ESXi）
+
+重装或迁移 OpenWrt 后，建议顺手检查以下 4 项基础系统配置，避免隐性丢包、磁盘卡顿或暴露内网服务。
+
+**1. 调大内核网络缓冲（解决 UDP 缓冲溢出丢包）**
+
+OpenWrt 默认的 `net.core.rmem_max` / `wmem_max` 只有 208 KB，高并发 DNS、Tailscale UDP 打洞或代理流量下容易出现 `Udp RcvbufErrors` 丢包。在 `/etc/sysctl.conf` 末尾追加：
+
+```ini
+net.core.rmem_max=7500000
+net.core.wmem_max=7500000
+net.core.rmem_default=262144
+net.core.wmem_default=262144
+net.core.netdev_max_backlog=4096
+net.ipv4.tcp_rmem=4096 131072 8388608
+net.ipv4.tcp_wmem=4096 65536 8388608
+net.ipv4.tcp_fastopen=3
+net.ipv4.tcp_slow_start_after_idle=0
+net.ipv4.tcp_mtu_probing=1
+```
+
+应用生效并查看 `Udp: RcvbufErrors`：
+
+```bash
+sysctl -p /etc/sysctl.conf
+cat /proc/net/snmp | grep '^Udp:'
+```
+
+**2. 检查根分区挂载参数（避免 `sync` 同步写盘）**
+
+部分 x86 固件会在 `/etc/config/fstab` 里给 `/` 配上 `rw,sync,noatime`，导致每次写日志或状态都同步落盘，严重拖慢 IO 并加速 SSD 磨损。确认根分区选项不包含 `sync`：
+
+```bash
+mount | grep ' / '
+# 若看到 sync，在 UCI 中改为 rw,noatime 并在线热重挂：
+uci set fstab.@mount[3].options='rw,noatime'   # 先用 uci show fstab 确认索引确为 /
+uci commit fstab
+mount -o remount,async,noatime /
+```
+
+**3. 收紧 WAN 防火墙与 DNS 暴露**
+
+确保 `wan` 区域默认 `input` 和 `forward` 为 `REJECT`，并开启 `dnsmasq.localservice='1'`（仅对本地子网应答 53 端口）。如果有时需要从上级光猫/路由网段（如 `192.168.1.0/24`）访问 OpenWrt 管理页，不要把整个 `wan` 设为 `ACCEPT`，而是单独放行来源网段的管理端口：
+
+```bash
+uci set dhcp.@dnsmasq[0].localservice='1'
+uci commit dhcp && /etc/init.d/dnsmasq restart
+
+uci set firewall.@zone[1].input='REJECT'
+uci set firewall.@zone[1].forward='REJECT'
+RULE=$(uci add firewall rule)
+uci set firewall."$RULE".name='Allow-WAN-Local-Admin'
+uci set firewall."$RULE".src='wan'
+uci set firewall."$RULE".src_ip='192.168.1.0/24'
+uci set firewall."$RULE".proto='tcp'
+uci set firewall."$RULE".dest_port='22 80 443 9090'
+uci set firewall."$RULE".family='ipv4'
+uci set firewall."$RULE".target='ACCEPT'
+uci commit firewall && /etc/init.d/firewall reload
+```
+
+**4. ESXi 宿主机侧速查**
+
+- **WAN 口驱动**：将 WAN 网卡从模拟的 `e1000` 换为半虚拟化 `vmxnet3`，减少高吞吐下的软中断开销。
+- **vCPU 数量**：在双核及以上宿主机上分配至少 2 核 vCPU，使 OpenWrt 的 `packet_steering` 能够发挥作用。
+- **避免二层环路**：不要把接入同一二层广播域的多个虚拟网卡同时桥进 `br-lan`（容易触发 `br-lan: received packet ... with own address as source address` 刷屏及大量 `rx_drop`）。
+
+---
+
+## 12. 升级备份列表
 
 `/etc/sysupgrade.conf` 里列出的文件，会在系统升级或用 LuCI 备份时保留。`/etc/config/openclash` 在 `/etc/config/` 下，系统默认就会保留，但上传的配置文件和自定义规则要手动加进来。`core/` 和 `rule_provider/` 能重新下载，不用备份。
 
@@ -397,6 +504,7 @@ cat > /etc/sysupgrade.conf <<'EOF'
 /etc/crontabs/
 /etc/ethers
 /etc/installed_packages.txt
+/etc/sysctl.conf
 
 # dnsmasq（base.conf 内网域名；.bak 是旧 v2ray 代理列表）
 /etc/dnsmasq/
@@ -422,7 +530,7 @@ sysupgrade -l | grep -E "openclash|dnsmasq|v2ray|crontabs"
 
 ---
 
-## 12. 控制面板说明
+## 13. 控制面板说明
 
 OpenClash 自带 MetaCubeXD 等控制面板，可以切换规则、全局、直连模式，选节点，查看连接和日志。
 
@@ -435,7 +543,7 @@ OpenClash 自带 MetaCubeXD 等控制面板，可以切换规则、全局、直�
 
 ---
 
-## 13. 故障排查
+## 14. 故障排查
 
 | 现象 | 原因 | 处理 |
 | --- | --- | --- |
@@ -445,10 +553,14 @@ OpenClash 自带 MetaCubeXD 等控制面板，可以切换规则、全局、直�
 | `/etc/openclash/ruleset/` 目录不存在 | OpenClash 把路径改成了 `rule_provider/` | 去 `/etc/openclash/rule_provider/` 下看 |
 | `rule_provider/` 是空的 | 节点不通，规则集经代理下载失败 | 检查节点配置，看 `/tmp/openclash.log` |
 | `*.home.marco` 返回 `198.18.x.x` | fake-ip-filter 没生效 | 在 覆写设置 → DNS → Fake-IP-Filter 里再加一遍 |
-| `niekun.net`、`time.google.com` 等 fake-ip-filter 里的域名 `nslookup` 返回 `No answer`，网站打不开 | OpenClash 把 `respect-rules` 改写成了 `false`，国外 DoH 被直连而失败 | 在界面开启 respect-rules（见 7.2），重启后用 `nslookup -port=7874 time.google.com 127.0.0.1` 验证 |
-| OpenClash 莫名其妙停了 | 之前的回滚定时器没取消，到点执行了 stop | 先清掉旧定时器再埋新的（见第 2 节）；守护进程通常会自动把内核拉起来 |
+| `niekun.net`、`time.google.com` 等 fake-ip-filter 里的域名 `nslookup` 返回 `No answer`，网站打不开 | OpenClash 把 `respect-rules` 改写成了 `false`，国外 DoH 被直连而失败 | 在界面开启 respect-rules（见 [7.2](#72-dns-与覆写设置)），重启后用 `nslookup -port=7874 time.google.com 127.0.0.1` 验证 |
+| `tailscaled` 报 `proxyconnect tcp: dial tcp 192.168.122.1:10809: connection refused` | 局域网主机残留了旧 v2ray 的代理环境变量 | 删除 `/etc/default/tailscaled` 或 `/etc/environment` 中的 `HTTP_PROXY` / `HTTPS_PROXY` 并重启 `tailscaled` |
+| Tailscale 域名返回 `198.18.x.x`，或 DERP 纯 IP 443 连接走代理超时离线 | 缺少 `fake-ip-filter`，未开 `enable_meta_sniffer`，或节点开了 `tfo: true` | 将 `+.tailscale.com` / `+.tailscale.io` / `+.ts.net` 加入 `fake-ip-filter`、`nameserver-policy` 和 `custom_direct`；开启 `enable_meta_sniffer='1'`；节点改 `tfo: false` |
+| 局域网 `frpc` 隧道延迟异常或流量绕行 VPS 代理 | VPS IP 未加入直连列表，命中 `MATCH` 走代理套娃 | 将 VPS IP（`IP/32`）加入 `custom_direct_ip` |
+| 内网连接偶发断流或分流规则失效 | 防火墙开启了软件流卸载（`flow_offloading`）绕过了 Netfilter | 将 `firewall.@defaults[0].flow_offloading` 设为 `'0'` 并重载防火墙 |
+| OpenClash 莫名其妙停了 | 之前的回滚定时器没取消，到点执行了 stop | 先清掉旧定时器再埋新的（见[第 2 节](#2-远程操作前回滚定时器)）；守护进程通常会自动把内核拉起来 |
 | 游戏或语音的 UDP 不正常 | 堆栈兼容性问题 | 把 TUN 堆栈换成 gVisor 试试 |
-| Tailscale 远程连接断开 | 开了路由本机代理，或者用了全局模式 | 关闭路由本机代理，切回规则模式 |
+| Tailscale 远程连接断开 | 开了路由本机代理（且 `tailscaled` 在路由器上），或者用了全局模式 | 关闭路由本机代理，切回规则模式 |
 
 常用日志：
 
@@ -459,7 +571,7 @@ logread | grep -iE "openclash|openclash-guard" | tail -30
 
 ---
 
-## 14. 回滚到 v2ray 方案
+## 15. 回滚到 v2ray 方案
 
 ```bash
 /etc/init.d/openclash stop; /etc/init.d/openclash disable; uci set openclash.config.enable='0'; uci commit openclash
