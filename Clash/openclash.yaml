@@ -162,13 +162,21 @@ proxies:
 
 # ---------------- 策略组 ----------------
 proxy-groups:
+  - name: 🛟 自动容灾
+    type: fallback
+    proxies: [out-reality, out-hy2, out-vmess]
+    url: https://www.gstatic.com/generate_204
+    interval: 180
+    timeout: 3000
+    lazy: true
+
   - name: 🚀 节点选择
     type: select
-    proxies: [out-reality, out-hy2, out-vmess, DIRECT]
+    proxies: [🛟 自动容灾, out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🤖 AI 服务
     type: select
-    proxies: [🚀 节点选择, out-reality, out-hy2, out-vmess, DIRECT]
+    proxies: [🚀 节点选择, 🛟 自动容灾, out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🛑 广告拦截 # 去广告由这里负责（dnsmasq 的 reject-*.conf 已删除），默认 REJECT
     type: select
@@ -182,7 +190,7 @@ proxy-groups:
   # 全局模式会把内网、Tailscale 流量也送进代理，只建议临时排查用
   - name: GLOBAL
     type: select
-    proxies: [🚀 节点选择, out-reality, out-hy2, out-vmess, DIRECT]
+    proxies: [🚀 节点选择, 🛟 自动容灾, out-reality, out-hy2, out-vmess, DIRECT]
 
 # ---------------- 规则集 ----------------
 rule-anchor:

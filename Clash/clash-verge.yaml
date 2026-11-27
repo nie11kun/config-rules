@@ -141,13 +141,21 @@ proxies:
 
 # ---------------- 策略组 ----------------
 proxy-groups:
+  - name: 🛟 自动容灾
+    type: fallback
+    proxies: [out-reality, out-hy2, out-vmess]
+    url: https://www.gstatic.com/generate_204
+    interval: 180
+    timeout: 3000
+    lazy: true
+
   - name: 🚀 节点选择
     type: select
-    proxies: [out-reality, out-hy2, out-vmess, DIRECT]
+    proxies: [🛟 自动容灾, out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🤖 AI 服务
     type: select
-    proxies: [🚀 节点选择, out-reality, out-hy2, out-vmess, DIRECT]
+    proxies: [🚀 节点选择, 🛟 自动容灾, out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🛑 广告拦截
     type: select

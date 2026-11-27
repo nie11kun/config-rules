@@ -30,7 +30,7 @@ My personal used proxy configs.
 - UUID：Clash / Stash 里是 `uuid-uuid-uuid-uuid`，v2ray 配置里按各文件注释填写
 - WebSocket 路径：Clash / Stash 里是 `/path`，v2ray 里是 `/proxypath`（客户端、服务端、nginx 三处需保持一致）
 - `hosts` / DNS 里的 `1.2.3.4`：示例映射，按需修改或删除
-- Shadowrocket 规则里的节点名 `NIEKUN.NET VMESS`：需要与 App 内的节点名称一致
+- Shadowrocket 规则里的节点名 `NIEKUN-REALITY` / `NIEKUN-HY2` / `NIEKUN-VMESS`：供 `[Proxy Group]` 中 `NIEKUN-AUTO` fallback 组引用，需与 App 内节点名称一致
 - REALITY 参数：`your-reality-private-key` / `your-reality-public-key` / `1234abcd` 通过 `sing-box generate reality-keypair` 与 `sing-box generate rand --hex 4` 生成（YAML 中 `short-id` 加双引号）
 - Hysteria2 密码：`your-hy2-password`（证书路径 `/path/to/fullchain.pem` 与 `/path/to/privkey.pem`）
 
