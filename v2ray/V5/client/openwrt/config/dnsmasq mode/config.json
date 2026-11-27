@@ -120,6 +120,7 @@
                         }
                     ],
                     "maxEarlyData": 2048,
+                    "earlyDataHeaderName": "Sec-WebSocket-Protocol",
                     "useBrowserForwarding": false
                 },
                 "security": "tls",
@@ -131,7 +132,7 @@
                 },
                 "socketSettings": {
                     //"mark": 255,
-                    "tcpFastOpen": true
+                    "tcpFastOpen": false
                 }
             },
             "mux": {

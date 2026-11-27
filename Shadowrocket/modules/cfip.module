@@ -5,4 +5,5 @@
 # https://github.com/ip-scanner/cloudflare/blob/daily
 
 [Host]
-niekun.net = 8.222.140.87
+# 注意：若节点 server 或个人站使用 niekun.net，勿启用过期单 IP 避免劫持失联
+# niekun.net = 8.222.140.87

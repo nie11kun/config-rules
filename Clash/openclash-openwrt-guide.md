@@ -426,11 +426,16 @@ uci get system.@system[0].zonename; date
 
 重装或迁移 OpenWrt 后，建议顺手检查以下 4 项基础系统配置，避免隐性丢包、磁盘卡顿或暴露内网服务。
 
-**1. 调大内核网络缓冲（解决 UDP 缓冲溢出丢包）**
+**1. 开启 BBR 并调大内核网络缓冲（解决 UDP 缓冲溢出丢包）**
 
-OpenWrt 默认的 `net.core.rmem_max` / `wmem_max` 只有 208 KB，高并发 DNS、Tailscale UDP 打洞或代理流量下容易出现 `Udp RcvbufErrors` 丢包。在 `/etc/sysctl.conf` 末尾追加：
+OpenWrt 默认使用 `cubic`，且 `net.core.rmem_max` / `wmem_max` 只有 208 KB，高并发 DNS、Tailscale UDP 打洞或代理流量下容易出现 `Udp RcvbufErrors` 丢包。先安装 BBR 模块并在 `/etc/sysctl.conf` 末尾追加：
+
+```bash
+opkg update && opkg install kmod-tcp-bbr
+```
 
 ```ini
+net.ipv4.tcp_congestion_control=bbr
 net.core.rmem_max=7500000
 net.core.wmem_max=7500000
 net.core.rmem_default=262144
@@ -443,10 +448,11 @@ net.ipv4.tcp_slow_start_after_idle=0
 net.ipv4.tcp_mtu_probing=1
 ```
 
-应用生效并查看 `Udp: RcvbufErrors`：
+应用生效并查看拥塞控制与 `Udp: RcvbufErrors`：
 
 ```bash
 sysctl -p /etc/sysctl.conf
+sysctl net.ipv4.tcp_congestion_control
 cat /proc/net/snmp | grep '^Udp:'
 ```
 
