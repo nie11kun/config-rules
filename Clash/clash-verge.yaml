@@ -91,6 +91,32 @@ dns:
 
 # ---------------- 代理节点 ----------------
 proxies:
+  - name: out-reality
+    type: vless
+    server: 111.111.111.111 # ← 你的服务器地址
+    port: 8443
+    uuid: uuid-uuid-uuid-uuid # ← 你的 UUID
+    network: tcp
+    tls: true
+    udp: true
+    flow: xtls-rprx-vision
+    servername: www.apple.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: your-reality-public-key # ← sing-box generate reality-keypair 生成的 PublicKey
+      short-id: "1234abcd" # ← 与服务端 short_id 一致（加引号防止 YAML 解析成数字）
+
+  - name: out-hy2
+    type: hysteria2
+    server: 111.111.111.111 # ← 你的服务器地址
+    port: 443
+    ports: 40000-40500 # ← 端口跳跃范围（需服务端 iptables/nftables REDIRECT 至 443/udp）
+    password: your-hy2-password # ← 你的 Hysteria2 密码
+    sni: xxx.com # ← 服务端证书域名
+    up: "50 Mbps" # ← 按家宽实际上行带宽填写
+    down: "300 Mbps"
+    skip-cert-verify: false
+
   - name: out-vmess
     type: vmess
     server: 111.111.111.111 # ← 你的服务器地址
@@ -117,11 +143,11 @@ proxies:
 proxy-groups:
   - name: 🚀 节点选择
     type: select
-    proxies: [out-vmess, DIRECT]
+    proxies: [out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🤖 AI 服务
     type: select
-    proxies: [🚀 节点选择, out-vmess, DIRECT]
+    proxies: [🚀 节点选择, out-reality, out-hy2, out-vmess, DIRECT]
 
   - name: 🛑 广告拦截
     type: select

@@ -15,6 +15,8 @@ My personal used proxy configs.
 | `v2ray/V5/client/conf.d/` | v2ray v5 客户端配置（jsonv5，多文件） |
 | `v2ray/V5/client/openwrt/` | OpenWrt 透明代理：配置、init.d、iptables / dnsmasq 脚本 |
 | `v2ray/V5/server/` | 服务端配置、nginx 反代、systemd 单元 |
+| `sing-box/server/config.json` | sing-box 服务端配置模板（VLESS-Vision-REALITY + Hysteria2 + WARP AI 分流） |
+| `sing-box/server/sing-box-server-guide.md` | VPS 安装配置 sing-box 的完整教程（与现有网站共存、端口跳跃、证书续签联动） |
 | `v2ray/V5/client/openwrt/script/v2ray-update.sh` | OpenWrt 一键更新：安装最新 ipk、检查 v5 启动配置、更新加强版 geo 和 dnsmasq 代理域名列表（需同目录的 `gfwlist.sh`）、重启；`install` 参数启用每日自动更新 |
 | `v2ray/V5/server/v2ray-update.sh` | VPS 一键更新：升级 v2ray、固定 jsonv5 启动、更新加强版 geo、重启；`install` 参数启用每日自动更新 |
 | `v2ray/update_geo.sh` / `update_geo.bat` | 下载最新 `geoip.dat` / `geosite.dat`（仓库不保存这两个文件），`.bat` 为 Windows 版 |
@@ -29,6 +31,8 @@ My personal used proxy configs.
 - WebSocket 路径：Clash / Stash 里是 `/path`，v2ray 里是 `/proxypath`（客户端、服务端、nginx 三处需保持一致）
 - `hosts` / DNS 里的 `1.2.3.4`：示例映射，按需修改或删除
 - Shadowrocket 规则里的节点名 `NIEKUN.NET VMESS`：需要与 App 内的节点名称一致
+- REALITY 参数：`your-reality-private-key` / `your-reality-public-key` / `1234abcd` 通过 `sing-box generate reality-keypair` 与 `sing-box generate rand --hex 4` 生成（YAML 中 `short-id` 加双引号）
+- Hysteria2 密码：`your-hy2-password`（证书路径 `/path/to/fullchain.pem` 与 `/path/to/privkey.pem`）
 
 ## geo 数据
 

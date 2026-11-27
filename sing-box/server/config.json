@@ -1,0 +1,124 @@
+{
+  "log": {
+    "level": "error",
+    "timestamp": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "/var/lib/sing-box/cache.db"
+    }
+  },
+  "inbounds": [
+    {
+      "type": "vless",
+      "tag": "in-reality",
+      "listen": "::",
+      "listen_port": 8443,
+      "users": [
+        {
+          "name": "marco",
+          "uuid": "uuid-here",
+          "flow": "xtls-rprx-vision"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "www.apple.com",
+        "reality": {
+          "enabled": true,
+          "handshake": {
+            "server": "www.apple.com",
+            "server_port": 443
+          },
+          "private_key": "your-reality-private-key",
+          "short_id": [
+            "1234abcd"
+          ]
+        }
+      }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "in-hy2",
+      "listen": "::",
+      "listen_port": 443,
+      "up_mbps": 100,
+      "down_mbps": 300,
+      "users": [
+        {
+          "name": "marco",
+          "password": "your-hy2-password"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "alpn": [
+          "h3"
+        ],
+        "certificate_path": "/path/to/fullchain.pem",
+        "key_path": "/path/to/privkey.pem"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "socks",
+      "tag": "warp-socks",
+      "server": "127.0.0.1",
+      "server_port": 40000
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "final": "direct",
+    "rule_set": [
+      {
+        "tag": "geosite-openai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geosite-anthropic",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-anthropic.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geosite-perplexity",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-perplexity.srs",
+        "download_detour": "direct"
+      }
+    ],
+    "rules": [
+      {
+        "action": "sniff"
+      },
+      {
+        "protocol": "bittorrent",
+        "action": "reject"
+      },
+      {
+        "ip_is_private": true,
+        "action": "reject"
+      },
+      {
+        "rule_set": [
+          "geosite-openai",
+          "geosite-anthropic",
+          "geosite-perplexity"
+        ],
+        "outbound": "warp-socks"
+      }
+    ]
+  }
+}
